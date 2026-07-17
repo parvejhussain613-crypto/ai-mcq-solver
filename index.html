@@ -1,10 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>AI MCQ Solver</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI MCQ Solver</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+font-size:32px;
+margin-bottom:20px;
+}
+
+.card{
+background:#1e293b;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+textarea{
+width:100%;
+height:180px;
+padding:15px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+select,button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+button{
+background:#2563eb;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+#result{
+margin-top:20px;
+padding:15px;
+background:#111827;
+border-radius:10px;
+}
+</style>
+
 </head>
+
 <body>
-  <h1>🤖 AI MCQ Solver</h1>
-  <p>Welcome! This website is under development.</p>
+
+<div class="container">
+
+<h1>🤖 AI MCQ Solver</h1>
+
+<div class="card">
+
+<textarea id="question"
+placeholder="Paste your MCQ question here..."></textarea>
+
+<select id="subject">
+<option>General</option>
+<option>Math</option>
+<option>Science</option>
+<option>English</option>
+<option>Computer</option>
+</select>
+
+<button onclick="solveMCQ()">Solve MCQ</button>
+
+<div id="result">
+Answer will appear here...
+</div>
+
+</div>
+
+</div>
+
+<script>
+function solveMCQ(){
+
+let q=document.getElementById("question").value;
+
+if(q==""){
+alert("Please enter a question.");
+return;
+}
+
+document.getElementById("result").innerHTML=
+"✅ AI feature is coming in Part 2...";
+}
+</script>
+
 </body>
 </html>
