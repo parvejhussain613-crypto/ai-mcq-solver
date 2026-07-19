@@ -86,7 +86,25 @@ border-radius:10px;
 
 <textarea id="question"
 placeholder="Paste your MCQ question here..."></textarea>
+<!-- 📸 Camera Section -->
+<div class="camera-box">
+    <input type="file"
+           id="cameraInput"
+           accept="image/*"
+           capture="environment"
+           onchange="previewImage(event)"
+           hidden>
 
+    <button type="button" class="camera-btn"
+            onclick="document.getElementById('cameraInput').click()">
+        📸 Capture MCQ Image
+    </button>
+
+    <img id="preview"
+         src=""
+         alt="Preview"
+         style="display:none; width:100%; margin-top:15px; border-radius:10px;">
+</div>
 <select id="subject">
 <option>General</option>
 <option>Math</option>
