@@ -35,3 +35,19 @@ function clearQuestion() {
   document.getElementById("question").value = "";
   document.getElementById("result").innerHTML = "Answer will appear here...";
 }
+// 📸 Camera Image Preview
+function previewImage(event) {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const preview = document.getElementById("preview");
+        preview.src = e.target.result;
+        preview.style.display = "block";
+    };
+
+    reader.readAsDataURL(file);
+}
