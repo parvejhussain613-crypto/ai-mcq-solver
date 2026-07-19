@@ -1,36 +1,40 @@
 // AI MCQ Solver v1.0
-function solveMCQ() {
 
-    let question = document.getElementById("question").value;
-    let A = document.getElementById("optionA").value;
-    let B = document.getElementById("optionB").value;
-    let C = document.getElementById("optionC").value;
-    let D = document.getElementById("optionD").value;
+async function solveMCQ() {
+    const question = document.getElementById("question").value;
 
-    if(question.trim() === ""){
-        document.getElementById("result").innerHTML = "❌ Question likho bhai!";
+    if (!question.trim()) {
+        document.getElementById("result").innerHTML = "❌ Please enter a question!";
         return;
     }
 
-    document.getElementById("result").innerHTML = "🤖 AI solve kar raha hai...";
+    document.getElementById("result").innerHTML = "🤖 AI is solving...";
 
-    setTimeout(() => {
+    try {
+        const response = await fetch("http://localhost:3000/solve", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                question: question
+            })
+        });
 
-        document.getElementById("result").innerHTML =
-        `
-        <h3>✅ Answer</h3>
-        Question: ${question}<br><br>
-        Options:<br>
-        A) ${A}<br>
-        B) ${B}<br>
-        C) ${C}<br>
-        D) ${D}<br><br>
-        💡 Correct answer AI generate karega.
+        const data = await response.json();
+
+        document.getElementById("result").innerHTML = `
+            <h3>✅ Answer</h3>
+            <p>${data.answer}</p>
+
+            <h3>📖 Explanation</h3>
+            <p>${data.explanation}</p>
         `;
-
-    },1500);
+    } catch (error) {
+        document.getElementById("result").innerHTML =
+            "❌ Server se connect nahi ho paya!";
+    }
 }
-
 // Clear question
 function clearQuestion() {
   document.getElementById("question").value = "";
