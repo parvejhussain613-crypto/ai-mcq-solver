@@ -1,33 +1,34 @@
 // AI MCQ Solver v1.0
-
 function solveMCQ() {
-  const question = document.getElementById("question").value.trim();
-  const subject = document.getElementById("subject").value;
-  const result = document.getElementById("result");
 
-  if (question === "") {
-    alert("⚠️ Please enter your MCQ question.");
-    return;
-  }
+    let question = document.getElementById("question").value;
+    let A = document.getElementById("optionA").value;
+    let B = document.getElementById("optionB").value;
+    let C = document.getElementById("optionC").value;
+    let D = document.getElementById("optionD").value;
 
-  result.innerHTML = `
-    <h3>🤖 AI MCQ Solver</h3>
-    <p><strong>Subject:</strong> ${subject}</p>
-    <hr>
-    <p>📄 <strong>Question:</strong></p>
-    <p>${question}</p>
-    <br>
-    <p>⏳ AI is analyzing your question...</p>
-  `;
+    if(question.trim() === ""){
+        document.getElementById("result").innerHTML = "❌ Question likho bhai!";
+        return;
+    }
 
-  setTimeout(() => {
-    result.innerHTML += `
-      <hr>
-      <h3>✅ Demo Result</h3>
-      <p><strong>Answer:</strong> Coming soon...</p>
-      <p><strong>Explanation:</strong> Gemini AI integration will be added in the next version.</p>
-    `;
-  }, 2000);
+    document.getElementById("result").innerHTML = "🤖 AI solve kar raha hai...";
+
+    setTimeout(() => {
+
+        document.getElementById("result").innerHTML =
+        `
+        <h3>✅ Answer</h3>
+        Question: ${question}<br><br>
+        Options:<br>
+        A) ${A}<br>
+        B) ${B}<br>
+        C) ${C}<br>
+        D) ${D}<br><br>
+        💡 Correct answer AI generate karega.
+        `;
+
+    },1500);
 }
 
 // Clear question
