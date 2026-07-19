@@ -51,3 +51,22 @@ function previewImage(event) {
 
     reader.readAsDataURL(file);
 }
+// 📸 OCR: Image to Text
+async function previewImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const preview = document.getElementById("preview");
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+
+    const result = document.getElementById("result");
+    result.innerHTML = "⏳ Reading image...";
+
+    const {
+        data: { text }
+    } = await Tesseract.recognize(file, "eng");
+
+    document.getElementById("question").value = text;
+    result.innerHTML = "✅ MCQ extracted successfully!";
+}
