@@ -93,3 +93,37 @@ if (themeBtn) {
         document.body.classList.add("dark");
     }
 }
+// 📚 Save MCQ History
+function saveHistory(question, answer) {
+    let history = JSON.parse(localStorage.getItem("mcqHistory")) || [];
+
+    history.unshift({
+        question,
+        answer,
+        time: new Date().toLocaleString()
+    });
+
+    if (history.length > 20) {
+        history.pop();
+    }
+
+    localStorage.setItem("mcqHistory", JSON.stringify(history));
+}
+
+// 📖 Show History
+function loadHistory() {
+    const history = JSON.parse(localStorage.getItem("mcqHistory")) || [];
+    const historyBox = document.getElementById("history");
+
+    if (!historyBox) return;
+
+    historyBox.innerHTML = history.map(item => `
+        <div class="history-item">
+            <strong>Q:</strong> ${item.question}<br>
+            <strong>A:</strong> ${item.answer}<br>
+            <small>${item.time}</small>
+        </div>
+    `).join("");
+}
+
+window.onload = loadHistory;
