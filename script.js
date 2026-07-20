@@ -142,4 +142,10 @@ function readPDF() {
         "📄 PDF selected: " + file.name +
         "<br><br>✅ PDF reader is ready. Next step is extracting text from the PDF.";
 }
-
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("service-worker.js")
+            .then(() => console.log("Service Worker Registered"))
+            .catch(err => console.log(err));
+    });
+}
