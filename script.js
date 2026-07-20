@@ -30,6 +30,8 @@ async function solveMCQ() {
             <h3>📖 Explanation</h3>
             <p>${data.explanation}</p>
         `;
+        saveHistory(question, data.answer);
+loadHistory();
     } catch (error) {
         document.getElementById("result").innerHTML =
             "❌ Server se connect nahi ho paya!";
