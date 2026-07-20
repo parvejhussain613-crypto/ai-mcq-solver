@@ -129,3 +129,17 @@ function loadHistory() {
 }
 
 window.onload = loadHistory;
+// 📄 Read PDF (Demo)
+function readPDF() {
+    const file = document.getElementById("pdfInput").files[0];
+
+    if (!file) {
+        alert("Please select a PDF file!");
+        return;
+    }
+
+    document.getElementById("result").innerHTML =
+        "📄 PDF selected: " + file.name +
+        "<br><br>✅ PDF reader is ready. Next step is extracting text from the PDF.";
+}
+
