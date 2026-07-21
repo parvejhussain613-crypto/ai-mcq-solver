@@ -205,3 +205,26 @@ function login() {
         alert("❌ Incorrect email or password!");
     }
 }
+// 👤 Show User Name
+function showUser() {
+
+    const user = JSON.parse(localStorage.getItem("mcqUser"));
+
+    const welcomeUser = document.getElementById("welcomeUser");
+
+    if (user && welcomeUser) {
+        welcomeUser.innerHTML = `Hello, ${user.name}! 👋`;
+    }
+}
+
+// 🚪 Logout
+function logout() {
+
+    localStorage.removeItem("isLoggedIn");
+
+    alert("✅ You have been logged out!");
+
+    window.location.href = "login.html";
+}
+
+showUser();
