@@ -1,28 +1,69 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { GoogleGenAI } from "@google/genai";
+
+dotenv.config();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.post("/solve", async (req, res) => {
-    const { question } = req.body;
+const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY
+});
 
-    if (!question) {
-        return res.status(400).json({
-            answer: "No question provided.",
-            explanation: "Please enter a question."
+app.post("/solve", async (req, res) => {
+
+    try {
+
+        const { question, options } = req.body;
+
+        if (!question) {
+            return res.status(400).json({
+                error: "Question is required"
+            });
+        }
+
+        const prompt = `
+You are an AI MCQ Solver.
+
+Solve the following multiple-choice question.
+
+Question:
+${question}
+
+Options:
+${options || "No options provided"}
+
+Return the response in this format:
+
+Answer: [Correct option]
+Explanation: [Short and clear explanation]
+`;
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt
         });
+
+        res.json({
+            answer: response.text
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            error: "AI could not solve the question"
+        });
+
     }
 
-    // Demo response (AI API baad me connect karenge)
-    res.json({
-        answer: "Option B",
-        explanation: `Received question: "${question}". This is a demo response. A real AI model will provide the correct answer and explanation after the AI API is connected.`
-    });
 });
 
 app.listen(3000, () => {
-    console.log("Server running on port 3000");
+    console.log("🚀 AI MCQ Server running on port 3000");
 });
