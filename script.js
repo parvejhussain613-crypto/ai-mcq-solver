@@ -149,3 +149,31 @@ if ("serviceWorker" in navigator) {
             .catch(err => console.log(err));
     });
 }
+// 📝 Signup Function
+function signup() {
+    const name = document.getElementById("signupName").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value;
+
+    if (!name || !email || !password) {
+        alert("❌ Please fill all fields!");
+        return;
+    }
+
+    if (password.length < 6) {
+        alert("❌ Password must be at least 6 characters!");
+        return;
+    }
+
+    const user = {
+        name: name,
+        email: email,
+        password: password
+    };
+
+    localStorage.setItem("mcqUser", JSON.stringify(user));
+
+    alert("✅ Account created successfully!");
+
+    window.location.href = "login.html";
+}
