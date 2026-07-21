@@ -118,4 +118,57 @@ body.dark .mcq-box {
     background: #1e1e1e;
     color: white;
 }
+/* 📊 Professional Dashboard */
 
+.dashboard {
+    width: 90%;
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 35px 25px;
+    text-align: center;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard h1 {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+#welcomeUser {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.dashboard-buttons {
+    display: grid;
+    gap: 15px;
+}
+
+.dashboard-buttons button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.dashboard-buttons button:hover {
+    transform: translateY(-2px);
+}
+
+/* 🌙 Dark Mode Dashboard */
+
+body.dark .dashboard {
+    background: #1e1e1e;
+    color: white;
+}
+
+body.dark .dashboard-buttons button {
+    background: #333;
+    color: white;
+}
