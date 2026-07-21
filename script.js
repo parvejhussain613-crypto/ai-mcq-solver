@@ -1,41 +1,72 @@
 // AI MCQ Solver v1.0
-
+// 🤖 Real AI MCQ Solver
 async function solveMCQ() {
-    const question = document.getElementById("question").value;
 
-    if (!question.trim()) {
-        document.getElementById("result").innerHTML = "❌ Please enter a question!";
+    const question = document.getElementById("question").value.trim();
+
+    const A = document.getElementById("optionA")?.value || "";
+    const B = document.getElementById("optionB")?.value || "";
+    const C = document.getElementById("optionC")?.value || "";
+    const D = document.getElementById("optionD")?.value || "";
+
+    const result = document.getElementById("result");
+
+    if (!question) {
+        result.innerHTML = "❌ Please enter a question!";
         return;
     }
 
-    document.getElementById("result").innerHTML = "🤖 AI is solving...";
+    const options = `
+A) ${A}
+B) ${B}
+C) ${C}
+D) ${D}
+`;
+
+    result.innerHTML = "🤖 AI is solving your MCQ... ⏳";
 
     try {
-        const response = await fetch("http://localhost:3000/solve", {
+
+        const response = await fetch("YOUR_BACKEND_URL/solve", {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
-                question: question
+                question: question,
+                options: options
             })
         });
 
         const data = await response.json();
 
-        document.getElementById("result").innerHTML = `
-            <h3>✅ Answer</h3>
-            <p>${data.answer}</p>
+        if (!response.ok) {
+            throw new Error(data.error || "Something went wrong");
+        }
 
-            <h3>📖 Explanation</h3>
-            <p>${data.explanation}</p>
+        result.innerHTML = `
+            <div class="ai-answer">
+                <h3>🤖 AI Answer</h3>
+                <p>${data.answer}</p>
+            </div>
         `;
+
+        // 📚 Save History
         saveHistory(question, data.answer);
-loadHistory();
+        loadHistory();
+
     } catch (error) {
-        document.getElementById("result").innerHTML =
-            "❌ Server se connect nahi ho paya!";
+
+        console.error(error);
+
+        result.innerHTML =
+            "❌ AI se connect nahi ho paya. Backend URL check karo.";
+
     }
+}
+
 }
 // Clear question
 function clearQuestion() {
