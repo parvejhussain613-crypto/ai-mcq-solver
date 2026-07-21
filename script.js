@@ -177,3 +177,31 @@ function signup() {
 
     window.location.href = "login.html";
 }
+function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+        alert("❌ Please enter email and password!");
+        return;
+    }
+
+    const savedUser = JSON.parse(localStorage.getItem("mcqUser"));
+
+    if (!savedUser) {
+        alert("❌ Account nahi mila! Pehle Sign Up karo.");
+        return;
+    }
+
+    if (email === savedUser.email && password === savedUser.password) {
+
+        localStorage.setItem("isLoggedIn", "true");
+
+        alert("✅ Login successful!");
+
+        window.location.href = "index.html";
+
+    } else {
+        alert("❌ Incorrect email or password!");
+    }
+}
