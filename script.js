@@ -228,3 +228,4 @@ function logout() {
 }
 
 showUser();
+window.location.href = "dashboard.html";
