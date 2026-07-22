@@ -27,7 +27,7 @@ D) ${D}
 
     try {
 
-        const response = await fetch("YOUR_BACKEND_URL/solve", {
+const response = await fetch("https://ai-mcq-solver-i7qs.onrender.com/solve",
             method: "POST",
 
             headers: {
