@@ -277,3 +277,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+document.addEventListener("DOMContentLoaded", function () {
+
+    const solveBtn = document.getElementById("solveBtn");
+    const result = document.getElementById("result");
+
+    if (solveBtn) {
+        solveBtn.addEventListener("click", function () {
+
+            result.innerHTML = `
+                <h3>✅ Button Working!</h3>
+                <p>🤖 JavaScript is connected successfully.</p>
+            `;
+
+        });
+    }
+
+});
