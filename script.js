@@ -260,3 +260,23 @@ function logout() {
 
 showUser();
 window.location.href = "dashboard.html";
+console.log("✅ script.js is loaded");
+
+document.addEventListener("DOMContentLoaded", function () {
+    const button = document.querySelector('button[onclick="solveMCQ()"]');
+
+    if (button) {
+        button.addEventListener("click", function () {
+            console.log("✅ Solve MCQ clicked");
+
+            const result = document.getElementById("result");
+
+            if (result) {
+                result.innerHTML = `
+                    <h3>🤖 AI is working...</h3>
+                    <p>⏳ Please wait...</p>
+                `;
+            }
+        });
+    }
+});
