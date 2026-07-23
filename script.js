@@ -258,9 +258,6 @@ function logout() {
     window.location.href = "login.html";
 }
 
-showUser();
-window.location.href = "dashboard.html";
-console.log("✅ script.js is loaded");
 
 document.addEventListener("DOMContentLoaded", function () {
     const button = document.querySelector('button[onclick="solveMCQ()"]');
