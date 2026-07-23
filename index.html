@@ -134,22 +134,6 @@ placeholder="Paste your MCQ question here..."></textarea>
 
 </div>
 
-<script>
-function solveMCQ(){
-
-let q=document.getElementById("question").value;
-
-if(q==""){
-alert("Please enter a question.");
-return;
-}
-
-document.getElementById("result").innerHTML=
-<div id="result">
-    <p>🤖 Your AI answer will appear here...</p>
-</div>";
-}
-</script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </body>
 </html>
