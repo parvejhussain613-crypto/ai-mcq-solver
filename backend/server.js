@@ -63,7 +63,8 @@ Explanation: [Short and clear explanation]
     }
 
 });
+const PORT = process.env.PORT || 3000;
 
-app.listen(3000, () => {
-    console.log("🚀 AI MCQ Server running on port 3000");
+app.listen(PORT, () => {
+  console.log(`🤖 AI MCQ Server running on port ${PORT}`);
 });
