@@ -13,6 +13,9 @@ app.use(express.json());
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY
 });
+app.get("/", (req, res) => {
+  res.send("AI MCQ Solver Backend is Running ✅");
+});
 
 app.post("/solve", async (req, res) => {
 
