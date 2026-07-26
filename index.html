@@ -1,146 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI MCQ Solver</title>
-    <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2563eb">
+  <meta charset="UTF-8">
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-body{
-background:#0f172a;
-color:white;
-padding:20px;
-}
+  <title>MCQ Tools</title>
 
-.container{
-max-width:700px;
-margin:auto;
-}
-
-h1{
-text-align:center;
-font-size:32px;
-margin-bottom:20px;
-}
-
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:15px;
-margin-bottom:20px;
-}
-
-textarea{
-width:100%;
-height:180px;
-padding:15px;
-border:none;
-border-radius:10px;
-font-size:16px;
-}
-
-select,button{
-width:100%;
-padding:15px;
-margin-top:15px;
-border:none;
-border-radius:10px;
-font-size:16px;
-}
-
-button{
-background:#2563eb;
-color:white;
-cursor:pointer;
-font-weight:bold;
-}
-
-button:hover{
-background:#1d4ed8;
-}
-
-#result{
-margin-top:20px;
-padding:15px;
-background:#111827;
-border-radius:10px;
-}
-</style>
-
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+  <!-- Top Bar -->
+  <header class="top-bar">
 
-<h1>🤖 AI MCQ Solver</h1>
-<button id="themeToggle">🌙 Dark Mode</button>
-<div class="card">
-
-<textarea id="question"
-placeholder="Paste your MCQ question here..."></textarea>
-    <div class="options">
-  <input id="optionA" placeholder="Option A">
-  <input id="optionB" placeholder="Option B">
-  <input id="optionC" placeholder="Option C">
-  <input id="optionD" placeholder="Option D">
-</div>
-    
-<!-- 📸 Camera Section -->
-<div class="camera-box">
-    <input type="file"
-           id="cameraInput"
-           accept="image/*"
-           capture="environment"
-           onchange="previewImage(event)"
-           hidden>
-
-    <button type="button" class="camera-btn"
-            onclick="document.getElementById('cameraInput').click()">
-        📸 Capture MCQ Image
+    <button class="menu-btn" id="menuBtn">
+      ☰
     </button>
 
-    <img id="preview"
-         src=""
-         alt="Preview"
-         style="display:none; width:100%; margin-top:15px; border-radius:10px;">
-</div>
-<select id="subject">
-<option>General</option>
-<option>Math</option>
-<option>Science</option>
-<option>English</option>
-<option>Computer</option>
-</select>
+    <div class="app-name">
+      MCQ Tools
+      <span class="dot"></span>
+    </div>
 
-<button type="button" id="solveBtn">
-    🤖 Solve MCQ
-</button>
-<!-- 🤖 AI Answer Result -->
-<div id="result" class="ai-result">
-    <h3>🤖 AI Answer</h3>
-    <p>Your answer will appear here...</p>
-</div>
-<h2>📚 History</h2>
-<div id="history"></div>
-</div>
+    <button class="new-btn" id="newBtn">
+      ✨
+    </button>
 
-</div>
+  </header>
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<script src="script.js"></script>
+
+  <!-- Main Screen -->
+  <main class="main-screen">
+
+    <!-- AI Icon -->
+    <div class="ai-icon">
+      ✨
+    </div>
+
+    <!-- Welcome Text -->
+    <h1>
+      What can I help with?
+    </h1>
+
+    <p class="subtitle">
+      Ask anything about your MCQ
+    </p>
+
+
+    <!-- MCQ Question Input -->
+    <div class="input-box">
+
+      <textarea
+        id="question"
+        placeholder="Ask your MCQ question..."
+      ></textarea>
+
+      <!-- Options -->
+      <div class="options">
+
+        <input
+          type="text"
+          id="optionA"
+          placeholder="Option A"
+        >
+
+        <input
+          type="text"
+          id="optionB"
+          placeholder="Option B"
+        >
+
+        <input
+          type="text"
+          id="optionC"
+          placeholder="Option C"
+        >
+
+        <input
+          type="text"
+          id="optionD"
+          placeholder="Option D"
+        >
+
+      </div>
+
+
+      <!-- Bottom Actions -->
+      <div class="input-actions">
+
+        <!-- Camera -->
+        <input
+          type="file"
+          id="cameraInput"
+          accept="image/*"
+          capture="environment"
+          onchange="previewImage(event)"
+          hidden
+        >
+
+        <button
+          class="action-btn"
+          onclick="document.getElementById('cameraInput').click()"
+        >
+          📷
+        </button>
+
+
+        <!-- Subject -->
+        <select id="subject">
+
+          <option value="General">
+            General
+          </option>
+
+          <option value="Math">
+            Math
+          </option>
+
+          <option value="Science">
+            Science
+          </option>
+
+          <option value="English">
+            English
+          </option>
+
+          <option value="Computer">
+            Computer
+          </option>
+
+        </select>
+
+
+        <!-- Solve -->
+        <button
+          class="solve-btn"
+          id="solveBtn"
+          onclick="solveMCQ()"
+        >
+          ✨
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- Image Preview -->
+    <img
+      id="preview"
+      class="preview"
+      src=""
+      alt="MCQ Preview"
+    >
+
+
+    <!-- AI Answer -->
+    <div
+      id="result"
+      class="answer-box"
+    >
+
+      <div class="answer-title">
+        ✨ AI Answer
+      </div>
+
+      <p>
+        Your answer will appear here...
+      </p>
+
+    </div>
+
+
+    <!-- History -->
+    <section class="history-section">
+
+      <h2>
+        📚 History
+      </h2>
+
+      <div id="history">
+        <!-- History will appear here -->
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- Side Menu -->
+  <div
+    id="sideMenu"
+    class="side-menu"
+  >
+
+    <button id="closeMenu">
+      ✕
+    </button>
+
+    <h2>
+      MCQ Tools
+    </h2>
+
+    <button>
+      🏠 Home
+    </button>
+
+    <button>
+      📚 History
+    </button>
+
+    <button>
+      ⚙️ Settings
+    </button>
+
+  </div>
+
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+
 </body>
 </html>
-<button onclick="clearQuestion()">🗑️ Clear</button>
-<h2>📄 Upload PDF</h2>
-<input type="file" id="pdfInput" accept=".pdf">
-<button onclick="readPDF()">Read PDF</button>
