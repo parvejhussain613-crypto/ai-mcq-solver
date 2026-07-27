@@ -1,174 +1,381 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+/* =========================
+   MCQ TOOLS - MODERN UI
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-background:#0f172a;
-color:#fff;
-line-height:1.6;
+body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #f8fbff 55%,
+    #b9e2ff 100%
+  );
+  color: #111111;
 }
 
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
+
+/* =========================
+   TOP BAR
+========================= */
+
+.top-bar {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(15px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-h1{
-text-align:center;
-font-size:2rem;
-margin:20px 0;
-color:#38bdf8;
+.menu-btn,
+.new-btn {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
 }
 
-.card{
-background:#1e293b;
-padding:20px;
-border-radius:15px;
-margin:20px 0;
-box-shadow:0 4px 15px rgba(0,0,0,.3);
+.menu-btn:hover,
+.new-btn:hover {
+  background: #eeeeee;
 }
 
-textarea,
-select,
-button{
-width:100%;
-padding:15px;
-margin-top:15px;
-border:none;
-border-radius:10px;
-font-size:16px;
+.app-name {
+  font-size: 22px;
+  font-weight: 500;
 }
 
-textarea{
-min-height:180px;
-resize:vertical;
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #4285f4;
+  border-radius: 50%;
+  margin-left: 4px;
 }
 
-button{
-background:#2563eb;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
+
+/* =========================
+   MAIN SCREEN
+========================= */
+
+.main-screen {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  padding: 80px 20px 180px;
+  text-align: center;
 }
 
-button:hover{
-background:#1d4ed8;
-transform:translateY(-2px);
+.ai-icon {
+  width: 75px;
+  height: 75px;
+  margin: 0 auto 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 45px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    #4285f4,
+    #9b72cb,
+    #34a853
+  );
+  box-shadow: 0 10px 35px rgba(66, 133, 244, 0.25);
 }
 
-#result{
-margin-top:20px;
-padding:15px;
-background:#111827;
-border-radius:10px;
-border:1px solid #334155;
+h1 {
+  font-size: 38px;
+  font-weight: 400;
+  margin-bottom: 10px;
 }
 
-@media(max-width:600px){
-h1{
-font-size:1.6rem;
-}
-.container{
-padding:15px;
-}
-}
-/* 📸 Camera Section */
-.camera-box{
-    margin:20px 0;
-    text-align:center;
+.subtitle {
+  color: #666666;
+  font-size: 17px;
+  margin-bottom: 35px;
 }
 
-.camera-btn{
-    width:100%;
-    padding:15px;
-    background:#2563eb;
-    color:#fff;
-    border:none;
-    border-radius:12px;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.3s;
+
+/* =========================
+   INPUT BOX
+========================= */
+
+.input-box {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e2e2;
+  border-radius: 28px;
+  padding: 18px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+  text-align: left;
 }
 
-.camera-btn:hover{
-    background:#1d4ed8;
+textarea {
+  width: 100%;
+  height: 110px;
+  border: none;
+  outline: none;
+  resize: none;
+  font-size: 18px;
+  font-family: inherit;
+  padding: 10px;
+  background: transparent;
 }
 
-#preview{
-    margin-top:15px;
-    border-radius:12px;
-    border:2px solid #2563eb;
-    max-height:300px;
-    object-fit:cover;
-}
-body.dark {
-    background: #121212;
-    color: white;
+textarea::placeholder {
+  color: #888888;
 }
 
-body.dark .card,
-body.dark .container,
-body.dark .mcq-box {
-    background: #1e1e1e;
-    color: white;
-}
-/* 📊 Professional Dashboard */
 
-.dashboard {
-    width: 90%;
-    max-width: 600px;
-    margin: 60px auto;
-    padding: 35px 25px;
-    text-align: center;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+/* =========================
+   OPTIONS
+========================= */
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.dashboard h1 {
-    margin-bottom: 10px;
-    font-size: 28px;
+.options input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #dddddd;
+  border-radius: 14px;
+  outline: none;
+  font-size: 15px;
+  background: #fafafa;
 }
 
-#welcomeUser {
-    font-size: 18px;
-    margin-bottom: 30px;
+.options input:focus {
+  border-color: #4285f4;
+  background: white;
 }
 
-.dashboard-buttons {
-    display: grid;
-    gap: 15px;
+
+/* =========================
+   INPUT ACTIONS
+========================= */
+
+.input-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
 }
 
-.dashboard-buttons button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+.action-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: #f1f3f4;
+  font-size: 22px;
+  cursor: pointer;
 }
 
-.dashboard-buttons button:hover {
-    transform: translateY(-2px);
+.action-btn:hover {
+  background: #e5e7eb;
 }
 
-/* 🌙 Dark Mode Dashboard */
-
-body.dark .dashboard {
-    background: #1e1e1e;
-    color: white;
+select {
+  flex: 1;
+  height: 48px;
+  border: none;
+  outline: none;
+  padding: 0 15px;
+  border-radius: 25px;
+  background: #f1f3f4;
+  font-size: 15px;
+  cursor: pointer;
 }
 
-body.dark .dashboard-buttons button {
-    background: #333;
-    color: white;
+
+/* =========================
+   SOLVE BUTTON
+========================= */
+
+.solve-btn {
+  width: 55px;
+  height: 55px;
+  border: none;
+  border-radius: 50%;
+  background: #4285f4;
+  color: white;
+  font-size: 25px;
+  cursor: pointer;
+  transition: 0.3s;
 }
+
+.solve-btn:hover {
+  transform: scale(1.08);
+  background: #3367d6;
+}
+
+.solve-btn:active {
+  transform: scale(0.95);
+}
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+.preview {
+  display: none;
+  width: 100%;
+  max-width: 500px;
+  margin: 20px auto;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   AI ANSWER
+========================= */
+
+.answer-box {
+  margin-top: 35px;
+  padding: 25px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: left;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  min-height: 100px;
+}
+
+.answer-title {
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.answer-box p {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+.history-section {
+  margin-top: 35px;
+  text-align: left;
+}
+
+.history-section h2 {
+  font-size: 25px;
+  margin-bottom: 15px;
+}
+
+#history {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* =========================
+   SIDE MENU
+========================= */
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background: white;
+  z-index: 1000;
+  padding: 25px;
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
+  transition: 0.3s;
+}
+
+.side-menu.active {
+  left: 0;
+}
+
+.side-menu h2 {
+  margin: 40px 0 25px;
+}
+
+.side-menu button {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #f1f3f4;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#closeMenu {
+  width: auto;
+  background: transparent;
+  font-size: 22px;
+}
+
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+  .main-screen {
+    padding: 70px 18px 150px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+  }
+
+  .options {
+    grid-template-columns: 1fr;
+  }
+
+  .input-box {
+    border-radius: 25px;
+  }
+
+  .input-actions {
+    gap: 8px;
+  }
+
+  .solve-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .action-btn {
+    width: 45px;
+    height: 45px;
+  }
+
+    }
