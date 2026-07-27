@@ -1,296 +1,265 @@
-// AI MCQ Solver v1.0
-// 🤖 Real AI MCQ Solver
+// =====================================
+// MCQ TOOLS - FRONTEND JAVASCRIPT
+// =====================================
+
 async function solveMCQ() {
 
-    const question = document.getElementById("question").value.trim();
+  const question = document
+    .getElementById("question")
+    .value
+    .trim();
 
-    const A = document.getElementById("optionA")?.value || "";
-    const B = document.getElementById("optionB")?.value || "";
-    const C = document.getElementById("optionC")?.value || "";
-    const D = document.getElementById("optionD")?.value || "";
+  const A = document
+    .getElementById("optionA")
+    .value
+    .trim();
 
-    const result = document.getElementById("result");
+  const B = document
+    .getElementById("optionB")
+    .value
+    .trim();
 
-    if (!question) {
-        result.innerHTML = "❌ Please enter a question!";
-        return;
-    }
+  const C = document
+    .getElementById("optionC")
+    .value
+    .trim();
 
-    const options = `
+  const D = document
+    .getElementById("optionD")
+    .value
+    .trim();
+
+  const result = document.getElementById("result");
+
+
+  // Check Question
+  if (!question) {
+
+    result.innerHTML = `
+      ❌ Please enter an MCQ question.
+    `;
+
+    return;
+  }
+
+
+  // Options
+  const options = `
 A) ${A}
 B) ${B}
 C) ${C}
 D) ${D}
 `;
 
-    result.innerHTML = "🤖 AI is solving your MCQ... ⏳";
 
-    try {
+  // Loading Message
+  result.innerHTML = `
+    🤖 AI is solving your MCQ...
+    <br><br>
+    ⏳ Please wait...
+  `;
 
-const response = await fetch("https://ai-mcq-solver-i7qs.onrender.com/solve",
-            method: "POST",
 
-            headers: {
-                "Content-Type": "application/json"
-            },
+  try {
 
-            body: JSON.stringify({
-                question: question,
-                options: options
-            })
-        });
+    // Backend API
+    const response = await fetch(
+      "https://ai-mcq-solver-i7qs.onrender.com/solve",
+      {
+        method: "POST",
 
-        const data = await response.json();
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-        if (!response.ok) {
-            throw new Error(data.error || "Something went wrong");
-        }
+        body: JSON.stringify({
+          question: question,
+          options: options
+        })
+      }
+    );
 
-        result.innerHTML = `
-            <div class="ai-answer">
-                <h3>🤖 AI Answer</h3>
-                <p>${data.answer}</p>
-            </div>
-        `;
 
-        // 📚 Save History
-        saveHistory(question, data.answer);
-        loadHistory();
+    const data = await response.json();
 
-    } catch (error) {
 
-        console.error(error);
+    // Error Check
+    if (!response.ok) {
 
-        result.innerHTML =
-            "❌ AI se connect nahi ho paya. Backend URL check karo.";
+      throw new Error(
+        data.error || "Something went wrong"
+      );
 
     }
-}
+
+
+    // Show AI Answer
+    result.innerHTML = `
+      <strong>🤖 AI Answer</strong>
+      <br><br>
+      ${data.answer}
+    `;
+
+
+    // Save History
+    saveHistory(
+      question,
+      data.answer
+    );
+
+
+    // Load History
+    loadHistory();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    result.innerHTML = `
+      ❌ AI se connect nahi ho paya.
+      <br><br>
+      Backend server check karo.
+    `;
+
+  }
 
 }
-// Clear question
-function clearQuestion() {
-  document.getElementById("question").value = "";
-  document.getElementById("result").innerHTML = "Answer will appear here...";
-}
-// 📸 Camera Image Preview
-function previewImage(event) {
-    const file = event.target.files[0];
 
-    if (!file) return;
 
-    const reader = new FileReader();
+// =====================================
+// SAVE HISTORY
+// =====================================
 
-    reader.onload = function (e) {
-        const preview = document.getElementById("preview");
-        preview.src = e.target.result;
-        preview.style.display = "block";
-    };
-
-    reader.readAsDataURL(file);
-}
-// 📸 OCR: Image to Text
-async function previewImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const preview = document.getElementById("preview");
-    preview.src = URL.createObjectURL(file);
-    preview.style.display = "block";
-
-    const result = document.getElementById("result");
-    result.innerHTML = "⏳ Reading image...";
-
-    const {
-        data: { text }
-    } = await Tesseract.recognize(file, "eng");
-
-    document.getElementById("question").value = text;
-    result.innerHTML = "✅ MCQ extracted successfully!";
-}
-// 🌙 Dark Mode Toggle
-const themeBtn = document.getElementById("themeToggle");
-
-if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-        document.body.classList.toggle("dark");
-
-        if (document.body.classList.contains("dark")) {
-            localStorage.setItem("theme", "dark");
-        } else {
-            localStorage.setItem("theme", "light");
-        }
-    });
-
-    if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark");
-    }
-}
-// 📚 Save MCQ History
 function saveHistory(question, answer) {
-    let history = JSON.parse(localStorage.getItem("mcqHistory")) || [];
 
-    history.unshift({
-        question,
-        answer,
-        time: new Date().toLocaleString()
-    });
+  let history =
+    JSON.parse(
+      localStorage.getItem("mcqHistory")
+    ) || [];
 
-    if (history.length > 20) {
-        history.pop();
-    }
 
-    localStorage.setItem("mcqHistory", JSON.stringify(history));
+  history.unshift({
+    question: question,
+    answer: answer,
+    time: new Date().toLocaleString()
+  });
+
+
+  // Keep only latest 20
+  history = history.slice(0, 20);
+
+
+  localStorage.setItem(
+    "mcqHistory",
+    JSON.stringify(history)
+  );
+
 }
 
-// 📖 Show History
+
+// =====================================
+// LOAD HISTORY
+// =====================================
+
 function loadHistory() {
-    const history = JSON.parse(localStorage.getItem("mcqHistory")) || [];
-    const historyBox = document.getElementById("history");
 
-    if (!historyBox) return;
+  const historyList =
+    document.getElementById("historyList");
 
-    historyBox.innerHTML = history.map(item => `
-        <div class="history-item">
-            <strong>Q:</strong> ${item.question}<br>
-            <strong>A:</strong> ${item.answer}<br>
-            <small>${item.time}</small>
-        </div>
+
+  if (!historyList) return;
+
+
+  let history =
+    JSON.parse(
+      localStorage.getItem("mcqHistory")
+    ) || [];
+
+
+  if (history.length === 0) {
+
+    historyList.innerHTML =
+      "No questions solved yet.";
+
+    return;
+
+  }
+
+
+  historyList.innerHTML =
+    history.map((item, index) => `
+
+      <div class="history-item">
+
+        <strong>
+          ${index + 1}. ${item.question}
+        </strong>
+
+        <br><br>
+
+        <span>
+          🤖 ${item.answer}
+        </span>
+
+        <br><br>
+
+        <small>
+          ${item.time}
+        </small>
+
+      </div>
+
     `).join("");
-}
 
-window.onload = loadHistory;
-// 📄 Read PDF (Demo)
-function readPDF() {
-    const file = document.getElementById("pdfInput").files[0];
-
-    if (!file) {
-        alert("Please select a PDF file!");
-        return;
-    }
-
-    document.getElementById("result").innerHTML =
-        "📄 PDF selected: " + file.name +
-        "<br><br>✅ PDF reader is ready. Next step is extracting text from the PDF.";
-}
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("service-worker.js")
-            .then(() => console.log("Service Worker Registered"))
-            .catch(err => console.log(err));
-    });
-}
-// 📝 Signup Function
-function signup() {
-    const name = document.getElementById("signupName").value.trim();
-    const email = document.getElementById("signupEmail").value.trim();
-    const password = document.getElementById("signupPassword").value;
-
-    if (!name || !email || !password) {
-        alert("❌ Please fill all fields!");
-        return;
-    }
-
-    if (password.length < 6) {
-        alert("❌ Password must be at least 6 characters!");
-        return;
-    }
-
-    const user = {
-        name: name,
-        email: email,
-        password: password
-    };
-
-    localStorage.setItem("mcqUser", JSON.stringify(user));
-
-    alert("✅ Account created successfully!");
-
-    window.location.href = "login.html";
-}
-function login() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-
-    if (!email || !password) {
-        alert("❌ Please enter email and password!");
-        return;
-    }
-
-    const savedUser = JSON.parse(localStorage.getItem("mcqUser"));
-
-    if (!savedUser) {
-        alert("❌ Account nahi mila! Pehle Sign Up karo.");
-        return;
-    }
-
-    if (email === savedUser.email && password === savedUser.password) {
-
-        localStorage.setItem("isLoggedIn", "true");
-
-        alert("✅ Login successful!");
-
-        window.location.href = "index.html";
-
-    } else {
-        alert("❌ Incorrect email or password!");
-    }
-}
-// 👤 Show User Name
-function showUser() {
-
-    const user = JSON.parse(localStorage.getItem("mcqUser"));
-
-    const welcomeUser = document.getElementById("welcomeUser");
-
-    if (user && welcomeUser) {
-        welcomeUser.innerHTML = `Hello, ${user.name}! 👋`;
-    }
-}
-
-// 🚪 Logout
-function logout() {
-
-    localStorage.removeItem("isLoggedIn");
-
-    alert("✅ You have been logged out!");
-
-    window.location.href = "login.html";
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    const button = document.querySelector('button[onclick="solveMCQ()"]');
+// =====================================
+// IMAGE CAPTURE
+// =====================================
 
-    if (button) {
-        button.addEventListener("click", function () {
-            console.log("✅ Solve MCQ clicked");
+const imageInput =
+  document.getElementById("imageInput");
 
-            const result = document.getElementById("result");
 
-            if (result) {
-                result.innerHTML = `
-                    <h3>🤖 AI is working...</h3>
-                    <p>⏳ Please wait...</p>
-                `;
-            }
-        });
+if (imageInput) {
+
+  imageInput.addEventListener(
+    "change",
+    function () {
+
+      const file =
+        this.files[0];
+
+      if (!file) return;
+
+
+      const result =
+        document.getElementById("result");
+
+
+      result.innerHTML = `
+        📷 MCQ Image Selected
+        <br><br>
+        🧠 Image OCR feature is ready.
+      `;
+
     }
-});
-document.addEventListener("DOMContentLoaded", function () {
+  );
 
-    const solveBtn = document.getElementById("solveBtn");
-    const result = document.getElementById("result");
+}
 
-    if (solveBtn) {
-        solveBtn.addEventListener("click", function () {
 
-            result.innerHTML = `
-                <h3>✅ Button Working!</h3>
-                <p>🤖 JavaScript is connected successfully.</p>
-            `;
+// =====================================
+// LOAD HISTORY WHEN PAGE OPENS
+// =====================================
 
-        });
-    }
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
 
-});
+    loadHistory();
+
+  }
+);
