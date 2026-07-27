@@ -2,11 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>MCQ Tools</title>
 
@@ -15,211 +11,125 @@
 
 <body>
 
-  <!-- Top Bar -->
-  <header class="top-bar">
+  <!-- Top Header -->
+  <header class="header">
+    <button class="menu-btn">☰</button>
 
-    <button class="menu-btn" id="menuBtn">
-      ☰
-    </button>
-
-    <div class="app-name">
-      MCQ Tools
-      <span class="dot"></span>
+    <div class="logo">
+      🤖 MCQ Tools
     </div>
 
-    <button class="new-btn" id="newBtn">
-      ✨
-    </button>
-
+    <button class="profile-btn">👤</button>
   </header>
 
 
-  <!-- Main Screen -->
-  <main class="main-screen">
+  <!-- Main Content -->
+  <main class="container">
 
-    <!-- AI Icon -->
-    <div class="ai-icon">
-      ✨
-    </div>
+    <div class="ai-icon">✨</div>
 
-    <!-- Welcome Text -->
-    <h1>
-      What can I help with?
-    </h1>
+    <h1>What can I help you with?</h1>
 
     <p class="subtitle">
-      Ask anything about your MCQ
+      Ask your MCQ question and let AI solve it for you.
     </p>
 
 
-    <!-- MCQ Question Input -->
-    <div class="input-box">
+    <!-- Question Input -->
+    <div class="input-area">
 
       <textarea
         id="question"
-        placeholder="Ask your MCQ question..."
+        placeholder="Enter your MCQ question here..."
       ></textarea>
-
-      <!-- Options -->
-      <div class="options">
-
-        <input
-          type="text"
-          id="optionA"
-          placeholder="Option A"
-        >
-
-        <input
-          type="text"
-          id="optionB"
-          placeholder="Option B"
-        >
-
-        <input
-          type="text"
-          id="optionC"
-          placeholder="Option C"
-        >
-
-        <input
-          type="text"
-          id="optionD"
-          placeholder="Option D"
-        >
-
-      </div>
-
-
-      <!-- Bottom Actions -->
-      <div class="input-actions">
-
-        <!-- Camera -->
-        <input
-          type="file"
-          id="cameraInput"
-          accept="image/*"
-          capture="environment"
-          onchange="previewImage(event)"
-          hidden
-        >
-
-        <button
-          class="action-btn"
-          onclick="document.getElementById('cameraInput').click()"
-        >
-          📷
-        </button>
-
-
-        <!-- Subject -->
-        <select id="subject">
-
-          <option value="General">
-            General
-          </option>
-
-          <option value="Math">
-            Math
-          </option>
-
-          <option value="Science">
-            Science
-          </option>
-
-          <option value="English">
-            English
-          </option>
-
-          <option value="Computer">
-            Computer
-          </option>
-
-        </select>
-
-
-        <!-- Solve -->
-        <button
-          class="solve-btn"
-          id="solveBtn"
-          onclick="solveMCQ()"
-        >
-          ✨
-        </button>
-
-      </div>
 
     </div>
 
 
-    <!-- Image Preview -->
-    <img
-      id="preview"
-      class="preview"
-      src=""
-      alt="MCQ Preview"
+    <!-- Options -->
+    <div class="options">
+
+      <input
+        id="optionA"
+        class="option-input"
+        type="text"
+        placeholder="Option A"
+      >
+
+      <input
+        id="optionB"
+        class="option-input"
+        type="text"
+        placeholder="Option B"
+      >
+
+      <input
+        id="optionC"
+        class="option-input"
+        type="text"
+        placeholder="Option C"
+      >
+
+      <input
+        id="optionD"
+        class="option-input"
+        type="text"
+        placeholder="Option D"
+      >
+
+    </div>
+
+
+    <!-- Buttons -->
+    <div class="button-row">
+
+      <button
+        class="camera-btn"
+        onclick="document.getElementById('imageInput').click()"
+      >
+        📷 Capture MCQ
+      </button>
+
+      <button
+        class="solve-btn"
+        onclick="solveMCQ()"
+      >
+        ✨ Solve MCQ
+      </button>
+
+    </div>
+
+
+    <!-- Hidden Image Input -->
+    <input
+      type="file"
+      id="imageInput"
+      accept="image/*"
+      capture="environment"
+      style="display:none;"
     >
 
 
     <!-- AI Answer -->
-    <div
-      id="result"
-      class="answer-box"
-    >
-
-      <div class="answer-title">
-        ✨ AI Answer
-      </div>
-
-      <p>
-        Your answer will appear here...
-      </p>
-
+    <div id="result">
+      🤖 AI Answer
+      <br>
+      <span>Your answer will appear here...</span>
     </div>
 
 
     <!-- History -->
-    <section class="history-section">
+    <div class="history">
 
-      <h2>
-        📚 History
-      </h2>
+      <h2>📚 History</h2>
 
-      <div id="history">
-        <!-- History will appear here -->
+      <div id="historyList">
+        No questions solved yet.
       </div>
 
-    </section>
+    </div>
 
   </main>
-
-
-  <!-- Side Menu -->
-  <div
-    id="sideMenu"
-    class="side-menu"
-  >
-
-    <button id="closeMenu">
-      ✕
-    </button>
-
-    <h2>
-      MCQ Tools
-    </h2>
-
-    <button>
-      🏠 Home
-    </button>
-
-    <button>
-      📚 History
-    </button>
-
-    <button>
-      ⚙️ Settings
-    </button>
-
-  </div>
 
 
   <!-- JavaScript -->
