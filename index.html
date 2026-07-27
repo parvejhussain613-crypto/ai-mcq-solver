@@ -44,61 +44,95 @@
       ></textarea>
 
     </div>
+<!-- MCQ Input Area -->
+<div class="mcq-input-wrapper">
+
+    <!-- Question Input -->
+    <textarea
+        id="question"
+        placeholder="Ask your MCQ question..."
+        rows="1"
+    ></textarea>
+
+    <!-- Bottom Action Bar -->
+    <div class="input-actions">
+
+        <!-- Plus Button -->
+        <button
+            type="button"
+            class="plus-btn"
+            onclick="document.getElementById('imageInput').click()"
+            title="Capture MCQ"
+        >
+            +
+        </button>
+
+        <!-- Voice Button -->
+        <button
+            type="button"
+            class="voice-btn"
+            onclick="startVoiceInput()"
+            title="Voice Input"
+        >
+            🎤
+        </button>
+
+        <!-- Solve Button -->
+        <button
+            type="button"
+            class="send-btn"
+            onclick="solveMCQ()"
+            title="Solve MCQ"
+        >
+            ↑
+        </button>
+
+    </div>
+</div>
 
 
-    <!-- Options -->
-    <div class="options">
+<!-- MCQ Options -->
+<div class="options">
 
-      <input
+    <input
         id="optionA"
         class="option-input"
         type="text"
         placeholder="Option A"
-      >
+    >
 
-      <input
+    <input
         id="optionB"
         class="option-input"
         type="text"
         placeholder="Option B"
-      >
+    >
 
-      <input
+    <input
         id="optionC"
         class="option-input"
         type="text"
         placeholder="Option C"
-      >
+    >
 
-      <input
+    <input
         id="optionD"
         class="option-input"
         type="text"
         placeholder="Option D"
-      >
+    >
 
-    </div>
+</div>
 
 
-    <!-- Buttons -->
-    <div class="button-row">
-
-      <button
-        class="camera-btn"
-        onclick="document.getElementById('imageInput').click()"
-      >
-        📷 Capture MCQ
-      </button>
-
-      <button
-        class="solve-btn"
-        onclick="solveMCQ()"
-      >
-        ✨ Solve MCQ
-      </button>
-
-    </div>
-
+<!-- Hidden Image Input -->
+<input
+    type="file"
+    id="imageInput"
+    accept="image/*"
+    capture="environment"
+    style="display:none;"
+>
 
     <!-- Hidden Image Input -->
     <input
