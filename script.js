@@ -263,3 +263,39 @@ document.addEventListener(
 
   }
 );
+// 🎤 Voice Input
+function startVoiceInput() {
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        alert("Sorry, your browser does not support voice input.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.start();
+
+    recognition.onstart = function () {
+        console.log("🎤 Listening...");
+    };
+
+    recognition.onresult = function (event) {
+        const text = event.results[0][0].transcript;
+
+        const questionBox =
+            document.getElementById("question");
+
+        questionBox.value = text;
+    };
+
+    recognition.onerror = function (event) {
+        console.log("Voice input error:", event.error);
+    };
+}
