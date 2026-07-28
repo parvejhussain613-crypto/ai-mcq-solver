@@ -60,94 +60,116 @@
     <p class="subtitle">
       Ask your MCQ question and let AI solve it for you.
     </p>
+<!-- ===== AI CHAT AREA ===== -->
+<main class="chat-container">
+
+  <!-- Welcome Screen -->
+  <section id="welcomeScreen" class="welcome-screen">
+    <div class="ai-logo">✨</div>
+
+    <h1>What can I help you with?</h1>
+
+    <p>
+      Ask anything, solve questions, analyze images,
+      or upload files.
+    </p>
+  </section>
+
+  <!-- Chat Messages -->
+  <section id="chatMessages" class="chat-messages">
+    <!-- Messages will appear here -->
+  </section>
+
+</main>
 
 
-    <!-- Question Input -->
-    <div class="input-area">
+<!-- ===== PLUS MENU ===== -->
+<div id="plusMenu" class="plus-menu">
 
-      <textarea
-        id="question"
-        placeholder="Enter your MCQ question here..."
-      ></textarea>
+  <button id="cameraBtn" class="plus-item">
+    📷
+    <span>Camera</span>
+  </button>
 
-    </div>
-<!-- MCQ Input Area -->
-<div class="mcq-input-wrapper">
+  <button id="photoBtn" class="plus-item">
+    🖼️
+    <span>Photos</span>
+  </button>
 
-    <!-- Question Input -->
-    <textarea
-        id="question"
-        placeholder="Ask your MCQ question..."
-        rows="1"
-    ></textarea>
+  <button id="fileBtn" class="plus-item">
+    📄
+    <span>Files</span>
+  </button>
 
-    <!-- Bottom Action Bar -->
-    <div class="input-actions">
-
-        <!-- Plus Button -->
-        <button
-            type="button"
-            class="plus-btn"
-            onclick="document.getElementById('imageInput').click()"
-            title="Capture MCQ"
-        >
-            +
-        </button>
-
-        <!-- Voice Button -->
-        <button
-            type="button"
-            class="voice-btn"
-            onclick="startVoiceInput()"
-            title="Voice Input"
-        >
-            🎤
-        </button>
-
-        <!-- Solve Button -->
-        <button
-            type="button"
-            class="send-btn"
-            onclick="solveMCQ()"
-            title="Solve MCQ"
-        >
-            ↑
-        </button>
-
-    </div>
 </div>
 
 
-<!-- MCQ Options -->
-<div class="options">
+<!-- Hidden File Inputs -->
+<input
+  type="file"
+  id="cameraInput"
+  accept="image/*"
+  capture="environment"
+  hidden
+>
 
-    <input
-        id="optionA"
-        class="option-input"
-        type="text"
-        placeholder="Option A"
-    >
+<input
+  type="file"
+  id="photoInput"
+  accept="image/*"
+  hidden
+>
 
-    <input
-        id="optionB"
-        class="option-input"
-        type="text"
-        placeholder="Option B"
-    >
+<input
+  type="file"
+  id="fileInput"
+  accept=".pdf,.doc,.docx,.txt,image/*"
+  hidden
+>
 
-    <input
-        id="optionC"
-        class="option-input"
-        type="text"
-        placeholder="Option C"
-    >
 
-    <input
-        id="optionD"
-        class="option-input"
-        type="text"
-        placeholder="Option D"
+<!-- ===== CHAT INPUT ===== -->
+<div class="chat-input-wrapper">
+
+  <div class="chat-input-box">
+
+    <!-- Plus Button -->
+    <button
+      id="plusBtn"
+      class="input-icon"
+      type="button"
     >
+      +
+    </button>
+
+    <!-- Message Input -->
+    <textarea
+      id="messageInput"
+      placeholder="Ask anything..."
+      rows="1"
+    ></textarea>
+
+    <!-- Microphone -->
+    <button
+      id="micBtn"
+      class="input-icon"
+      type="button"
+    >
+      🎤
+    </button>
+
+    <!-- Send -->
+    <button
+      id="sendBtn"
+      class="send-btn"
+      type="button"
+    >
+      ↑
+    </button>
+
+  </div>
+
+</div>
 
 </div>
 
