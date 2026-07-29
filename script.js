@@ -1,301 +1,337 @@
-// =====================================
-// MCQ TOOLS - FRONTEND JAVASCRIPT
-// =====================================
+// ============================================
+// MCQ TOOLS AI - MAIN JAVASCRIPT
+// ============================================
 
-async function solveMCQ() {
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
 
-  const question = document
-    .getElementById("question")
-    .value
-    .trim();
+const newChatBtn = document.getElementById("newChatBtn");
 
-  const A = document
-    .getElementById("optionA")
-    .value
-    .trim();
+const plusBtn = document.getElementById("plusBtn");
+const plusMenu = document.getElementById("plusMenu");
 
-  const B = document
-    .getElementById("optionB")
-    .value
-    .trim();
+const cameraBtn = document.getElementById("cameraBtn");
+const photoBtn = document.getElementById("photoBtn");
+const fileBtn = document.getElementById("fileBtn");
 
-  const C = document
-    .getElementById("optionC")
-    .value
-    .trim();
+const cameraInput = document.getElementById("cameraInput");
+const photoInput = document.getElementById("photoInput");
+const fileInput = document.getElementById("fileInput");
 
-  const D = document
-    .getElementById("optionD")
-    .value
-    .trim();
+const sendBtn = document.getElementById("sendBtn");
+const messageInput = document.getElementById("messageInput");
 
-  const result = document.getElementById("result");
+const chatMessages = document.getElementById("chatMessages");
+const welcomeScreen = document.getElementById("welcomeScreen");
 
 
-  // Check Question
-  if (!question) {
+// ============================================
+// SIDEBAR OPEN / CLOSE
+// ============================================
 
-    result.innerHTML = `
-      ❌ Please enter an MCQ question.
-    `;
+menuBtn.addEventListener("click", () => {
+  sidebar.classList.add("active");
+  overlay.classList.add("active");
+});
 
-    return;
-  }
-
-
-  // Options
-  const options = `
-A) ${A}
-B) ${B}
-C) ${C}
-D) ${D}
-`;
+overlay.addEventListener("click", () => {
+  sidebar.classList.remove("active");
+  overlay.classList.remove("active");
+});
 
 
-  // Loading Message
-  result.innerHTML = `
-    🤖 AI is solving your MCQ...
-    <br><br>
-    ⏳ Please wait...
-  `;
+// ============================================
+// PLUS MENU
+// ============================================
+
+plusBtn.addEventListener("click", () => {
+  plusMenu.classList.toggle("active");
+});
 
 
-  try {
+// ============================================
+// CAMERA
+// ============================================
 
-    // Backend API
-    const response = await fetch(
-      "https://ai-mcq-solver-i7qs.onrender.com/solve",
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-          question: question,
-          options: options
-        })
-      }
-    );
+cameraBtn.addEventListener("click", () => {
+  cameraInput.click();
+  plusMenu.classList.remove("active");
+});
 
 
-    const data = await response.json();
+// ============================================
+// PHOTOS
+// ============================================
+
+photoBtn.addEventListener("click", () => {
+  photoInput.click();
+  plusMenu.classList.remove("active");
+});
 
 
-    // Error Check
-    if (!response.ok) {
+// ============================================
+// FILES
+// ============================================
 
-      throw new Error(
-        data.error || "Something went wrong"
-      );
-
-    }
-
-
-    // Show AI Answer
-    result.innerHTML = `
-      <strong>🤖 AI Answer</strong>
-      <br><br>
-      ${data.answer}
-    `;
+fileBtn.addEventListener("click", () => {
+  fileInput.click();
+  plusMenu.classList.remove("active");
+});
 
 
-    // Save History
-    saveHistory(
-      question,
-      data.answer
-    );
+// ============================================
+// CAMERA FILE SELECTED
+// ============================================
 
+cameraInput.addEventListener("change", (event) => {
 
-    // Load History
-    loadHistory();
+  const file = event.target.files[0];
 
+  if (!file) return;
 
-  } catch (error) {
-
-    console.error(error);
-
-    result.innerHTML = `
-      ❌ AI se connect nahi ho paya.
-      <br><br>
-      Backend server check karo.
-    `;
-
-  }
-
-}
-
-
-// =====================================
-// SAVE HISTORY
-// =====================================
-
-function saveHistory(question, answer) {
-
-  let history =
-    JSON.parse(
-      localStorage.getItem("mcqHistory")
-    ) || [];
-
-
-  history.unshift({
-    question: question,
-    answer: answer,
-    time: new Date().toLocaleString()
-  });
-
-
-  // Keep only latest 20
-  history = history.slice(0, 20);
-
-
-  localStorage.setItem(
-    "mcqHistory",
-    JSON.stringify(history)
+  addUserMessage(
+    "📷 Image selected: " + file.name
   );
 
-}
+  showAIMessage(
+    "Image received successfully. Image analysis will be connected in the next step. 🤖"
+  );
+
+});
 
 
-// =====================================
-// LOAD HISTORY
-// =====================================
+// ============================================
+// PHOTO SELECTED
+// ============================================
 
-function loadHistory() {
+photoInput.addEventListener("change", (event) => {
 
-  const historyList =
-    document.getElementById("historyList");
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  addUserMessage(
+    "🖼️ Photo selected: " + file.name
+  );
+
+  showAIMessage(
+    "Photo received successfully. AI image analysis will be connected in the next step. 🤖"
+  );
+
+});
 
 
-  if (!historyList) return;
+// ============================================
+// FILE SELECTED
+// ============================================
+
+fileInput.addEventListener("change", (event) => {
+
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  addUserMessage(
+    "📄 File selected: " + file.name
+  );
+
+  showAIMessage(
+    "File received: " + file.name +
+    "<br><br>File analysis will be connected in the next step. 🤖"
+  );
+
+});
 
 
-  let history =
-    JSON.parse(
-      localStorage.getItem("mcqHistory")
-    ) || [];
+// ============================================
+// SEND MESSAGE
+// ============================================
+
+sendBtn.addEventListener("click", sendMessage);
 
 
-  if (history.length === 0) {
+messageInput.addEventListener("keydown", (event) => {
 
-    historyList.innerHTML =
-      "No questions solved yet.";
+  if (event.key === "Enter" && !event.shiftKey) {
 
-    return;
+    event.preventDefault();
+
+    sendMessage();
 
   }
 
-
-  historyList.innerHTML =
-    history.map((item, index) => `
-
-      <div class="history-item">
-
-        <strong>
-          ${index + 1}. ${item.question}
-        </strong>
-
-        <br><br>
-
-        <span>
-          🤖 ${item.answer}
-        </span>
-
-        <br><br>
-
-        <small>
-          ${item.time}
-        </small>
-
-      </div>
-
-    `).join("");
-
-}
+});
 
 
-// =====================================
-// IMAGE CAPTURE
-// =====================================
+// ============================================
+// SEND MESSAGE FUNCTION
+// ============================================
 
-const imageInput =
-  document.getElementById("imageInput");
+function sendMessage() {
 
+  const message =
+    messageInput.value.trim();
 
-if (imageInput) {
-
-  imageInput.addEventListener(
-    "change",
-    function () {
-
-      const file =
-        this.files[0];
-
-      if (!file) return;
+  if (!message) return;
 
 
-      const result =
-        document.getElementById("result");
+  // Hide welcome screen
+  welcomeScreen.style.display = "none";
 
 
-      result.innerHTML = `
-        📷 MCQ Image Selected
-        <br><br>
-        🧠 Image OCR feature is ready.
-      `;
+  // Add user message
+  addUserMessage(message);
 
-    }
-  );
+
+  // Clear input
+  messageInput.value = "";
+
+
+  // Show AI typing
+  showTyping();
+
+
+  // Temporary AI response
+  setTimeout(() => {
+
+    removeTyping();
+
+    showAIMessage(
+      "Hello! 👋 I'm MCQ Tools AI. Your AI assistant is ready. 🤖<br><br>" +
+      "In the next step, we'll connect the AI API so I can answer your questions."
+    );
+
+  }, 1500);
 
 }
 
 
-// =====================================
-// LOAD HISTORY WHEN PAGE OPENS
-// =====================================
+// ============================================
+// ADD USER MESSAGE
+// ============================================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  function () {
+function addUserMessage(message) {
 
-    loadHistory();
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "message user-message";
+
+  div.textContent =
+    message;
+
+  chatMessages.appendChild(div);
+
+  scrollToBottom();
+
+}
+
+
+// ============================================
+// ADD AI MESSAGE
+// ============================================
+
+function showAIMessage(message) {
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "message ai-message";
+
+  div.innerHTML =
+    message;
+
+  chatMessages.appendChild(div);
+
+  scrollToBottom();
+
+}
+
+
+// ============================================
+// AI TYPING
+// ============================================
+
+function showTyping() {
+
+  const div =
+    document.createElement("div");
+
+  div.id =
+    "typingMessage";
+
+  div.className =
+    "message ai-message";
+
+  div.innerHTML =
+    "🤖 Thinking...";
+
+  chatMessages.appendChild(div);
+
+  scrollToBottom();
+
+}
+
+
+function removeTyping() {
+
+  const typing =
+    document.getElementById(
+      "typingMessage"
+    );
+
+  if (typing) {
+
+    typing.remove();
+
+  }
+
+}
+
+
+// ============================================
+// SCROLL TO BOTTOM
+// ============================================
+
+function scrollToBottom() {
+
+  setTimeout(() => {
+
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth"
+    });
+
+  }, 100);
+
+}
+
+
+// ============================================
+// NEW CHAT
+// ============================================
+
+newChatBtn.addEventListener(
+  "click",
+  () => {
+
+    chatMessages.innerHTML = "";
+
+    welcomeScreen.style.display =
+      "block";
+
+    sidebar.classList.remove(
+      "active"
+    );
+
+    overlay.classList.remove(
+      "active"
+    );
+
+    messageInput.value = "";
 
   }
 );
-// 🎤 Voice Input
-function startVoiceInput() {
-    const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-        alert("Sorry, your browser does not support voice input.");
-        return;
-    }
-
-    const recognition = new SpeechRecognition();
-
-    recognition.lang = "en-IN";
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.start();
-
-    recognition.onstart = function () {
-        console.log("🎤 Listening...");
-    };
-
-    recognition.onresult = function (event) {
-        const text = event.results[0][0].transcript;
-
-        const questionBox =
-            document.getElementById("question");
-
-        questionBox.value = text;
-    };
-
-    recognition.onerror = function (event) {
-        console.log("Voice input error:", event.error);
-    };
-}
