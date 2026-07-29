@@ -4,171 +4,78 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MCQ Tools AI</title>
+  <title>Smart AI</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- =========================
-       TOP HEADER
-  ========================== -->
+  <!-- Top Header -->
+  <header class="top-header">
 
-  <header class="header">
-
-    <button
-      id="menuBtn"
-      class="menu-btn"
-      type="button"
-    >
+    <button id="menuBtn" class="menu-btn">
       ☰
     </button>
 
-    <div class="logo">
-      🤖 MCQ Tools AI
+    <div class="app-name">
+      Smart AI
     </div>
 
-    <button
-      class="profile-btn"
-      type="button"
-    >
-      👤
+    <button class="new-chat-btn">
+      ✎
     </button>
 
   </header>
 
 
-  <!-- =========================
-       SIDEBAR
-  ========================== -->
+  <!-- Main Home Screen -->
+  <main id="homeScreen" class="home-screen">
 
-  <div id="sidebar" class="sidebar">
-
-    <div class="sidebar-header">
-      <h2>🤖 MCQ Tools AI</h2>
+    <div class="smart-ai-logo">
+      ✨
     </div>
 
-    <button
-      id="newChatBtn"
-      class="side-item"
-      type="button"
-    >
-      ➕ New Chat
-    </button>
-
-    <button
-      id="historyBtn"
-      class="side-item"
-      type="button"
-    >
-      📚 Chat History
-    </button>
-
-    <button
-      id="settingsBtn"
-      class="side-item"
-      type="button"
-    >
-      ⚙️ Settings
-    </button>
-
-  </div>
-
-
-  <!-- Sidebar Overlay -->
-
-  <div
-    id="overlay"
-    class="overlay"
-  ></div>
-
-
-  <!-- =========================
-       MAIN CHAT AREA
-  ========================== -->
-
-  <main class="container">
-
-    <!-- Welcome Screen -->
-
-    <section
-      id="welcomeScreen"
-      class="welcome-screen"
-    >
-
-      <div class="ai-icon">
-        ✨
-      </div>
-
-      <h1>
-        What can I help you with?
-      </h1>
-
-      <p class="subtitle">
-        Ask anything, solve questions, analyze images,
-        or upload files.
-      </p>
-
-    </section>
-
-
-    <!-- Chat Messages -->
-
-    <section
-      id="chatMessages"
-      class="chat-messages"
-    >
-
-      <!-- Messages will appear here -->
-
-    </section>
+    <h1>
+      What can I help you with?
+    </h1>
 
   </main>
 
 
-  <!-- =========================
-       PLUS MENU
-  ========================== -->
+  <!-- Chat Area -->
+  <main id="chatScreen" class="chat-screen">
 
-  <div
-    id="plusMenu"
-    class="plus-menu"
-  >
+    <div id="messages"></div>
 
-    <button
-      id="cameraBtn"
-      class="plus-item"
-      type="button"
-    >
-      📷
-      <span>Camera</span>
+  </main>
+
+
+  <!-- Plus Menu -->
+  <div id="plusMenu" class="plus-menu">
+
+    <button id="photoBtn">
+      🖼️ Photos
     </button>
 
-    <button
-      id="photoBtn"
-      class="plus-item"
-      type="button"
-    >
-      🖼️
-      <span>Photos</span>
+    <button id="cameraBtn">
+      📷 Camera
     </button>
 
-    <button
-      id="fileBtn"
-      class="plus-item"
-      type="button"
-    >
-      📄
-      <span>Files</span>
+    <button id="fileBtn">
+      📎 Files
     </button>
 
   </div>
 
 
-  <!-- =========================
-       HIDDEN FILE INPUTS
-  ========================== -->
+  <!-- Hidden Inputs -->
+  <input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    hidden
+  >
 
   <input
     type="file"
@@ -180,64 +87,40 @@
 
   <input
     type="file"
-    id="photoInput"
-    accept="image/*"
-    hidden
-  >
-
-  <input
-    type="file"
     id="fileInput"
-    accept=".pdf,.doc,.docx,.txt,image/*"
+    accept=".pdf,.doc,.docx,.txt"
     hidden
   >
 
 
-  <!-- =========================
-       CHAT INPUT
-  ========================== -->
+  <!-- Bottom Input -->
+  <div class="input-container">
 
-  <div class="chat-input-wrapper">
-
-    <div class="chat-input-box">
-
-      <!-- Plus -->
+    <div class="input-box">
 
       <button
         id="plusBtn"
-        class="input-icon"
-        type="button"
+        class="plus-btn"
       >
         +
       </button>
 
-
-      <!-- Message -->
-
       <textarea
         id="messageInput"
-        placeholder="Ask anything..."
+        placeholder="Ask Smart AI"
         rows="1"
       ></textarea>
 
-
-      <!-- Microphone -->
-
       <button
         id="micBtn"
-        class="input-icon"
-        type="button"
+        class="mic-btn"
       >
         🎤
       </button>
 
-
-      <!-- Send -->
-
       <button
         id="sendBtn"
         class="send-btn"
-        type="button"
       >
         ↑
       </button>
@@ -247,7 +130,35 @@
   </div>
 
 
-  <!-- JavaScript -->
+  <!-- Side Menu -->
+  <div id="sideMenu" class="side-menu">
+
+    <div class="side-menu-header">
+      <h2>Smart AI</h2>
+
+      <button id="closeMenu">
+        ✕
+      </button>
+    </div>
+
+    <button id="newChat">
+      ✨ New chat
+    </button>
+
+    <div class="history-title">
+      Recent chats
+    </div>
+
+    <div id="chatHistory">
+      <!-- Old chats will appear here -->
+    </div>
+
+  </div>
+
+
+  <!-- Dark Overlay -->
+  <div id="overlay"></div>
+
 
   <script src="script.js"></script>
 
