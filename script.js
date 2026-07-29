@@ -1,172 +1,252 @@
-// ============================================
-// MCQ TOOLS AI - MAIN JAVASCRIPT
-// ============================================
+// ==========================================
+// SMART AI - MAIN JAVASCRIPT
+// ==========================================
 
 const menuBtn = document.getElementById("menuBtn");
 const sidebar = document.getElementById("sidebar");
-const overlay = document.getElementById("overlay");
-
-const newChatBtn = document.getElementById("newChatBtn");
 
 const plusBtn = document.getElementById("plusBtn");
-const plusMenu = document.getElementById("plusMenu");
+const attachmentMenu =
+  document.getElementById("attachmentMenu");
 
-const cameraBtn = document.getElementById("cameraBtn");
-const photoBtn = document.getElementById("photoBtn");
-const fileBtn = document.getElementById("fileBtn");
+const messageInput =
+  document.getElementById("messageInput");
 
-const cameraInput = document.getElementById("cameraInput");
-const photoInput = document.getElementById("photoInput");
-const fileInput = document.getElementById("fileInput");
+const sendBtn =
+  document.getElementById("sendBtn");
 
-const sendBtn = document.getElementById("sendBtn");
-const messageInput = document.getElementById("messageInput");
+const chatContainer =
+  document.getElementById("chatContainer");
 
-const chatMessages = document.getElementById("chatMessages");
-const welcomeScreen = document.getElementById("welcomeScreen");
+const welcomeScreen =
+  document.getElementById("welcomeScreen");
+
+const newChatBtn =
+  document.getElementById("newChatBtn");
+
+const historyBtn =
+  document.getElementById("historyBtn");
+
+const cameraBtn =
+  document.getElementById("cameraBtn");
+
+const photoBtn =
+  document.getElementById("photoBtn");
+
+const fileBtn =
+  document.getElementById("fileBtn");
+
+const cameraInput =
+  document.getElementById("cameraInput");
+
+const photoInput =
+  document.getElementById("photoInput");
+
+const fileInput =
+  document.getElementById("fileInput");
 
 
-// ============================================
-// SIDEBAR OPEN / CLOSE
-// ============================================
+// ==========================================
+// SIDEBAR
+// ==========================================
 
 menuBtn.addEventListener("click", () => {
-  sidebar.classList.add("active");
-  overlay.classList.add("active");
-});
 
-overlay.addEventListener("click", () => {
-  sidebar.classList.remove("active");
-  overlay.classList.remove("active");
+  sidebar.classList.toggle("active");
+
 });
 
 
-// ============================================
+// ==========================================
 // PLUS MENU
-// ============================================
+// ==========================================
 
 plusBtn.addEventListener("click", () => {
-  plusMenu.classList.toggle("active");
+
+  attachmentMenu.classList.toggle("active");
+
 });
 
 
-// ============================================
+// ==========================================
 // CAMERA
-// ============================================
+// ==========================================
 
 cameraBtn.addEventListener("click", () => {
+
   cameraInput.click();
-  plusMenu.classList.remove("active");
+
+  attachmentMenu.classList.remove("active");
+
 });
 
 
-// ============================================
+// ==========================================
 // PHOTOS
-// ============================================
+// ==========================================
 
 photoBtn.addEventListener("click", () => {
+
   photoInput.click();
-  plusMenu.classList.remove("active");
+
+  attachmentMenu.classList.remove("active");
+
 });
 
 
-// ============================================
+// ==========================================
 // FILES
-// ============================================
+// ==========================================
 
 fileBtn.addEventListener("click", () => {
+
   fileInput.click();
-  plusMenu.classList.remove("active");
-});
 
-
-// ============================================
-// CAMERA FILE SELECTED
-// ============================================
-
-cameraInput.addEventListener("change", (event) => {
-
-  const file = event.target.files[0];
-
-  if (!file) return;
-
-  addUserMessage(
-    "📷 Image selected: " + file.name
-  );
-
-  showAIMessage(
-    "Image received successfully. Image analysis will be connected in the next step. 🤖"
-  );
+  attachmentMenu.classList.remove("active");
 
 });
 
 
-// ============================================
-// PHOTO SELECTED
-// ============================================
+// ==========================================
+// CAMERA SELECTED
+// ==========================================
 
-photoInput.addEventListener("change", (event) => {
+cameraInput.addEventListener(
+  "change",
+  function () {
 
-  const file = event.target.files[0];
+    if (!this.files[0]) return;
 
-  if (!file) return;
+    const file =
+      this.files[0];
 
-  addUserMessage(
-    "🖼️ Photo selected: " + file.name
-  );
+    addUserMessage(
+      "📷 " + file.name
+    );
 
-  showAIMessage(
-    "Photo received successfully. AI image analysis will be connected in the next step. 🤖"
-  );
+    showThinking();
 
-});
+    setTimeout(() => {
 
+      removeThinking();
 
-// ============================================
-// FILE SELECTED
-// ============================================
+      addAIMessage(
+        "I received your camera image. 🤖<br><br>" +
+        "Image analysis will be connected to the AI in the next step."
+      );
 
-fileInput.addEventListener("change", (event) => {
-
-  const file = event.target.files[0];
-
-  if (!file) return;
-
-  addUserMessage(
-    "📄 File selected: " + file.name
-  );
-
-  showAIMessage(
-    "File received: " + file.name +
-    "<br><br>File analysis will be connected in the next step. 🤖"
-  );
-
-});
-
-
-// ============================================
-// SEND MESSAGE
-// ============================================
-
-sendBtn.addEventListener("click", sendMessage);
-
-
-messageInput.addEventListener("keydown", (event) => {
-
-  if (event.key === "Enter" && !event.shiftKey) {
-
-    event.preventDefault();
-
-    sendMessage();
+    }, 1500);
 
   }
+);
 
-});
+
+// ==========================================
+// PHOTO SELECTED
+// ==========================================
+
+photoInput.addEventListener(
+  "change",
+  function () {
+
+    if (!this.files[0]) return;
+
+    const file =
+      this.files[0];
+
+    addUserMessage(
+      "🖼️ " + file.name
+    );
+
+    showThinking();
+
+    setTimeout(() => {
+
+      removeThinking();
+
+      addAIMessage(
+        "I received your photo. 🤖<br><br>" +
+        "AI image analysis will be connected in the next step."
+      );
+
+    }, 1500);
+
+  }
+);
 
 
-// ============================================
+// ==========================================
+// FILE SELECTED
+// ==========================================
+
+fileInput.addEventListener(
+  "change",
+  function () {
+
+    if (!this.files[0]) return;
+
+    const file =
+      this.files[0];
+
+    addUserMessage(
+      "📄 " + file.name
+    );
+
+    showThinking();
+
+    setTimeout(() => {
+
+      removeThinking();
+
+      addAIMessage(
+        "I received your file: <b>" +
+        file.name +
+        "</b><br><br>" +
+        "File analysis will be connected in the next step."
+      );
+
+    }, 1500);
+
+  }
+);
+
+
+// ==========================================
+// SEND MESSAGE
+// ==========================================
+
+sendBtn.addEventListener(
+  "click",
+  sendMessage
+);
+
+
+// ==========================================
+// ENTER TO SEND
+// ==========================================
+
+messageInput.addEventListener(
+  "keydown",
+  function (event) {
+
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+// ==========================================
 // SEND MESSAGE FUNCTION
-// ============================================
+// ==========================================
 
 function sendMessage() {
 
@@ -177,7 +257,14 @@ function sendMessage() {
 
 
   // Hide welcome screen
-  welcomeScreen.style.display = "none";
+  welcomeScreen.style.display =
+    "none";
+
+
+  // Show chat
+  chatContainer.classList.add(
+    "active"
+  );
 
 
   // Add user message
@@ -188,18 +275,19 @@ function sendMessage() {
   messageInput.value = "";
 
 
-  // Show AI typing
-  showTyping();
+  // Show AI thinking
+  showThinking();
 
 
-  // Temporary AI response
+  // Temporary response
   setTimeout(() => {
 
-    removeTyping();
+    removeThinking();
 
-    showAIMessage(
-      "Hello! 👋 I'm MCQ Tools AI. Your AI assistant is ready. 🤖<br><br>" +
-      "In the next step, we'll connect the AI API so I can answer your questions."
+    addAIMessage(
+      "Hello! 👋 I'm <b>Smart AI</b>.<br><br>" +
+      "Your AI assistant is ready. 🤖<br><br>" +
+      "In the next step, we'll connect the real AI API so I can answer your questions."
     );
 
   }, 1500);
@@ -207,102 +295,239 @@ function sendMessage() {
 }
 
 
-// ============================================
-// ADD USER MESSAGE
-// ============================================
+// ==========================================
+// USER MESSAGE
+// ==========================================
 
 function addUserMessage(message) {
 
-  const div =
+  const messageBox =
     document.createElement("div");
 
-  div.className =
-    "message user-message";
+  messageBox.className =
+    "user-message";
 
-  div.textContent =
+
+  const content =
+    document.createElement("div");
+
+  content.className =
+    "message-content";
+
+  content.textContent =
     message;
 
-  chatMessages.appendChild(div);
+
+  messageBox.appendChild(
+    content
+  );
+
+
+  chatContainer.appendChild(
+    messageBox
+  );
+
+
+  saveChat();
+
 
   scrollToBottom();
 
 }
 
 
-// ============================================
-// ADD AI MESSAGE
-// ============================================
+// ==========================================
+// AI MESSAGE
+// ==========================================
 
-function showAIMessage(message) {
+function addAIMessage(message) {
 
-  const div =
+  const messageBox =
     document.createElement("div");
 
-  div.className =
-    "message ai-message";
+  messageBox.className =
+    "ai-message";
 
-  div.innerHTML =
+
+  const content =
+    document.createElement("div");
+
+  content.className =
+    "message-content";
+
+  content.innerHTML =
     message;
 
-  chatMessages.appendChild(div);
+
+  messageBox.appendChild(
+    content
+  );
+
+
+  chatContainer.appendChild(
+    messageBox
+  );
+
+
+  saveChat();
+
 
   scrollToBottom();
 
 }
 
 
-// ============================================
-// AI TYPING
-// ============================================
+// ==========================================
+// THINKING ANIMATION
+// ==========================================
 
-function showTyping() {
+function showThinking() {
 
-  const div =
+  const thinking =
     document.createElement("div");
 
-  div.id =
-    "typingMessage";
+  thinking.id =
+    "thinkingMessage";
 
-  div.className =
-    "message ai-message";
+  thinking.className =
+    "ai-message";
 
-  div.innerHTML =
-    "🤖 Thinking...";
 
-  chatMessages.appendChild(div);
+  thinking.innerHTML = `
+    <div class="message-content">
+      Smart AI is thinking
+      <span class="dots">•••</span>
+    </div>
+  `;
+
+
+  chatContainer.appendChild(
+    thinking
+  );
+
 
   scrollToBottom();
 
 }
 
 
-function removeTyping() {
+// ==========================================
+// REMOVE THINKING
+// ==========================================
 
-  const typing =
+function removeThinking() {
+
+  const thinking =
     document.getElementById(
-      "typingMessage"
+      "thinkingMessage"
     );
 
-  if (typing) {
+  if (thinking) {
 
-    typing.remove();
+    thinking.remove();
 
   }
 
 }
 
 
-// ============================================
-// SCROLL TO BOTTOM
-// ============================================
+// ==========================================
+// NEW CHAT
+// ==========================================
+
+newChatBtn.addEventListener(
+  "click",
+  function () {
+
+    chatContainer.innerHTML =
+      "";
+
+    chatContainer.classList.remove(
+      "active"
+    );
+
+    welcomeScreen.style.display =
+      "flex";
+
+    sidebar.classList.remove(
+      "active"
+    );
+
+  }
+);
+
+
+// ==========================================
+// CHAT HISTORY
+// ==========================================
+
+historyBtn.addEventListener(
+  "click",
+  function () {
+
+    const savedChat =
+      localStorage.getItem(
+        "smartAIChat"
+      );
+
+    if (!savedChat) {
+
+      alert(
+        "No previous chat found."
+      );
+
+      return;
+
+    }
+
+    welcomeScreen.style.display =
+      "none";
+
+    chatContainer.classList.add(
+      "active"
+    );
+
+    chatContainer.innerHTML =
+      savedChat;
+
+    sidebar.classList.remove(
+      "active"
+    );
+
+    scrollToBottom();
+
+  }
+);
+
+
+// ==========================================
+// SAVE CHAT
+// ==========================================
+
+function saveChat() {
+
+  localStorage.setItem(
+    "smartAIChat",
+    chatContainer.innerHTML
+  );
+
+}
+
+
+// ==========================================
+// SCROLL
+// ==========================================
 
 function scrollToBottom() {
 
   setTimeout(() => {
 
     window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth"
+      top:
+        document.body.scrollHeight,
+
+      behavior:
+        "smooth"
     });
 
   }, 100);
@@ -310,28 +535,58 @@ function scrollToBottom() {
 }
 
 
-// ============================================
-// NEW CHAT
-// ============================================
+// ==========================================
+// VOICE INPUT
+// ==========================================
 
-newChatBtn.addEventListener(
+const micBtn =
+  document.getElementById(
+    "micBtn"
+  );
+
+
+micBtn.addEventListener(
   "click",
-  () => {
+  function () {
 
-    chatMessages.innerHTML = "";
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
 
-    welcomeScreen.style.display =
-      "block";
 
-    sidebar.classList.remove(
-      "active"
-    );
+    if (!SpeechRecognition) {
 
-    overlay.classList.remove(
-      "active"
-    );
+      alert(
+        "Voice input is not supported in this browser."
+      );
 
-    messageInput.value = "";
+      return;
+
+    }
+
+
+    const recognition =
+      new SpeechRecognition();
+
+
+    recognition.lang =
+      "en-IN";
+
+
+    recognition.start();
+
+
+    recognition.onresult =
+      function (event) {
+
+        const text =
+          event.results[0][0]
+            .transcript;
+
+        messageInput.value =
+          text;
+
+      };
 
   }
 );
