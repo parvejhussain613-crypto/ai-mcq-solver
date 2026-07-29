@@ -1,375 +1,252 @@
-/* ==============================
-   MCQ TOOLS AI - MAIN DESIGN
-================================ */
-
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
   font-family: Arial, sans-serif;
-  background: #ffffff;
-  color: #202124;
+  background: #f8fbff;
+  color: #1f1f1f;
   min-height: 100vh;
 }
 
-/* ==============================
-   TOP HEADER
-================================ */
-
-.topbar {
+/* Header */
+header {
   height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px;
-  background: #ffffff;
-  border-bottom: 1px solid #eeeeee;
+  padding: 0 20px;
+  background: rgba(255, 255, 255, 0.95);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.app-title {
-  flex: 1;
-  font-size: 22px;
-  font-weight: 500;
-  margin-left: 15px;
-}
-
-.icon-btn {
-  border: none;
-  background: transparent;
-  font-size: 28px;
-  cursor: pointer;
+.menu-btn {
   width: 45px;
   height: 45px;
-  border-radius: 50%;
-}
-
-.icon-btn:hover {
-  background: #f1f3f4;
-}
-
-/* ==============================
-   SIDEBAR
-================================ */
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -290px;
-  width: 280px;
-  height: 100vh;
-  background: #ffffff;
-  box-shadow: 5px 0 20px rgba(0,0,0,0.12);
-  z-index: 1000;
-  padding: 25px 15px;
-  transition: left 0.3s ease;
-}
-
-.sidebar.active {
-  left: 0;
-}
-
-.sidebar-header {
-  padding: 15px;
-  margin-bottom: 20px;
-}
-
-.sidebar-header h2 {
-  font-size: 22px;
-}
-
-.side-item {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0;
   border: none;
   background: transparent;
-  text-align: left;
-  font-size: 17px;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.side-item:hover {
-  background: #f1f3f4;
-}
-
-/* ==============================
-   OVERLAY
-================================ */
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  z-index: 900;
-  display: none;
-}
-
-.overlay.active {
-  display: block;
-}
-
-/* ==============================
-   CHAT CONTAINER
-================================ */
-
-.chat-container {
-  max-width: 900px;
-  margin: auto;
-  min-height: calc(100vh - 150px);
-  padding: 30px 20px 180px;
-}
-
-/* ==============================
-   WELCOME SCREEN
-================================ */
-
-.welcome-screen {
-  text-align: center;
-  padding-top: 100px;
-}
-
-.ai-logo {
-  width: 110px;
-  height: 110px;
-  margin: auto;
-  border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    #4f7cff,
-    #8b5cf6,
-    #42b883
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 55px;
-  box-shadow: 0 10px 35px rgba(70,100,255,0.25);
-}
-
-.welcome-screen h1 {
-  font-size: 42px;
-  font-weight: 500;
-  margin-top: 45px;
-}
-
-.welcome-screen p {
-  font-size: 18px;
-  color: #6b7280;
-  margin-top: 18px;
-  line-height: 1.5;
-}
-
-/* ==============================
-   CHAT MESSAGES
-================================ */
-
-.chat-messages {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.message {
-  max-width: 80%;
-  padding: 14px 18px;
-  border-radius: 20px;
-  font-size: 17px;
-  line-height: 1.5;
-}
-
-.user-message {
-  align-self: flex-end;
-  background: #e8f0fe;
-  border-bottom-right-radius: 5px;
-}
-
-.ai-message {
-  align-self: flex-start;
-  background: #f1f3f4;
-  border-bottom-left-radius: 5px;
-}
-
-/* ==============================
-   CHAT INPUT
-================================ */
-
-.chat-input-wrapper {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(900px, calc(100% - 30px));
-  z-index: 500;
-}
-
-.chat-input-box {
-  min-height: 70px;
-  background: #ffffff;
-  border: 1px solid #dadce0;
-  border-radius: 35px;
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.12);
-}
-
-#messageInput {
-  flex: 1;
-  border: none;
-  outline: none;
-  resize: none;
-  background: transparent;
-  font-size: 17px;
-  padding: 12px;
-  max-height: 120px;
-  font-family: inherit;
-}
-
-#messageInput::placeholder {
-  color: #777;
-}
-
-/* ==============================
-   INPUT BUTTONS
-================================ */
-
-.input-icon {
-  width: 48px;
-  height: 48px;
-  border: none;
-  background: transparent;
-  border-radius: 50%;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.input-icon:hover {
-  background: #f1f3f4;
-}
-
-.send-btn {
-  width: 48px;
-  height: 48px;
-  border: none;
-  border-radius: 50%;
-  background: #8ab4f8;
-  color: #111;
   font-size: 30px;
   cursor: pointer;
 }
 
-.send-btn:hover {
-  background: #6ea1f5;
+.logo {
+  flex: 1;
+  font-size: 25px;
+  margin-left: 10px;
+  font-weight: 500;
 }
 
-/* ==============================
-   PLUS MENU
-================================ */
-
-.plus-menu {
-  position: fixed;
-  bottom: 100px;
-  left: calc(50% - 440px);
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 10px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
-  display: none;
-  z-index: 600;
-}
-
-.plus-menu.active {
-  display: flex;
-  gap: 8px;
-}
-
-.plus-item {
+.profile-btn {
+  width: 48px;
+  height: 48px;
   border: none;
-  background: #f5f5f5;
-  border-radius: 15px;
-  padding: 12px 18px;
+  border-radius: 50%;
+  background: #e5f0ff;
+  font-size: 25px;
   cursor: pointer;
-  font-size: 15px;
+}
+
+/* Main */
+.container {
+  max-width: 850px;
+  margin: auto;
+  padding: 35px 20px 150px;
+}
+
+/* AI Icon */
+.ai-icon {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 25px auto 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 65px;
+  background: linear-gradient(135deg, #536dfe, #8e44ad, #3ba776);
+  box-shadow: 0 15px 35px rgba(80, 100, 200, 0.2);
+}
+
+/* Welcome */
+h1 {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 50px;
+}
+
+/* Hide old MCQ input */
+.input-area {
+  display: none;
+}
+
+/* Hide old option boxes */
+.options {
+  display: none;
+}
+
+/* Chat messages */
+#chatContainer {
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.user-message {
+  align-self: flex-end;
+  max-width: 80%;
+  background: #e8f0fe;
+  padding: 14px 18px;
+  border-radius: 20px;
+  font-size: 17px;
+}
+
+.ai-message {
+  align-self: flex-start;
+  max-width: 90%;
+  background: white;
+  padding: 18px;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  line-height: 1.6;
+}
+
+/* Bottom Chat Box */
+.button-row {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(90%, 750px);
+  min-height: 75px;
+  background: white;
+  border-radius: 40px;
+  padding: 10px 15px;
+  display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 12px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  z-index: 200;
 }
 
-.plus-item:hover {
-  background: #e8eaed;
+/* + Button */
+.button-row::before {
+  content: "+";
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
+  cursor: pointer;
 }
 
-.plus-item span {
-  font-size: 13px;
+/* Camera Button */
+.camera-btn {
+  order: 3;
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  font-size: 25px;
+  cursor: pointer;
 }
 
-/* ==============================
-   MOBILE DESIGN
-================================ */
+/* Solve Button */
+.solve-btn {
+  order: 4;
+  width: 55px;
+  height: 55px;
+  border: none;
+  border-radius: 50%;
+  background: #8ab4f8;
+  font-size: 25px;
+  cursor: pointer;
+}
 
+/* Input placeholder area */
+.button-row::after {
+  content: "Ask anything...";
+  position: absolute;
+  left: 75px;
+  top: 25px;
+  color: #777;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+/* Hide old text buttons */
+.camera-btn {
+  font-size: 0;
+}
+
+.camera-btn::after {
+  content: "🎤";
+  font-size: 25px;
+}
+
+.solve-btn {
+  font-size: 0;
+}
+
+.solve-btn::after {
+  content: "↑";
+  font-size: 30px;
+}
+
+/* AI Answer hidden on home */
+#result {
+  display: none;
+}
+
+/* History hidden on home */
+.history {
+  display: none;
+}
+
+/* Mobile */
 @media (max-width: 600px) {
 
-  .topbar {
-    height: 65px;
+  header {
+    padding: 0 15px;
   }
 
-  .app-title {
-    font-size: 20px;
+  .logo {
+    font-size: 23px;
   }
 
-  .welcome-screen {
-    padding-top: 70px;
+  .container {
+    padding: 25px 15px 130px;
   }
 
-  .ai-logo {
-    width: 95px;
-    height: 95px;
-    font-size: 45px;
+  .ai-icon {
+    width: 120px;
+    height: 120px;
+    font-size: 50px;
+    margin-top: 20px;
   }
 
-  .welcome-screen h1 {
-    font-size: 34px;
-    margin-top: 35px;
+  h1 {
+    font-size: 40px;
   }
 
-  .welcome-screen p {
-    font-size: 16px;
-    padding: 0 20px;
+  .subtitle {
+    font-size: 18px;
   }
 
-  .chat-container {
-    padding-bottom: 150px;
+  .button-row {
+    width: 94%;
+    bottom: 12px;
   }
-
-  .chat-input-wrapper {
-    bottom: 15px;
-    width: calc(100% - 20px);
-  }
-
-  .chat-input-box {
-    min-height: 65px;
-  }
-
-  .plus-menu {
-    left: 10px;
-    bottom: 90px;
-    max-width: calc(100% - 20px);
-    overflow-x: auto;
-  }
-
-  .plus-item {
-    min-width: 85px;
-  }
-
-  .message {
-    max-width: 90%;
-  }
-}
+   }
