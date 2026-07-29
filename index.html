@@ -4,218 +4,251 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MCQ Tools</title>
+  <title>MCQ Tools AI</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<!-- ===== Header ===== -->
-<header class="topbar">
-  <button id="menuBtn" class="icon-btn">☰</button>
 
-  <div class="app-title">
-    🤖 <span>MCQ Tools AI</span>
-  </div>
+  <!-- =========================
+       TOP HEADER
+  ========================== -->
 
-  <button class="icon-btn">👤</button>
-</header>
-
-<!-- ===== Sidebar ===== -->
-<div id="sidebar" class="sidebar">
-
-  <div class="sidebar-header">
-    <h2>MCQ Tools</h2>
-  </div>
-
-  <button class="side-item">➕ New Chat</button>
-  <button class="side-item">📚 History</button>
-  <button class="side-item">📷 Scan MCQ</button>
-  <button class="side-item">🤖 AI Chat</button>
-  <button class="side-item">⚙️ Settings</button>
-
-</div>
-
-<!-- Overlay -->
-<div id="overlay" class="overlay"></div>
-  <!-- Top Header -->
   <header class="header">
-    <button class="menu-btn">☰</button>
+
+    <button
+      id="menuBtn"
+      class="menu-btn"
+      type="button"
+    >
+      ☰
+    </button>
 
     <div class="logo">
-      🤖 MCQ Tools
+      🤖 MCQ Tools AI
     </div>
 
-    <button class="profile-btn">👤</button>
+    <button
+      class="profile-btn"
+      type="button"
+    >
+      👤
+    </button>
+
   </header>
 
 
-  <!-- Main Content -->
-  <main class="container">
+  <!-- =========================
+       SIDEBAR
+  ========================== -->
 
-    <div class="ai-icon">✨</div>
+  <div id="sidebar" class="sidebar">
 
-    <h1>What can I help you with?</h1>
+    <div class="sidebar-header">
+      <h2>🤖 MCQ Tools AI</h2>
+    </div>
 
-    <p class="subtitle">
-      Ask your MCQ question and let AI solve it for you.
-    </p>
-<!-- ===== AI CHAT AREA ===== -->
-<main class="chat-container">
-
-  <!-- Welcome Screen -->
-  <section id="welcomeScreen" class="welcome-screen">
-    <div class="ai-logo">✨</div>
-
-    <h1>What can I help you with?</h1>
-
-    <p>
-      Ask anything, solve questions, analyze images,
-      or upload files.
-    </p>
-  </section>
-
-  <!-- Chat Messages -->
-  <section id="chatMessages" class="chat-messages">
-    <!-- Messages will appear here -->
-  </section>
-
-</main>
-
-
-<!-- ===== PLUS MENU ===== -->
-<div id="plusMenu" class="plus-menu">
-
-  <button id="cameraBtn" class="plus-item">
-    📷
-    <span>Camera</span>
-  </button>
-
-  <button id="photoBtn" class="plus-item">
-    🖼️
-    <span>Photos</span>
-  </button>
-
-  <button id="fileBtn" class="plus-item">
-    📄
-    <span>Files</span>
-  </button>
-
-</div>
-
-
-<!-- Hidden File Inputs -->
-<input
-  type="file"
-  id="cameraInput"
-  accept="image/*"
-  capture="environment"
-  hidden
->
-
-<input
-  type="file"
-  id="photoInput"
-  accept="image/*"
-  hidden
->
-
-<input
-  type="file"
-  id="fileInput"
-  accept=".pdf,.doc,.docx,.txt,image/*"
-  hidden
->
-
-
-<!-- ===== CHAT INPUT ===== -->
-<div class="chat-input-wrapper">
-
-  <div class="chat-input-box">
-
-    <!-- Plus Button -->
     <button
-      id="plusBtn"
-      class="input-icon"
+      id="newChatBtn"
+      class="side-item"
       type="button"
     >
-      +
+      ➕ New Chat
     </button>
 
-    <!-- Message Input -->
-    <textarea
-      id="messageInput"
-      placeholder="Ask anything..."
-      rows="1"
-    ></textarea>
-
-    <!-- Microphone -->
     <button
-      id="micBtn"
-      class="input-icon"
+      id="historyBtn"
+      class="side-item"
       type="button"
     >
-      🎤
+      📚 Chat History
     </button>
 
-    <!-- Send -->
     <button
-      id="sendBtn"
-      class="send-btn"
+      id="settingsBtn"
+      class="side-item"
       type="button"
     >
-      ↑
+      ⚙️ Settings
     </button>
 
   </div>
 
-</div>
 
-</div>
+  <!-- Sidebar Overlay -->
+
+  <div
+    id="overlay"
+    class="overlay"
+  ></div>
 
 
-<!-- Hidden Image Input -->
-<input
-    type="file"
-    id="imageInput"
-    accept="image/*"
-    capture="environment"
-    style="display:none;"
->
+  <!-- =========================
+       MAIN CHAT AREA
+  ========================== -->
 
-    <!-- Hidden Image Input -->
-    <input
-      type="file"
-      id="imageInput"
-      accept="image/*"
-      capture="environment"
-      style="display:none;"
+  <main class="container">
+
+    <!-- Welcome Screen -->
+
+    <section
+      id="welcomeScreen"
+      class="welcome-screen"
     >
 
-
-    <!-- AI Answer -->
-    <div id="result">
-      🤖 AI Answer
-      <br>
-      <span>Your answer will appear here...</span>
-    </div>
-
-
-    <!-- History -->
-    <div class="history">
-
-      <h2>📚 History</h2>
-
-      <div id="historyList">
-        No questions solved yet.
+      <div class="ai-icon">
+        ✨
       </div>
 
-    </div>
+      <h1>
+        What can I help you with?
+      </h1>
+
+      <p class="subtitle">
+        Ask anything, solve questions, analyze images,
+        or upload files.
+      </p>
+
+    </section>
+
+
+    <!-- Chat Messages -->
+
+    <section
+      id="chatMessages"
+      class="chat-messages"
+    >
+
+      <!-- Messages will appear here -->
+
+    </section>
 
   </main>
 
 
+  <!-- =========================
+       PLUS MENU
+  ========================== -->
+
+  <div
+    id="plusMenu"
+    class="plus-menu"
+  >
+
+    <button
+      id="cameraBtn"
+      class="plus-item"
+      type="button"
+    >
+      📷
+      <span>Camera</span>
+    </button>
+
+    <button
+      id="photoBtn"
+      class="plus-item"
+      type="button"
+    >
+      🖼️
+      <span>Photos</span>
+    </button>
+
+    <button
+      id="fileBtn"
+      class="plus-item"
+      type="button"
+    >
+      📄
+      <span>Files</span>
+    </button>
+
+  </div>
+
+
+  <!-- =========================
+       HIDDEN FILE INPUTS
+  ========================== -->
+
+  <input
+    type="file"
+    id="cameraInput"
+    accept="image/*"
+    capture="environment"
+    hidden
+  >
+
+  <input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    hidden
+  >
+
+  <input
+    type="file"
+    id="fileInput"
+    accept=".pdf,.doc,.docx,.txt,image/*"
+    hidden
+  >
+
+
+  <!-- =========================
+       CHAT INPUT
+  ========================== -->
+
+  <div class="chat-input-wrapper">
+
+    <div class="chat-input-box">
+
+      <!-- Plus -->
+
+      <button
+        id="plusBtn"
+        class="input-icon"
+        type="button"
+      >
+        +
+      </button>
+
+
+      <!-- Message -->
+
+      <textarea
+        id="messageInput"
+        placeholder="Ask anything..."
+        rows="1"
+      ></textarea>
+
+
+      <!-- Microphone -->
+
+      <button
+        id="micBtn"
+        class="input-icon"
+        type="button"
+      >
+        🎤
+      </button>
+
+
+      <!-- Send -->
+
+      <button
+        id="sendBtn"
+        class="send-btn"
+        type="button"
+      >
+        ↑
+      </button>
+
+    </div>
+
+  </div>
+
+
   <!-- JavaScript -->
+
   <script src="script.js"></script>
 
 </body>
