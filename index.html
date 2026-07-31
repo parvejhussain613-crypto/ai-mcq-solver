@@ -11,142 +11,155 @@
 
 <body>
 
-  <!-- Header -->
+  <!-- Top Header -->
   <header class="top-header">
 
-    <button class="menu-btn" id="menuBtn">☰</button>
+    <button id="menuBtn" class="menu-btn">
+      ☰
+    </button>
 
-    <div class="logo">
-      🤖 <span>Smart AI</span>
+    <div class="app-name">
+      Smart AI
     </div>
 
-    <button class="profile-btn">👤</button>
+    <button class="new-chat-btn">
+      ✎
+    </button>
 
   </header>
 
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
+  <!-- Main Home Screen -->
+  <main id="homeScreen" class="home-screen">
 
-    <div class="sidebar-logo">
-      🤖 Smart AI
+    <div class="smart-ai-logo">
+      ✨
     </div>
 
-    <button id="newChatBtn">
-      ➕ New Chat
+    <h1>
+      What can I help you with?
+    </h1>
+
+  </main>
+
+
+  <!-- Chat Area -->
+  <main id="chatScreen" class="chat-screen">
+
+    <div id="messages"></div>
+
+  </main>
+
+
+  <!-- Plus Menu -->
+  <div id="plusMenu" class="plus-menu">
+
+    <button id="photoBtn">
+      🖼️ Photos
     </button>
 
-    <button id="historyBtn">
-      📚 Chat History
+    <button id="cameraBtn">
+      📷 Camera
     </button>
 
-    <button id="settingsBtn">
-      ⚙️ Settings
+    <button id="fileBtn">
+      📎 Files
     </button>
 
-  </aside>
+  </div>
 
 
-  <!-- Main Chat Area -->
-  <main class="main-content">
+  <!-- Hidden Inputs -->
+  <input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    hidden
+  >
 
-    <!-- Welcome Screen -->
-    <section class="welcome-screen" id="welcomeScreen">
+  <input
+    type="file"
+    id="cameraInput"
+    accept="image/*"
+    capture="environment"
+    hidden
+  >
 
-      <div class="ai-logo">
-        ✨
-      </div>
-
-      <h1>What can I help you with?</h1>
-
-      <p>
-        Ask anything, solve questions, analyze images,
-        create content, or upload files.
-      </p>
-
-    </section>
+  <input
+    type="file"
+    id="fileInput"
+    accept=".pdf,.doc,.docx,.txt"
+    hidden
+  >
 
 
-    <!-- Chat Messages -->
-    <section class="chat-container" id="chatContainer">
+  <!-- Bottom Input -->
+  <div class="input-container">
 
-    </section>
+    <div class="input-box">
 
-<!-- ====== AI Assistant Input ====== -->
-<div class="chat-input-wrapper">
- ...
-</div>
-    <!-- Bottom Input -->
-    <div class="input-wrapper">
-
-      <button class="plus-btn" id="plusBtn"
+      <button
+        id="plusBtn"
+        class="plus-btn"
+      >
         +
       </button>
 
       <textarea
         id="messageInput"
-        placeholder="Ask anything..."
+        placeholder="Ask Smart AI"
         rows="1"
       ></textarea>
 
-      <button class="mic-btn" id="micBtn">
+      <button
+        id="micBtn"
+        class="mic-btn"
+      >
         🎤
       </button>
 
-      <button class="send-btn" id="sendBtn">
+      <button
+        id="sendBtn"
+        class="send-btn"
+      >
         ↑
       </button>
 
     </div>
 
+  </div>
 
-    <!-- Attachment Menu -->
-    <div class="attachment-menu" id="attachmentMenu">
 
-      <button id="cameraBtn">
-        📷
-        <span>Camera</span>
+  <!-- Side Menu -->
+  <div id="sideMenu" class="side-menu">
+
+    <div class="side-menu-header">
+      <h2>Smart AI</h2>
+
+      <button id="closeMenu">
+        ✕
       </button>
-
-      <button id="photoBtn">
-        🖼️
-        <span>Photos</span>
-      </button>
-
-      <button id="fileBtn">
-        📄
-        <span>Files</span>
-      </button>
-
     </div>
 
+    <button id="newChat">
+      ✨ New chat
+    </button>
 
-    <!-- Hidden File Inputs -->
-    <input
-      type="file"
-      id="photoInput"
-      accept="image/*"
-      hidden
-    >
+    <div class="history-title">
+      Recent chats
+    </div>
 
-    <input
-      type="file"
-      id="fileInput"
-      hidden
-    >
+    <div id="chatHistory">
+      <!-- Old chats will appear here -->
+    </div>
 
-    <input
-      type="file"
-      id="cameraInput"
-      accept="image/*"
-      capture="environment"
-      hidden
-    >
-
-  </main>
+  </div>
 
 
-  <!-- JavaScript -->
+  <!-- Dark Overlay -->
+  <div id="overlay"></div>
+
+
   <script src="script.js"></script>
 
 </body>
