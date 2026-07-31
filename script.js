@@ -590,3 +590,50 @@ micBtn.addEventListener(
 
   }
 );
+// ===== Photo Preview Code =====
+let selectedFile = null;
+const photoInput = document.getElementById('photoInput');
+const fileInput = document.getElementById('fileInput');
+const cameraInput = document.getElementById('cameraInput');
+const previewArea = document.getElementById('previewArea');
+const attachmentMenu = document.getElementById('attachmentMenu');
+
+// Jab bhi photo/file/camera select ho
+[photoInput, fileInput, cameraInput].forEach(input => {
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedFile = file;
+    showPreview(file);
+    attachmentMenu.classList.add('hidden'); // menu band kar do
+  }
+})
+
+function showPreview(file) {
+  previewArea.innerHTML = ''; // purana preview hatao
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    previewArea.innerHTML = `
+      <div class="preview-chip">
+        <img src="${e.target.result}">
+        <span>${file.name.substring(0,15)}...</span>
+        <button class="close-btn" onclick="removePreview()">×</button>
+      </div>
+    `;
+  }
+  reader.readAsDataURL(file);
+}
+
+function removePreview() {
+  selectedFile = null;
+  previewArea.innerHTML = '';
+  photoInput.value = '';
+  fileInput.value = '';
+  cameraInput.value = '';
+}
+
+// + button pe click karne se menu show/hide
+const plusBtn = document.getElementById('plusBtn');
+plusBtn.onclick = () => {
+  attachmentMenu.classList.toggle('hidden');
+}
