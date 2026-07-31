@@ -586,3 +586,7 @@ micBtn.addEventListener(
         messageInput.value =
           text;
 
+      };
+
+  }
+);
