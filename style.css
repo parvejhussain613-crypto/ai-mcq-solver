@@ -464,3 +464,32 @@ body.dark-mode .attachment-menu button:hover {
 body.dark-mode .user-message .message-content {
   background: #30343d;
   }
+.preview-area {
+  display: flex;
+  gap: 10px;
+  padding: 10px 15px;
+  flex-wrap: wrap;
+}
+.preview-chip {
+  background: #2a2a2a;
+  border-radius: 20px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-size: 14px;
+}
+.preview-chip img {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+.preview-chip.close-btn {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 16px;
+}
