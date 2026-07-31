@@ -587,16 +587,19 @@ micBtn.addEventListener(
           text;
 
       };
-
-  }
-);
-// ===== Photo Preview Code =====
+// ===== Photo Preview + Menu Fix =====
 let selectedFile = null;
+const plusBtn = document.querySelector('.plus-btn'); //. se class pakda
+const attachmentMenu = document.querySelector('.attachment-menu');
 const photoInput = document.getElementById('photoInput');
 const fileInput = document.getElementById('fileInput');
 const cameraInput = document.getElementById('cameraInput');
 const previewArea = document.getElementById('previewArea');
-const attachmentMenu = document.getElementById('attachmentMenu');
+
+// + button click
+plusBtn.onclick = () => {
+  attachmentMenu.classList.toggle('hidden');
+}
 
 // Jab bhi photo/file/camera select ho
 [photoInput, fileInput, cameraInput].forEach(input => {
@@ -605,12 +608,12 @@ const attachmentMenu = document.getElementById('attachmentMenu');
     if (!file) return;
     selectedFile = file;
     showPreview(file);
-    attachmentMenu.classList.add('hidden'); // menu band kar do
+    attachmentMenu.classList.add('hidden');
   }
 })
 
 function showPreview(file) {
-  previewArea.innerHTML = ''; // purana preview hatao
+  previewArea.innerHTML = '';
   const reader = new FileReader();
   reader.onload = (e) => {
     previewArea.innerHTML = `
@@ -632,8 +635,7 @@ function removePreview() {
   cameraInput.value = '';
 }
 
-// + button pe click karne se menu show/hide
-const plusBtn = document.getElementById('plusBtn');
-plusBtn.onclick = () => {
-  attachmentMenu.classList.toggle('hidden');
-}
+// Photo/Camera/File button click
+document.getElementById('photoBtn').onclick = () => photoInput.click();
+document.getElementById('fileBtn').onclick = () => fileInput.click();
+document.getElementById('cameraBtn').onclick = () => cameraInput.click();
