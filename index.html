@@ -11,140 +11,680 @@
 
 <body>
 
-  <!-- Header -->
+  <!-- ==============================
+       HEADER
+  =============================== -->
+
   <header class="top-header">
 
-    <button class="menu-btn" id="menuBtn">☰</button>
+    <button
+      id="menuBtn"
+      class="menu-btn"
+      aria-label="Open Menu">
+      ☰
+    </button>
 
-    <div class="logo">
-      🤖 <span>Smart AI</span>
+    <div class="app-logo">
+      ✨ Smart AI
     </div>
 
-    <button class="profile-btn">👤</button>
+    <button
+      id="profileBtn"
+      class="profile-btn"
+      aria-label="Profile">
+      👤
+    </button>
 
   </header>
 
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
+  <!-- ==============================
+       SIDEBAR
+  =============================== -->
 
-    <div class="sidebar-logo">
-      🤖 Smart AI
+  <aside id="sidebar" class="sidebar">
+
+    <div class="sidebar-header">
+
+      <h2>✨ Smart AI</h2>
+
+      <button
+        id="closeSidebar"
+        class="close-btn">
+        ✕
+      </button>
+
     </div>
 
-    <button id="newChatBtn">
-      ➕ New Chat
+
+    <!-- New Chat -->
+
+    <button
+      id="newChatBtn"
+      class="menu-item">
+      ➕
+      <span>New Chat</span>
     </button>
 
-    <button id="historyBtn">
-      📚 Chat History
+
+    <!-- Generate Image -->
+
+    <button
+      id="generateImageBtn"
+      class="menu-item">
+      🎨
+      <span>Generate Image</span>
     </button>
 
-    <button id="settingsBtn">
-      ⚙️ Settings
+
+    <!-- Generate Video -->
+
+    <button
+      id="generateVideoBtn"
+      class="menu-item">
+      🎬
+      <span>Generate Video</span>
     </button>
+
+
+    <!-- Image Enhance -->
+
+    <button
+      id="imageEnhanceBtn"
+      class="menu-item">
+      ✨
+      <span>Image Enhance</span>
+    </button>
+
+
+    <!-- Settings -->
+
+    <button
+      id="settingsBtn"
+      class="menu-item">
+      ⚙️
+      <span>Settings</span>
+    </button>
+
+
+    <!-- Recent Chats -->
+
+    <div class="recent-title">
+      Recent Chats
+    </div>
+
+    <div
+      id="recentChats"
+      class="recent-chats">
+    </div>
 
   </aside>
 
 
-  <!-- Main Chat Area -->
-  <main class="main-content">
+  <!-- ==============================
+       OVERLAY
+  =============================== -->
 
-    <!-- Welcome Screen -->
-    <section class="welcome-screen" id="welcomeScreen">
+  <div
+    id="overlay"
+    class="overlay">
+  </div>
 
-      <div class="ai-logo">
-        ✨
+
+  <!-- ==============================
+       MAIN APP
+  =============================== -->
+
+  <main id="app">
+
+    <!-- ============================
+         CHAT SCREEN
+    ============================= -->
+
+    <section
+      id="chatScreen"
+      class="screen active">
+
+      <div
+        id="welcomeScreen"
+        class="welcome-screen">
+
+        <div class="ai-logo">
+          ✨
+        </div>
+
+        <h1>
+          What can I help you with?
+        </h1>
+
+        <p>
+          Ask anything with Smart AI
+        </p>
+
       </div>
 
-      <h1>What can I help you with?</h1>
 
-      <p>
-        Ask anything, solve questions, analyze images,
-        create content, or upload files.
-      </p>
+      <!-- Chat Messages -->
+
+      <div
+        id="chatMessages"
+        class="chat-messages">
+      </div>
+
+
+      <!-- Chat Input -->
+
+      <div class="chat-input-area">
+
+        <div
+          id="attachmentPreview"
+          class="attachment-preview">
+        </div>
+
+
+        <div class="chat-input-box">
+
+          <button
+            id="plusBtn"
+            class="input-btn">
+            +
+          </button>
+
+
+          <textarea
+            id="messageInput"
+            placeholder="Ask Smart AI..."
+            rows="1">
+          </textarea>
+
+
+          <button
+            id="micBtn"
+            class="input-btn">
+            🎤
+          </button>
+
+
+          <button
+            id="sendBtn"
+            class="send-btn">
+            ↑
+          </button>
+
+        </div>
+
+      </div>
 
     </section>
 
 
-    <!-- Chat Messages -->
-    <section class="chat-container" id="chatContainer">
+    <!-- ============================
+         GENERATE IMAGE SCREEN
+    ============================= -->
+
+    <section
+      id="imageScreen"
+      class="screen tool-screen">
+
+      <button
+        class="back-btn"
+        data-back>
+        ←
+      </button>
+
+      <div class="tool-content">
+
+        <div class="tool-icon">
+          🎨
+        </div>
+
+        <h1>
+          Generate Image
+        </h1>
+
+        <p>
+          Create an image from your imagination.
+        </p>
+
+
+        <textarea
+          id="imagePrompt"
+          class="tool-prompt"
+          placeholder="Describe the image you want to create...">
+        </textarea>
+
+
+        <div class="tool-upload">
+
+          <input
+            type="file"
+            id="imageReferenceInput"
+            accept="image/*"
+            hidden>
+
+          <button
+            id="uploadImageReferenceBtn">
+            🖼️ Upload Reference Image
+          </button>
+
+        </div>
+
+
+        <button
+          id="generateImageAction"
+          class="primary-btn">
+          ✨ Generate Image
+        </button>
+
+
+        <!-- Image Loading -->
+
+        <div
+          id="imageLoading"
+          class="loading-box">
+
+          <div class="loader"></div>
+
+          <p>
+            Creating your image...
+          </p>
+
+          <span>
+            Please wait a moment
+          </span>
+
+        </div>
+
+
+        <!-- Generated Image -->
+
+        <div
+          id="generatedImageResult"
+          class="result-box">
+
+          <img
+            id="generatedImage"
+            alt="Generated Image">
+
+          <button
+            id="downloadImageBtn"
+            class="download-btn">
+            ⬇️ Download
+          </button>
+
+        </div>
+
+      </div>
 
     </section>
 
 
-    <!-- Bottom Input -->
-    <div class="input-wrapper">
+    <!-- ============================
+         GENERATE VIDEO SCREEN
+    ============================= -->
 
-      <button class="plus-btn" id="plusBtn">
-        +
+    <section
+      id="videoScreen"
+      class="screen tool-screen">
+
+      <button
+        class="back-btn"
+        data-back>
+        ←
       </button>
 
-      <textarea
-        id="messageInput"
-        placeholder="Ask anything..."
-        rows="1"
-      ></textarea>
+      <div class="tool-content">
 
-      <button class="mic-btn" id="micBtn">
-        🎤
+        <div class="tool-icon">
+          🎬
+        </div>
+
+        <h1>
+          Generate Video
+        </h1>
+
+        <p>
+          Create an AI video from your prompt.
+        </p>
+
+
+        <textarea
+          id="videoPrompt"
+          class="tool-prompt"
+          placeholder="Describe the video you want to create...">
+        </textarea>
+
+
+        <div class="video-options">
+
+          <label>
+            Duration
+          </label>
+
+          <select id="videoDuration">
+
+            <option value="8">
+              8 Seconds
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="tool-upload">
+
+          <input
+            type="file"
+            id="videoReferenceInput"
+            accept="image/*"
+            hidden>
+
+          <button
+            id="uploadVideoReferenceBtn">
+            🖼️ Upload Reference Image
+          </button>
+
+        </div>
+
+
+        <button
+          id="generateVideoAction"
+          class="primary-btn">
+          🎬 Generate Video
+        </button>
+
+
+        <!-- Video Loading -->
+
+        <div
+          id="videoLoading"
+          class="loading-box">
+
+          <div class="loader"></div>
+
+          <p>
+            Creating your video...
+          </p>
+
+          <span>
+            Your 8-second video is being generated.
+          </span>
+
+        </div>
+
+
+        <!-- Generated Video -->
+
+        <div
+          id="generatedVideoResult"
+          class="result-box">
+
+          <video
+            id="generatedVideo"
+            controls>
+          </video>
+
+          <button
+            id="downloadVideoBtn"
+            class="download-btn">
+            ⬇️ Download Video
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ============================
+         IMAGE ENHANCE SCREEN
+    ============================= -->
+
+    <section
+      id="enhanceScreen"
+      class="screen tool-screen">
+
+      <button
+        class="back-btn"
+        data-back>
+        ←
       </button>
 
-      <button class="send-btn" id="sendBtn">
-        ↑
+      <div class="tool-content">
+
+        <div class="tool-icon">
+          ✨
+        </div>
+
+        <h1>
+          Image Enhance
+        </h1>
+
+        <p>
+          Enhance your image with AI.
+        </p>
+
+
+        <input
+          type="file"
+          id="enhanceInput"
+          accept="image/*"
+          hidden>
+
+
+        <button
+          id="uploadEnhanceBtn"
+          class="upload-main-btn">
+          🖼️ Upload Photo
+        </button>
+
+
+        <!-- Original Preview -->
+
+        <div
+          id="enhancePreviewBox"
+          class="preview-box">
+
+          <img
+            id="enhancePreview"
+            alt="Selected Image">
+
+        </div>
+
+
+        <button
+          id="enhanceAction"
+          class="primary-btn">
+          ✨ Enhance Image
+        </button>
+
+
+        <!-- Enhance Loading -->
+
+        <div
+          id="enhanceLoading"
+          class="loading-box">
+
+          <div class="loader"></div>
+
+          <p>
+            Enhancing your image...
+          </p>
+
+          <span>
+            Creating high-quality HD result.
+          </span>
+
+        </div>
+
+
+        <!-- Enhanced Result -->
+
+        <div
+          id="enhancedResult"
+          class="result-box">
+
+          <img
+            id="enhancedImage"
+            alt="Enhanced Image">
+
+          <button
+            id="downloadEnhancedBtn"
+            class="download-btn">
+            ⬇️ Download Enhanced Image
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ============================
+         SETTINGS SCREEN
+    ============================= -->
+
+    <section
+      id="settingsScreen"
+      class="screen tool-screen">
+
+      <button
+        class="back-btn"
+        data-back>
+        ←
       </button>
 
-    </div>
+      <div class="tool-content">
+
+        <div class="tool-icon">
+          ⚙️
+        </div>
+
+        <h1>
+          Settings
+        </h1>
 
 
-    <!-- Attachment Menu -->
-    <div class="attachment-menu" id="attachmentMenu">
+        <div class="settings-card">
 
-      <button id="cameraBtn">
-        📷
-        <span>Camera</span>
-      </button>
+          <label>
+            Appearance
+          </label>
 
-      <button id="photoBtn">
-        🖼️
-        <span>Photos</span>
-      </button>
+          <select id="themeSelect">
 
-      <button id="fileBtn">
-        📄
-        <span>Files</span>
-      </button>
+            <option value="light">
+              Light
+            </option>
 
-    </div>
+            <option value="dark">
+              Dark
+            </option>
+
+          </select>
+
+        </div>
 
 
-    <!-- Hidden File Inputs -->
-    <input
-      type="file"
-      id="photoInput"
-      accept="image/*"
-      hidden
-    >
+        <button
+          id="logoutBtn"
+          class="logout-btn">
+          Log Out
+        </button>
 
-    <input
-      type="file"
-      id="fileInput"
-      hidden
-    >
+      </div>
 
-    <input
-      type="file"
-      id="cameraInput"
-      accept="image/*"
-      capture="environment"
-      hidden
-    >
+    </section>
 
   </main>
 
 
-  <!-- JavaScript -->
+  <!-- ==============================
+       ATTACHMENT MENU
+  =============================== -->
+
+  <div
+    id="attachmentMenu"
+    class="attachment-menu">
+
+    <button id="cameraBtn">
+      📷
+      <span>Camera</span>
+    </button>
+
+    <button id="photoBtn">
+      🖼️
+      <span>Photos</span>
+    </button>
+
+    <button id="fileBtn">
+      📎
+      <span>Files</span>
+    </button>
+
+  </div>
+
+
+  <!-- Hidden Inputs -->
+
+  <input
+    type="file"
+    id="cameraInput"
+    accept="image/*"
+    capture="environment"
+    hidden>
+
+  <input
+    type="file"
+    id="photoInput"
+    accept="image/*"
+    hidden>
+
+  <input
+    type="file"
+    id="fileInput"
+    hidden>
+
+
+  <!-- ==============================
+       LOGIN MODAL
+  =============================== -->
+
+  <div
+    id="loginModal"
+    class="modal">
+
+    <div class="modal-content">
+
+      <button
+        id="closeLoginModal"
+        class="close-modal">
+        ✕
+      </button>
+
+      <h2>
+        Login to Smart AI
+      </h2>
+
+      <p>
+        Please login to start chatting with Smart AI.
+      </p>
+
+      <button
+        id="loginRedirectBtn"
+        class="primary-btn">
+        Login / Sign Up
+      </button>
+
+    </div>
+
+  </div>
+
+
   <script src="script.js"></script>
 
 </body>
-</html>
+      </html>
