@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -15,7 +17,7 @@
 
   <meta
     name="description"
-    content="Smart AI — Your intelligent AI assistant for chat, image generation, video generation and image enhancement."
+    content="Smart AI - Ask questions, generate images, create videos and enhance photos."
   >
 
   <title>Smart AI</title>
@@ -31,1118 +33,1169 @@
     rel="stylesheet"
     href="style.css"
   >
+
 </head>
+
 
 <body>
 
-  <!-- =====================================
-       OVERLAY
-  ====================================== -->
+
+<!-- =====================================
+     OVERLAY
+===================================== -->
+
+<div
+  id="overlay"
+  class="overlay"
+></div>
+
+
+<!-- =====================================
+     SIDEBAR
+===================================== -->
+
+<aside
+  id="sidebar"
+  class="sidebar"
+>
+
+
+  <!-- SIDEBAR HEADER -->
+
+  <div class="sidebar-header">
+
+    <div class="brand-small">
+
+      <div class="brand-icon">
+        ✦
+      </div>
+
+      <span>
+        Smart AI
+      </span>
+
+    </div>
+
+
+    <button
+      id="closeSidebar"
+      class="icon-btn"
+      aria-label="Close menu"
+    >
+      ✕
+    </button>
+
+  </div>
+
+
+  <!-- NEW CHAT -->
+
+  <button
+    id="newChatBtn"
+    class="sidebar-item"
+  >
+
+    <span class="sidebar-item-icon">
+      ＋
+    </span>
+
+    <span>
+      New Chat
+    </span>
+
+  </button>
+
+
+  <!-- GENERATE IMAGE -->
+
+  <button
+    id="generateImageBtn"
+    class="sidebar-item"
+  >
+
+    <span class="sidebar-item-icon">
+      🖼️
+    </span>
+
+    <span>
+      Generate Image
+    </span>
+
+  </button>
+
+
+  <!-- GENERATE VIDEO -->
+
+  <button
+    id="generateVideoBtn"
+    class="sidebar-item"
+  >
+
+    <span class="sidebar-item-icon">
+      🎬
+    </span>
+
+    <span>
+      Generate Video
+    </span>
+
+  </button>
+
+
+  <!-- IMAGE ENHANCE -->
+
+  <button
+    id="imageEnhanceBtn"
+    class="sidebar-item"
+  >
+
+    <span class="sidebar-item-icon">
+      ✨
+    </span>
+
+    <span>
+      Image Enhance
+    </span>
+
+  </button>
+
+
+  <!-- SETTINGS -->
+
+  <button
+    id="settingsBtn"
+    class="sidebar-item"
+  >
+
+    <span class="sidebar-item-icon">
+      ⚙️
+    </span>
+
+    <span>
+      Settings
+    </span>
+
+  </button>
+
+
+  <!-- RECENT CHATS -->
+
+  <div class="sidebar-section-title">
+    Recent Chats
+  </div>
+
 
   <div
-    id="overlay"
-    class="overlay"
+    id="recentChats"
+    class="recent-chats"
   ></div>
 
 
-  <!-- =====================================
-       SIDEBAR
-  ====================================== -->
+  <!-- SIDEBAR BOTTOM -->
 
-  <aside
-    id="sidebar"
-    class="sidebar"
-  >
-
-    <div class="sidebar-header">
-
-      <div class="brand-small">
-        <div class="brand-icon">
-          ✦
-        </div>
-
-        <span>
-          Smart AI
-        </span>
-      </div>
-
-      <button
-        id="closeSidebar"
-        class="icon-btn"
-        aria-label="Close menu"
-      >
-        ✕
-      </button>
-
-    </div>
-
-
-    <!-- NEW CHAT -->
-
-    <button
-      id="newChatBtn"
-      class="sidebar-item"
-    >
-      <span class="sidebar-item-icon">
-        ＋
-      </span>
-
-      <span>
-        New Chat
-      </span>
-    </button>
-
-
-    <!-- AI TOOLS -->
-
-    <div class="sidebar-section-title">
-      AI Tools
-    </div>
-
-
-    <button
-      id="generateImageBtn"
-      class="sidebar-item"
-    >
-
-      <span class="sidebar-item-icon">
-        🖼️
-      </span>
-
-      <span>
-        Generate Image
-      </span>
-
-    </button>
-
-
-    <button
-      id="generateVideoBtn"
-      class="sidebar-item"
-    >
-
-      <span class="sidebar-item-icon">
-        🎬
-      </span>
-
-      <span>
-        Generate Video
-      </span>
-
-    </button>
-
-
-    <button
-      id="imageEnhanceBtn"
-      class="sidebar-item"
-    >
-
-      <span class="sidebar-item-icon">
-        ✨
-      </span>
-
-      <span>
-        Image Enhance
-      </span>
-
-    </button>
-
-
-    <!-- RECENT CHATS -->
-
-    <div class="sidebar-section-title">
-      Recent Chats
-    </div>
+  <div class="sidebar-bottom">
 
     <div
-      id="recentChats"
-      class="recent-chats"
-    ></div>
-
-
-    <!-- BOTTOM -->
-
-    <div class="sidebar-bottom">
-
-      <button
-        id="settingsBtn"
-        class="sidebar-item"
-      >
-
-        <span class="sidebar-item-icon">
-          ⚙️
-        </span>
-
-        <span>
-          Settings
-        </span>
-
-      </button>
-
+      class="version-text"
+      style="color: var(--muted); padding: 8px;"
+    >
+      Smart AI
     </div>
 
-  </aside>
+  </div>
 
 
-  <!-- =====================================
-       TOP HEADER
-  ====================================== -->
+</aside>
 
-  <header class="top-header">
 
-    <div class="header-left">
+<!-- =====================================
+     TOP HEADER
+===================================== -->
 
-      <button
-        id="menuBtn"
-        class="icon-btn"
-        aria-label="Open menu"
-      >
-        ☰
-      </button>
+<header class="top-header">
 
-      <div class="header-brand">
-        Smart AI
-      </div>
 
+  <div class="header-left">
+
+    <button
+      id="menuBtn"
+      class="icon-btn"
+      aria-label="Open menu"
+    >
+      ☰
+    </button>
+
+
+    <div class="header-brand">
+      Smart AI
+    </div>
+
+  </div>
+
+
+  <div class="header-right">
+
+    <button
+      class="profile-btn"
+      onclick="openLoginModal()"
+      aria-label="Account"
+    >
+      👤
+    </button>
+
+  </div>
+
+
+</header>
+
+
+<!-- =====================================
+     APP CONTAINER
+===================================== -->
+
+<main class="app-container">
+
+
+<!-- =====================================
+     CHAT SCREEN
+===================================== -->
+
+<section
+  id="chatScreen"
+  class="screen active"
+>
+
+
+  <!-- WELCOME -->
+
+  <div
+    id="welcomeScreen"
+    class="welcome-screen"
+  >
+
+    <div class="welcome-logo">
+      ✦
     </div>
 
 
-    <div class="header-right">
+    <h1>
+      How can I help you?
+    </h1>
+
+
+    <p>
+      Ask Smart AI anything, upload a photo,
+      take a picture, or attach a file.
+    </p>
+
+  </div>
+
+
+  <!-- CHAT MESSAGES -->
+
+  <div
+    id="chatMessages"
+    class="chat-messages"
+  ></div>
+
+
+  <!-- ATTACHMENT PREVIEW -->
+
+  <div
+    id="attachmentPreview"
+    class="attachment-preview"
+  ></div>
+
+
+  <!-- CHAT INPUT -->
+
+  <div class="chat-input-wrapper">
+
+
+    <div class="chat-input-box">
+
+
+      <!-- PLUS -->
 
       <button
-        id="profileBtn"
-        class="profile-btn"
-        aria-label="Profile"
+        id="plusBtn"
+        class="input-icon-btn"
+        aria-label="Add attachment"
       >
-        <span>
-          👤
-        </span>
+        ＋
       </button>
 
-    </div>
 
-  </header>
+      <!-- INPUT -->
 
-
-  <!-- =====================================
-       MAIN APP
-  ====================================== -->
-
-  <main class="app-container">
-
-
-    <!-- ===================================
-         CHAT SCREEN
-    ==================================== -->
-
-    <section
-      id="chatScreen"
-      class="screen active"
-    >
+      <textarea
+        id="messageInput"
+        class="message-input"
+        placeholder="Ask Smart AI..."
+        rows="1"
+      ></textarea>
 
 
-      <!-- WELCOME -->
+      <!-- MIC -->
+
+      <button
+        id="micBtn"
+        class="input-icon-btn"
+        aria-label="Voice input"
+      >
+        🎤
+      </button>
+
+
+      <!-- SEND -->
+
+      <button
+        id="sendBtn"
+        class="send-btn"
+        aria-label="Send message"
+      >
+        ➤
+      </button>
+
+
+      <!-- ATTACHMENT MENU -->
 
       <div
-        id="welcomeScreen"
-        class="welcome-screen"
+        id="attachmentMenu"
+        class="attachment-menu"
       >
 
-        <div class="welcome-logo">
-          ✦
-        </div>
 
-        <h1>
-          Hello, I'm Smart AI
-        </h1>
-
-        <p>
-          Ask me anything, create images,
-          generate videos, enhance photos,
-          and more.
-        </p>
-
-      </div>
-
-
-      <!-- CHAT MESSAGES -->
-
-      <div
-        id="chatMessages"
-        class="chat-messages"
-      ></div>
-
-
-      <!-- ATTACHMENT PREVIEW -->
-
-      <div
-        id="attachmentPreview"
-        class="attachment-preview"
-      ></div>
-
-
-      <!-- CHAT INPUT AREA -->
-
-      <div class="chat-input-wrapper">
-
-
-        <!-- ATTACHMENT MENU -->
-
-        <div
-          id="attachmentMenu"
-          class="attachment-menu"
-        >
-
-          <button
-            id="cameraBtn"
-            class="attachment-item"
-          >
-
-            <span class="attachment-icon">
-              📷
-            </span>
-
-            <span>
-              Camera
-            </span>
-
-          </button>
-
-
-          <button
-            id="photoBtn"
-            class="attachment-item"
-          >
-
-            <span class="attachment-icon">
-              🖼️
-            </span>
-
-            <span>
-              Photos
-            </span>
-
-          </button>
-
-
-          <button
-            id="fileBtn"
-            class="attachment-item"
-          >
-
-            <span class="attachment-icon">
-              📎
-            </span>
-
-            <span>
-              File
-            </span>
-
-          </button>
-
-        </div>
-
-
-        <!-- INPUT BOX -->
-
-        <div class="chat-input-box">
-
-
-          <!-- PLUS -->
-
-          <button
-            id="plusBtn"
-            class="input-icon-btn"
-            aria-label="Add attachment"
-          >
-            ＋
-          </button>
-
-
-          <!-- TEXT -->
-
-          <textarea
-            id="messageInput"
-            class="message-input"
-            placeholder="Ask Smart AI anything..."
-            rows="1"
-          ></textarea>
-
-
-          <!-- MIC -->
-
-          <button
-            id="micBtn"
-            class="input-icon-btn"
-            aria-label="Voice input"
-          >
-            🎤
-          </button>
-
-
-          <!-- SEND -->
-
-          <button
-            id="sendBtn"
-            class="send-btn"
-            aria-label="Send message"
-          >
-            ↑
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- HIDDEN FILE INPUTS -->
-
-      <input
-        id="cameraInput"
-        type="file"
-        accept="image/*"
-        capture="environment"
-        hidden
-      >
-
-      <input
-        id="photoInput"
-        type="file"
-        accept="image/*"
-        hidden
-      >
-
-      <input
-        id="fileInput"
-        type="file"
-        hidden
-      >
-
-    </section>
-
-
-    <!-- ===================================
-         GENERATE IMAGE SCREEN
-    ==================================== -->
-
-    <section
-      id="imageScreen"
-      class="screen tool-screen"
-    >
-
-      <div class="tool-header">
+        <!-- CAMERA -->
 
         <button
-          class="back-btn"
-          data-back
-        >
-          ←
-        </button>
-
-        <h2>
-          Generate Image
-        </h2>
-
-      </div>
-
-
-      <div class="tool-content">
-
-        <div class="tool-icon-large">
-          🖼️
-        </div>
-
-        <h1>
-          Create an Image
-        </h1>
-
-        <p>
-          Describe the image you want
-          Smart AI to create.
-        </p>
-
-
-        <textarea
-          id="imagePrompt"
-          class="tool-prompt"
-          placeholder="Describe your image..."
-        ></textarea>
-
-
-        <!-- OPTIONAL REFERENCE IMAGE -->
-
-        <input
-          id="imageReferenceInput"
-          type="file"
-          accept="image/*"
-          hidden
+          id="cameraBtn"
+          class="attachment-item"
         >
 
-        <button
-          id="uploadImageReferenceBtn"
-          class="secondary-btn"
-        >
-          📎 Add Reference Image
-        </button>
-
-
-        <button
-          id="generateImageAction"
-          class="primary-btn"
-        >
-          ✨ Generate Image
-        </button>
-
-
-        <!-- LOADING -->
-
-        <div
-          id="imageLoading"
-          class="loading-box"
-        >
-
-          <div class="loading-spinner"></div>
-
-          <p>
-            Smart AI is thinking...
-          </p>
-
-        </div>
-
-
-        <!-- RESULT -->
-
-        <div
-          id="generatedImageResult"
-          class="generated-result"
-        >
-
-          <div class="result-header">
-
-            <span>
-              Generated Image
-            </span>
-
-            <button
-              class="download-btn"
-              id="downloadGeneratedImage"
-            >
-              ⬇️
-            </button>
-
-          </div>
-
-          <img
-            id="generatedImage"
-            src=""
-            alt="Generated image"
-          >
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ===================================
-         GENERATE VIDEO SCREEN
-    ==================================== -->
-
-    <section
-      id="videoScreen"
-      class="screen tool-screen"
-    >
-
-      <div class="tool-header">
-
-        <button
-          class="back-btn"
-          data-back
-        >
-          ←
-        </button>
-
-        <h2>
-          Generate Video
-        </h2>
-
-      </div>
-
-
-      <div class="tool-content">
-
-        <div class="tool-icon-large">
-          🎬
-        </div>
-
-        <h1>
-          Create an 8-Second Video
-        </h1>
-
-        <p>
-          Describe your video idea and
-          Smart AI will create it.
-        </p>
-
-
-        <textarea
-          id="videoPrompt"
-          class="tool-prompt"
-          placeholder="Describe your video..."
-        ></textarea>
-
-
-        <!-- OPTIONAL VIDEO REFERENCE -->
-
-        <input
-          id="videoReferenceInput"
-          type="file"
-          accept="image/*,video/*"
-          hidden
-        >
-
-        <button
-          id="uploadVideoReferenceBtn"
-          class="secondary-btn"
-        >
-          📎 Add Reference
-        </button>
-
-
-        <!-- TRIAL INFO -->
-
-        <div
-          id="videoTrialInfo"
-          class="trial-info"
-        >
-          🎁 You have 3 free video generations.
-        </div>
-
-
-        <button
-          id="generateVideoAction"
-          class="primary-btn"
-        >
-          🎬 Generate Video
-        </button>
-
-
-        <!-- LOADING -->
-
-        <div
-          id="videoLoading"
-          class="loading-box"
-        >
-
-          <div class="loading-spinner"></div>
-
-          <p>
-            Smart AI is generating your
-            8-second video...
-          </p>
-
-          <small>
-            This may take some time.
-          </small>
-
-        </div>
-
-
-        <!-- RESULT -->
-
-        <div
-          id="generatedVideoResult"
-          class="generated-result"
-        >
-
-          <div class="result-header">
-
-            <span>
-              Generated Video
-            </span>
-
-            <button
-              class="download-btn"
-              id="downloadGeneratedVideo"
-            >
-              ⬇️
-            </button>
-
-          </div>
-
-          <video
-            id="generatedVideo"
-            controls
-            playsinline
-          ></video>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ===================================
-         IMAGE ENHANCE SCREEN
-    ==================================== -->
-
-    <section
-      id="enhanceScreen"
-      class="screen tool-screen"
-    >
-
-      <div class="tool-header">
-
-        <button
-          class="back-btn"
-          data-back
-        >
-          ←
-        </button>
-
-        <h2>
-          Image Enhance
-        </h2>
-
-      </div>
-
-
-      <div class="tool-content">
-
-        <div class="tool-icon-large">
-          ✨
-        </div>
-
-        <h1>
-          Enhance Your Image
-        </h1>
-
-        <p>
-          Upload a photo and improve
-          its quality with Smart AI.
-        </p>
-
-
-        <!-- UPLOAD -->
-
-        <input
-          id="enhanceInput"
-          type="file"
-          accept="image/*"
-          hidden
-        >
-
-
-        <button
-          id="uploadEnhanceBtn"
-          class="upload-box"
-        >
-
-          <span class="upload-icon">
+          <span class="attachment-icon">
             📷
           </span>
 
-          <strong>
-            Upload Photo
-          </strong>
-
-          <small>
-            Choose an image from your device
-          </small>
+          <span>
+            Camera
+          </span>
 
         </button>
 
 
-        <!-- PREVIEW -->
-
-        <div
-          id="enhancePreviewBox"
-          class="enhance-preview-box"
-        >
-
-          <img
-            id="enhancePreview"
-            src=""
-            alt="Selected image"
-          >
-
-        </div>
-
+        <!-- PHOTO -->
 
         <button
-          id="enhanceAction"
-          class="primary-btn"
+          id="photoBtn"
+          class="attachment-item"
         >
-          ✨ Enhance Image
+
+          <span class="attachment-icon">
+            🖼️
+          </span>
+
+          <span>
+            Photo
+          </span>
+
         </button>
 
 
-        <!-- LOADING -->
+        <!-- FILE -->
 
-        <div
-          id="enhanceLoading"
-          class="loading-box"
+        <button
+          id="fileBtn"
+          class="attachment-item"
         >
 
-          <div class="loading-spinner"></div>
+          <span class="attachment-icon">
+            📎
+          </span>
 
-          <p>
-            Enhancing your image...
-          </p>
+          <span>
+            File
+          </span>
 
-          <small>
-            Please wait.
-          </small>
+        </button>
 
-        </div>
-
-
-        <!-- RESULT -->
-
-        <div
-          id="enhancedResult"
-          class="generated-result"
-        >
-
-          <div class="result-header">
-
-            <span>
-              Enhanced Image
-            </span>
-
-            <button
-              class="download-btn"
-              id="downloadEnhancedImage"
-            >
-              ⬇️
-            </button>
-
-          </div>
-
-          <img
-            id="enhancedImage"
-            src=""
-            alt="Enhanced image"
-          >
-
-        </div>
 
       </div>
 
-    </section>
+
+    </div>
 
 
-    <!-- ===================================
-         SETTINGS SCREEN
-    ==================================== -->
+  </div>
 
-    <section
-      id="settingsScreen"
-      class="screen tool-screen"
+
+</section>
+
+
+<!-- =====================================
+     IMAGE GENERATION SCREEN
+===================================== -->
+
+<section
+  id="imageScreen"
+  class="screen tool-screen"
+>
+
+
+  <div class="tool-header">
+
+
+    <button
+      class="back-btn"
+      data-back
+    >
+      ←
+    </button>
+
+
+    <h2>
+      Generate Image
+    </h2>
+
+
+  </div>
+
+
+  <div class="tool-content">
+
+
+    <div class="tool-icon-large">
+      🖼️
+    </div>
+
+
+    <h1>
+      Create an Image
+    </h1>
+
+
+    <p>
+      Describe the image you want Smart AI
+      to generate.
+    </p>
+
+
+    <textarea
+      id="imagePrompt"
+      class="tool-prompt"
+      placeholder="Write your image prompt..."
+    ></textarea>
+
+
+    <button
+      id="uploadImageReferenceBtn"
+      class="secondary-btn"
+    >
+      📷 Upload Reference Image
+    </button>
+
+
+    <input
+      id="imageReferenceInput"
+      type="file"
+      accept="image/*"
+      hidden
     >
 
-      <div class="tool-header">
 
-        <button
-          class="back-btn"
-          data-back
-        >
-          ←
-        </button>
-
-        <h2>
-          Settings
-        </h2>
-
-      </div>
+    <button
+      id="generateImageAction"
+      class="primary-btn"
+    >
+      ✨ Generate Image
+    </button>
 
 
-      <div class="settings-content">
+    <div
+      id="imageLoading"
+      class="loading-box"
+    >
 
-
-        <!-- ACCOUNT -->
-
-        <div class="settings-card">
-
-          <h3>
-            Account
-          </h3>
-
-          <p>
-            Sign in to save your chats
-            and access Smart AI features.
-          </p>
-
-          <button
-            id="loginRedirectBtn"
-            class="primary-btn"
-          >
-            🔐 Login / Sign Up
-          </button>
-
-          <button
-            id="logoutBtn"
-            class="secondary-btn"
-          >
-            Log Out
-          </button>
-
-        </div>
-
-
-        <!-- THEME -->
-
-        <div class="settings-card">
-
-          <h3>
-            Appearance
-          </h3>
-
-          <label
-            for="themeSelect"
-          >
-            Theme
-          </label>
-
-          <select
-            id="themeSelect"
-            class="settings-select"
-          >
-
-            <option value="light">
-              Light
-            </option>
-
-            <option value="dark">
-              Dark
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <!-- ABOUT -->
-
-        <div class="settings-card">
-
-          <h3>
-            About Smart AI
-          </h3>
-
-          <p>
-            Smart AI is an intelligent
-            AI assistant created by
-            Md Parvez Hussain from India.
-          </p>
-
-          <p class="version-text">
-            Version 1.0
-          </p>
-
-        </div>
-
-
-        <!-- INSTALL -->
-
-        <div class="settings-card">
-
-          <h3>
-            Smart AI App
-          </h3>
-
-          <p>
-            Install Smart AI on your phone
-            for a better app-like experience.
-          </p>
-
-          <button
-            id="installAppBtn"
-            class="primary-btn"
-          >
-            📱 Install Smart AI
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- =====================================
-       LOGIN MODAL
-  ====================================== -->
-
-  <div
-    id="loginModal"
-    class="modal"
-  >
-
-    <div class="modal-card">
-
-      <button
-        id="closeLoginModal"
-        class="modal-close"
-      >
-        ✕
-      </button>
-
-      <div class="modal-icon">
-        🔐
-      </div>
-
-      <h2>
-        Login to Smart AI
-      </h2>
+      <div class="loading-spinner"></div>
 
       <p>
-        Please login to continue
-        chatting with Smart AI.
+        Creating your image...
       </p>
+
+      <small>
+        Please wait.
+      </small>
+
+    </div>
+
+
+    <div
+      id="generatedImageResult"
+      class="generated-result"
+    ></div>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================
+     VIDEO GENERATION SCREEN
+===================================== -->
+
+<section
+  id="videoScreen"
+  class="screen tool-screen"
+>
+
+
+  <div class="tool-header">
+
+
+    <button
+      class="back-btn"
+      data-back
+    >
+      ←
+    </button>
+
+
+    <h2>
+      Generate Video
+    </h2>
+
+
+  </div>
+
+
+  <div class="tool-content">
+
+
+    <div class="tool-icon-large">
+      🎬
+    </div>
+
+
+    <h1>
+      Create an 8s AI Video
+    </h1>
+
+
+    <p>
+      Describe your video idea and Smart AI
+      will generate an 8-second video.
+    </p>
+
+
+    <div class="trial-info">
+
+      🎁 You get
+      <strong>3 free video generations</strong>.
+
+      After that, upgrade for
+      <strong>₹299</strong>.
+
+    </div>
+
+
+    <textarea
+      id="videoPrompt"
+      class="tool-prompt"
+      placeholder="Write your video prompt..."
+    ></textarea>
+
+
+    <button
+      id="uploadVideoReferenceBtn"
+      class="secondary-btn"
+    >
+      📷 Upload Reference Image
+    </button>
+
+
+    <input
+      id="videoReferenceInput"
+      type="file"
+      accept="image/*,video/*"
+      hidden
+    >
+
+
+    <button
+      id="generateVideoAction"
+      class="primary-btn"
+    >
+      🎬 Generate 8s Video
+    </button>
+
+
+    <div
+      id="videoLoading"
+      class="loading-box"
+    >
+
+      <div class="loading-spinner"></div>
+
+      <p>
+        Generating your 8-second video...
+      </p>
+
+      <small>
+        Video generation may take some time.
+      </small>
+
+    </div>
+
+
+    <div
+      id="generatedVideoResult"
+      class="generated-result"
+    ></div>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================
+     IMAGE ENHANCE SCREEN
+===================================== -->
+
+<section
+  id="enhanceScreen"
+  class="screen tool-screen"
+>
+
+
+  <div class="tool-header">
+
+
+    <button
+      class="back-btn"
+      data-back
+    >
+      ←
+    </button>
+
+
+    <h2>
+      Image Enhance
+    </h2>
+
+
+  </div>
+
+
+  <div class="tool-content">
+
+
+    <div class="tool-icon-large">
+      ✨
+    </div>
+
+
+    <h1>
+      Enhance Your Photo
+    </h1>
+
+
+    <p>
+      Upload a photo and enhance it with
+      Smart AI.
+    </p>
+
+
+    <button
+      id="uploadEnhanceBtn"
+      class="upload-box"
+    >
+
+      <span class="upload-icon">
+        📤
+      </span>
+
+      <strong>
+        Upload Photo
+      </strong>
+
+      <small>
+        Select an image from your phone
+      </small>
+
+    </button>
+
+
+    <input
+      id="enhanceInput"
+      type="file"
+      accept="image/*"
+      hidden
+    >
+
+
+    <div
+      id="enhancePreviewBox"
+      class="enhance-preview-box"
+    >
+
+      <img
+        id="enhancePreview"
+        alt="Photo Preview"
+      >
+
+    </div>
+
+
+    <button
+      id="enhanceAction"
+      class="primary-btn"
+    >
+      ✨ Enhance Image
+    </button>
+
+
+    <div
+      id="enhanceLoading"
+      class="loading-box"
+    >
+
+      <div class="loading-spinner"></div>
+
+      <p>
+        Enhancing your photo...
+      </p>
+
+      <small>
+        Preparing HD result.
+      </small>
+
+    </div>
+
+
+    <div
+      id="generatedEnhanceResult"
+      class="generated-result"
+    ></div>
+
+
+  </div>
+
+
+</section>
+
+
+<!-- =====================================
+     SETTINGS SCREEN
+===================================== -->
+
+<section
+  id="settingsScreen"
+  class="screen tool-screen"
+>
+
+
+  <div class="tool-header">
+
+
+    <button
+      class="back-btn"
+      data-back
+    >
+      ←
+    </button>
+
+
+    <h2>
+      Settings
+    </h2>
+
+
+  </div>
+
+
+  <div class="settings-content">
+
+
+    <!-- ACCOUNT -->
+
+    <div class="settings-card">
+
+      <h3>
+        Account
+      </h3>
+
+      <p>
+        Login to use Smart AI features.
+      </p>
+
+      <button
+        class="primary-btn"
+        onclick="openLoginModal()"
+      >
+        👤 Login
+      </button>
+
+    </div>
+
+
+    <!-- APP INFO -->
+
+    <div class="settings-card">
+
+      <h3>
+        About Smart AI
+      </h3>
+
+      <p>
+        Smart AI is an AI assistant platform
+        for chatting, image generation,
+        video generation and image enhancement.
+      </p>
+
+      <div class="version-text">
+        Version 1.0
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+</section>
+
+
+</main>
+
+
+<!-- =====================================
+     HIDDEN FILE INPUTS
+===================================== -->
+
+<input
+  id="cameraInput"
+  type="file"
+  accept="image/*"
+  capture="environment"
+  hidden
+>
+
+
+<input
+  id="photoInput"
+  type="file"
+  accept="image/*"
+  hidden
+>
+
+
+<input
+  id="fileInput"
+  type="file"
+  hidden
+>
+
+
+<!-- =====================================
+     LOGIN MODAL
+===================================== -->
+
+<div
+  id="loginModal"
+  class="modal"
+>
+
+
+  <div class="modal-card">
+
+
+    <button
+      id="closeLoginModal"
+      class="modal-close"
+    >
+      ✕
+    </button>
+
+
+    <div class="modal-icon">
+      🔐
+    </div>
+
+
+    <h2>
+      Login to Smart AI
+    </h2>
+
+
+    <p>
+      Please login to ask questions
+      and use Smart AI features.
+    </p>
+
+
+    <form id="loginForm">
 
 
       <input
         id="loginEmail"
         class="auth-input"
         type="email"
-        placeholder="Email address"
-      >
-
-
-      <input
-        id="loginPassword"
-        class="auth-input"
-        type="password"
-        placeholder="Password"
+        placeholder="Enter your email"
+        required
       >
 
 
       <button
-        id="loginBtn"
+        type="submit"
         class="primary-btn"
       >
-        Login
+        Continue
       </button>
 
 
-      <button
-        id="signupBtn"
-        class="secondary-btn"
-      >
-        Create Account
-      </button>
+    </form>
 
-    </div>
 
   </div>
 
 
-  <!-- =====================================
-       UPGRADE MODAL
-  ====================================== -->
-
-  <div
-    id="upgradeModal"
-    class="modal"
-  >
-
-    <div class="modal-card upgrade-card">
-
-      <button
-        id="closeUpgradeModal"
-        class="modal-close"
-      >
-        ✕
-      </button>
-
-      <div class="modal-icon">
-        ⭐
-      </div>
-
-      <h2>
-        Upgrade Smart AI
-      </h2>
-
-      <p>
-        Your 3 free AI video generations
-        have been used.
-      </p>
-
-      <div class="price-box">
-
-        <strong>
-          ₹299
-        </strong>
-
-        <span>
-          Premium Upgrade
-        </span>
-
-      </div>
+</div>
 
 
-      <button
-        id="upgradeBtn"
-        class="primary-btn"
-      >
-        🚀 Upgrade Now
-      </button>
+<!-- =====================================
+     UPGRADE MODAL
+===================================== -->
 
-      <p class="payment-note">
-        Secure payment options will be
-        available here.
-      </p>
-
-    </div>
-
-  </div>
+<div
+  id="upgradeModal"
+  class="modal"
+>
 
 
-  <!-- =====================================
-       PWA INSTALL BANNER
-  ====================================== -->
+  <div class="modal-card">
 
-  <div
-    id="installBanner"
-    class="install-banner"
-  >
-
-    <div>
-
-      <strong>
-        Install Smart AI
-      </strong>
-
-      <p>
-        Add Smart AI to your phone
-        for quick access.
-      </p>
-
-    </div>
 
     <button
-      id="installBannerBtn"
+      id="closeUpgradeModal"
+      class="modal-close"
+    >
+      ✕
+    </button>
+
+
+    <div class="modal-icon">
+      🚀
+    </div>
+
+
+    <h2>
+      Upgrade Smart AI
+    </h2>
+
+
+    <p>
+      Your 3 free video generations
+      are finished.
+    </p>
+
+
+    <div class="price-box">
+
+      <strong>
+        ₹299
+      </strong>
+
+      <span>
+        Upgrade to continue generating
+        AI videos.
+      </span>
+
+    </div>
+
+
+    <button
+      id="upgradePaymentBtn"
       class="primary-btn"
     >
-      Install
+      Upgrade Now — ₹299
     </button>
+
+
+    <p class="payment-note">
+      Payment gateway will be connected
+      after Razorpay/UPI integration.
+    </p>
+
 
   </div>
 
 
-  <!-- =====================================
-       JAVASCRIPT
-  ====================================== -->
+</div>
 
-  <script
-    src="script.js"
-    defer
-  ></script>
+
+<!-- =====================================
+     INSTALL APP BANNER
+===================================== -->
+
+<div
+  id="installBanner"
+  class="install-banner"
+>
+
+
+  <div>
+
+    <strong>
+      Install Smart AI
+    </strong>
+
+    <p>
+      Add Smart AI to your phone.
+    </p>
+
+  </div>
+
+
+  <button
+    id="installAppBtn"
+    class="primary-btn"
+  >
+    Install
+  </button>
+
+
+</div>
+
+
+<!-- =====================================
+     JAVASCRIPT
+===================================== -->
+
+<script
+  src="script.js"
+></script>
+
+
+<!-- =====================================
+     PWA INSTALL SCRIPT
+===================================== -->
+
+<script>
+
+let deferredPrompt = null;
+
+const installBanner =
+  document.getElementById(
+    "installBanner"
+  );
+
+const installAppBtn =
+  document.getElementById(
+    "installAppBtn"
+  );
+
+
+window.addEventListener(
+  "beforeinstallprompt",
+  event => {
+
+    event.preventDefault();
+
+    deferredPrompt =
+      event;
+
+
+    if (installBanner) {
+
+      installBanner.classList.add(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+if (installAppBtn) {
+
+  installAppBtn.addEventListener(
+    "click",
+    async () => {
+
+      if (!deferredPrompt) {
+
+        alert(
+          "Install option is not available yet. Open Smart AI in Chrome and use the browser menu to install it."
+        );
+
+        return;
+
+      }
+
+
+      deferredPrompt.prompt();
+
+
+      const result =
+        await deferredPrompt.userChoice;
+
+
+      if (
+        result.outcome === "accepted"
+      ) {
+
+        console.log(
+          "Smart AI installation accepted."
+        );
+
+      }
+
+
+      deferredPrompt =
+        null;
+
+
+      if (installBanner) {
+
+        installBanner.classList.remove(
+          "show"
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+window.addEventListener(
+  "appinstalled",
+  () => {
+
+    if (installBanner) {
+
+      installBanner.classList.remove(
+        "show"
+      );
+
+    }
+
+    console.log(
+      "Smart AI installed."
+    );
+
+  }
+);
+
+</script>
+
 
 </body>
-          </html>
+
+  </html>
