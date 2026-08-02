@@ -1,5 +1,5 @@
 // ==========================================
-// SMART AI — BACKEND SERVER
+// SMART AI — GEMINI BACKEND
 // ==========================================
 
 require("dotenv").config();
@@ -7,10 +7,19 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
+const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
+// ==========================================
+// GEMINI SETUP
+// ==========================================
+
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY
+});
 
 // ==========================================
 // MIDDLEWARE
@@ -20,12 +29,14 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(express.urlencoded({
-  extended: true
-}));
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+);
 
 // ==========================================
-// FILE UPLOAD SETUP
+// FILE UPLOAD
 // ==========================================
 
 const upload = multer({
@@ -49,46 +60,129 @@ app.get("/api/health", (req, res) => {
 });
 
 // ==========================================
-// CHAT API
+// SMART AI CHAT — GEMINI
 // ==========================================
 
 app.post("/api/chat", async (req, res) => {
 
   try {
 
-    const {
-      message
-    } = req.body;
+    const message =
+      req.body.message?.trim();
 
     if (!message) {
 
       return res.status(400).json({
+
         success: false,
-        reply: "Please enter a message."
+
+        reply:
+          "Please enter a message."
+
       });
 
     }
 
-    /*
-      AI API yahan connect hoga.
+    // ======================================
+    // SMART AI IDENTITY
+    // ======================================
 
-      Abhi temporary response diya gaya hai.
-      API key next step mein .env se securely connect hogi.
-    */
+    const lowerMessage =
+      message.toLowerCase().trim();
 
-    return res.json({
+    const identityQuestions = [
+
+      "who created you",
+      "who create you",
+      "who is your owner",
+      "who made you",
+      "who built you",
+      "who developed you",
+      "tumko kisne banaya",
+      "tumhe kisne banaya",
+      "tumhara owner kaun hai",
+      "aapko kisne banaya"
+
+    ];
+
+    const isIdentityQuestion =
+      identityQuestions.some(
+        question =>
+          lowerMessage.includes(question)
+      );
+
+
+    if (isIdentityQuestion) {
+
+      return res.json({
+
+        success: true,
+
+        reply:
+          "Smart AI is created by Md Parvez Hussain from India."
+
+      });
+
+    }
+
+    // ======================================
+    // GEMINI REQUEST
+    // ======================================
+
+    const response =
+      await ai.models.generateContent({
+
+        model:
+          "gemini-2.0-flash",
+
+        contents: [
+
+          {
+            role: "user",
+
+            parts: [
+
+              {
+                text:
+`You are Smart AI, a helpful and friendly AI assistant.
+
+Always answer clearly and naturally.
+
+Your name is Smart AI.
+
+If someone asks who created you, who is your owner, who made you, or similar questions, answer:
+"Smart AI is created by Md Parvez Hussain from India."
+
+User question:
+${message}`
+              }
+
+            ]
+
+          }
+
+        ]
+
+      });
+
+
+    const reply =
+      response.text ||
+      "Sorry, I couldn't generate a response.";
+
+    res.json({
 
       success: true,
 
-      reply:
-        "Smart AI is ready 🤖. AI API connection will be added next."
+      reply: reply
 
     });
+
 
   } catch (error) {
 
     console.error(
-      "Chat Error:",
+      "Gemini Chat Error:",
       error
     );
 
@@ -97,7 +191,7 @@ app.post("/api/chat", async (req, res) => {
       success: false,
 
       reply:
-        "Smart AI server error."
+        "Smart AI is temporarily unavailable. Please check your Gemini API key and try again."
 
     });
 
@@ -106,7 +200,7 @@ app.post("/api/chat", async (req, res) => {
 });
 
 // ==========================================
-// IMAGE GENERATION API
+// IMAGE GENERATION
 // ==========================================
 
 app.post(
@@ -115,9 +209,8 @@ app.post(
 
     try {
 
-      const {
-        prompt
-      } = req.body;
+      const prompt =
+        req.body.prompt?.trim();
 
       if (!prompt) {
 
@@ -133,16 +226,16 @@ app.post(
       }
 
       /*
-        Real AI Image API
-        next step mein connect hogi.
-      */
+       * Image generation API
+       * will be connected separately.
+       */
 
       res.json({
 
         success: true,
 
         message:
-          "Image generation request received.",
+          "Image generation API is ready to be connected.",
 
         prompt: prompt
 
@@ -170,7 +263,7 @@ app.post(
 );
 
 // ==========================================
-// VIDEO GENERATION API
+// VIDEO GENERATION
 // ==========================================
 
 app.post(
@@ -179,10 +272,11 @@ app.post(
 
     try {
 
-      const {
-        prompt,
-        duration
-      } = req.body;
+      const prompt =
+        req.body.prompt?.trim();
+
+      const duration =
+        Number(req.body.duration) || 8;
 
       if (!prompt) {
 
@@ -197,28 +291,16 @@ app.post(
 
       }
 
-      /*
-        Real AI Video API
-        next step mein connect hogi.
-
-        Default duration:
-        8 seconds
-      */
-
-      const videoDuration =
-        duration || 8;
-
       res.json({
 
         success: true,
 
         message:
-          "Video generation request received.",
+          "Video generation API is ready to be connected.",
 
         prompt: prompt,
 
-        duration:
-          videoDuration
+        duration: duration
 
       });
 
@@ -244,7 +326,7 @@ app.post(
 );
 
 // ==========================================
-// IMAGE ENHANCE API
+// IMAGE ENHANCE
 // ==========================================
 
 app.post(
@@ -267,17 +349,12 @@ app.post(
 
       }
 
-      /*
-        Real Image Enhancement API
-        next step mein connect hogi.
-      */
-
       res.json({
 
         success: true,
 
         message:
-          "Image enhancement request received.",
+          "Image enhancement API is ready to be connected.",
 
         fileName:
           req.file.originalname
@@ -306,7 +383,7 @@ app.post(
 );
 
 // ==========================================
-// PAYMENT / UPGRADE API
+// PAYMENT
 // ==========================================
 
 app.post(
@@ -315,25 +392,14 @@ app.post(
 
     try {
 
-      /*
-        ₹299 payment gateway
-        next step mein connect hoga.
-
-        Payment gateway use karna
-        UPI QR ko directly public
-        frontend code mein rakhne se
-        zyada secure hai.
-      */
-
       res.json({
 
         success: true,
 
-        message:
-          "Payment system will be connected next.",
+        amount: 299,
 
-        amount:
-          299
+        message:
+          "Payment gateway will be connected next."
 
       });
 
