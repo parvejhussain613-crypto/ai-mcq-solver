@@ -1,174 +1,168 @@
-// ==========================================
-// SMART AI — GEMINI BACKEND
-// ==========================================
-
 require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const multer = require("multer");
-const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// ==========================================
-// GEMINI SETUP
-// ==========================================
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY
-});
-
-// ==========================================
+// ================================
 // MIDDLEWARE
-// ==========================================
+// ================================
 
 app.use(cors());
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
-app.use(
-  express.urlencoded({
-    extended: true
-  })
-);
 
-// ==========================================
-// FILE UPLOAD
-// ==========================================
+// ================================
+// BASIC ROUTE
+// ================================
 
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 10 * 1024 * 1024
-  }
-});
-
-// ==========================================
-// HEALTH CHECK
-// ==========================================
-
-app.get("/api/health", (req, res) => {
-
+app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "Smart AI backend is running 🚀"
+    message: "Smart AI Backend is running 🚀"
   });
-
 });
 
-// ==========================================
-// SMART AI CHAT — GEMINI
-// ==========================================
+
+// ================================
+// GEMINI AI CHAT
+// ================================
 
 app.post("/api/chat", async (req, res) => {
 
   try {
 
-    const message =
-      req.body.message?.trim();
+    const userMessage = req.body.message;
 
-    if (!message) {
-
+    if (!userMessage) {
       return res.status(400).json({
+        success: false,
+        reply: "Please enter a message."
+      });
+    }
+
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      return res.status(500).json({
+        success: false,
+        reply: "Gemini API key is missing in the backend .env file."
+      });
+    }
+
+
+    // Special Smart AI identity response
+
+    const lowerMessage =
+      userMessage.toLowerCase().trim();
+
+
+    if (
+      lowerMessage.includes("who created you") ||
+      lowerMessage.includes("who create you") ||
+      lowerMessage.includes("who is your owner") ||
+      lowerMessage.includes("who made you") ||
+      lowerMessage.includes("tumko kisne banaya") ||
+      lowerMessage.includes("tumhe kisne banaya")
+    ) {
+
+      return res.json({
+        success: true,
+        reply:
+          "Smart AI is created by Md Parvez Hussain from India."
+      });
+
+    }
+
+
+    // Gemini API
+
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
+      apiKey,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+
+          contents: [
+
+            {
+              role: "user",
+
+              parts: [
+
+                {
+                  text:
+                    `You are Smart AI, a helpful AI assistant created by Md Parvez Hussain from India.
+
+Answer the user's question clearly and helpfully.
+
+User question:
+${userMessage}`
+                }
+
+              ]
+
+            }
+
+          ]
+
+        })
+
+      }
+    );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      console.error(
+        "Gemini API Error:",
+        data
+      );
+
+      return res.status(500).json({
 
         success: false,
 
         reply:
-          "Please enter a message."
+          "Sorry, Smart AI could not connect to Gemini right now."
 
       });
 
     }
 
-    // ======================================
-    // SMART AI IDENTITY
-    // ======================================
 
-    const lowerMessage =
-      message.toLowerCase().trim();
-
-    const identityQuestions = [
-
-      "who created you",
-      "who create you",
-      "who is your owner",
-      "who made you",
-      "who built you",
-      "who developed you",
-      "tumko kisne banaya",
-      "tumhe kisne banaya",
-      "tumhara owner kaun hai",
-      "aapko kisne banaya"
-
-    ];
-
-    const isIdentityQuestion =
-      identityQuestions.some(
-        question =>
-          lowerMessage.includes(question)
-      );
+    const reply =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
 
-    if (isIdentityQuestion) {
+    if (!reply) {
 
       return res.json({
 
         success: true,
 
         reply:
-          "Smart AI is created by Md Parvez Hussain from India."
+          "Sorry, I could not generate a response."
 
       });
 
     }
 
-    // ======================================
-    // GEMINI REQUEST
-    // ======================================
-
-    const response =
-      await ai.models.generateContent({
-
-        model:
-          "gemini-2.0-flash",
-
-        contents: [
-
-          {
-            role: "user",
-
-            parts: [
-
-              {
-                text:
-`You are Smart AI, a helpful and friendly AI assistant.
-
-Always answer clearly and naturally.
-
-Your name is Smart AI.
-
-If someone asks who created you, who is your owner, who made you, or similar questions, answer:
-"Smart AI is created by Md Parvez Hussain from India."
-
-User question:
-${message}`
-              }
-
-            ]
-
-          }
-
-        ]
-
-      });
-
-
-    const reply =
-      response.text ||
-      "Sorry, I couldn't generate a response.";
 
     res.json({
 
@@ -182,16 +176,17 @@ ${message}`
   } catch (error) {
 
     console.error(
-      "Gemini Chat Error:",
+      "Smart AI Error:",
       error
     );
+
 
     res.status(500).json({
 
       success: false,
 
       reply:
-        "Smart AI is temporarily unavailable. Please check your Gemini API key and try again."
+        "Smart AI backend error. Please try again."
 
     });
 
@@ -199,241 +194,17 @@ ${message}`
 
 });
 
-// ==========================================
-// IMAGE GENERATION
-// ==========================================
 
-app.post(
-  "/api/generate-image",
-  async (req, res) => {
-
-    try {
-
-      const prompt =
-        req.body.prompt?.trim();
-
-      if (!prompt) {
-
-        return res.status(400).json({
-
-          success: false,
-
-          message:
-            "Please enter an image prompt."
-
-        });
-
-      }
-
-      /*
-       * Image generation API
-       * will be connected separately.
-       */
-
-      res.json({
-
-        success: true,
-
-        message:
-          "Image generation API is ready to be connected.",
-
-        prompt: prompt
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Image Error:",
-        error
-      );
-
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          "Image generation failed."
-
-      });
-
-    }
-
-  }
-);
-
-// ==========================================
-// VIDEO GENERATION
-// ==========================================
-
-app.post(
-  "/api/generate-video",
-  async (req, res) => {
-
-    try {
-
-      const prompt =
-        req.body.prompt?.trim();
-
-      const duration =
-        Number(req.body.duration) || 8;
-
-      if (!prompt) {
-
-        return res.status(400).json({
-
-          success: false,
-
-          message:
-            "Please enter a video prompt."
-
-        });
-
-      }
-
-      res.json({
-
-        success: true,
-
-        message:
-          "Video generation API is ready to be connected.",
-
-        prompt: prompt,
-
-        duration: duration
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Video Error:",
-        error
-      );
-
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          "Video generation failed."
-
-      });
-
-    }
-
-  }
-);
-
-// ==========================================
-// IMAGE ENHANCE
-// ==========================================
-
-app.post(
-  "/api/enhance-image",
-  upload.single("image"),
-  async (req, res) => {
-
-    try {
-
-      if (!req.file) {
-
-        return res.status(400).json({
-
-          success: false,
-
-          message:
-            "Please upload an image."
-
-        });
-
-      }
-
-      res.json({
-
-        success: true,
-
-        message:
-          "Image enhancement API is ready to be connected.",
-
-        fileName:
-          req.file.originalname
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Enhance Error:",
-        error
-      );
-
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          "Image enhancement failed."
-
-      });
-
-    }
-
-  }
-);
-
-// ==========================================
-// PAYMENT
-// ==========================================
-
-app.post(
-  "/api/create-payment",
-  async (req, res) => {
-
-    try {
-
-      res.json({
-
-        success: true,
-
-        amount: 299,
-
-        message:
-          "Payment gateway will be connected next."
-
-      });
-
-    } catch (error) {
-
-      console.error(
-        "Payment Error:",
-        error
-      );
-
-      res.status(500).json({
-
-        success: false,
-
-        message:
-          "Payment initialization failed."
-
-      });
-
-    }
-
-  }
-);
-
-// ==========================================
+// ================================
 // START SERVER
-// ==========================================
+// ================================
 
 app.listen(
   PORT,
   () => {
 
     console.log(
-      `Smart AI backend running on port ${PORT}`
+      `Smart AI Backend running on port ${PORT}`
     );
 
   }
