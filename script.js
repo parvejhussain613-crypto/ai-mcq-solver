@@ -862,7 +862,7 @@ async function sendMessage() {
   try {
 
     const response =
-      await fetch("https://smart-ai-9t05.onrender.com/api/chat", {
+      await fetch("https://ai-mcq-solver-i7qs.onrender.com/api/chat", {
 
           method: "POST",
 
@@ -1316,7 +1316,7 @@ if (generateImageAction) {
       try {
 
         const response =
-          await fetch("https://smart-ai-9t05.onrender.com/api/chat", {
+          await fetch("https://ai-mcq-solver-i7qs.onrender.com/api/chat", {
 
               method: "POST",
 
@@ -1612,7 +1612,7 @@ if (generateVideoAction) {
       try {
 
         const response =
-          await fetch("https://smart-ai-9t05.onrender.com/api/chat", {
+          await fetch("https://ai-mcq-solver-i7qs.onrender.com/api/chat", {
 
               method: "POST",
 
@@ -1981,7 +1981,7 @@ if (enhanceAction) {
 
 
         const response =
-          await fetch("https://smart-ai-9t05.onrender.com/api/chat", {
+          await fetch("https://ai-mcq-solver-i7qs.onrender.com/api/chat", {
 
               method: "POST",
 
