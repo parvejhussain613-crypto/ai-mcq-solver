@@ -5,21 +5,12 @@ const cors = require("cors");
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
-
-// ================================
-// MIDDLEWARE
-// ================================
-
 app.use(cors());
+app.use(express.json());
 
-app.use(express.json({ limit: "10mb" }));
+const PORT = process.env.PORT || 10000;
 
-
-// ================================
-// BASIC ROUTE
-// ================================
-
+// Home
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -27,185 +18,86 @@ app.get("/", (req, res) => {
   });
 });
 
-
-// ================================
-// GEMINI AI CHAT
-// ================================
-
+// Chat API
 app.post("/api/chat", async (req, res) => {
-
   try {
+    const { message } = req.body;
 
-    const userMessage = req.body.message;
-
-    if (!userMessage) {
-      return res.status(400).json({
+    if (!message) {
+      return res.json({
         success: false,
         reply: "Please enter a message."
       });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    if (!apiKey) {
-      return res.status(500).json({
-        success: false,
-        reply: "Gemini API key is missing in the backend .env file."
-      });
-    }
-
-
-    // Special Smart AI identity response
-
-    const lowerMessage =
-      userMessage.toLowerCase().trim();
-
+    // Smart AI identity
+    const text = message.toLowerCase();
 
     if (
-      lowerMessage.includes("who created you") ||
-      lowerMessage.includes("who create you") ||
-      lowerMessage.includes("who is your owner") ||
-      lowerMessage.includes("who made you") ||
-      lowerMessage.includes("tumko kisne banaya") ||
-      lowerMessage.includes("tumhe kisne banaya")
+      text.includes("who created you") ||
+      text.includes("who made you") ||
+      text.includes("who is your owner") ||
+      text.includes("tumko kisne banaya") ||
+      text.includes("tumhe kisne banaya")
     ) {
-
       return res.json({
         success: true,
-        reply:
-          "Smart AI is created by Md Parvez Hussain from India."
+        reply: "Smart AI is created by Md Parvez Hussain from India."
       });
-
     }
 
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "meta-llama/llama-3.1-8b-instruct:free",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are Smart AI, a helpful assistant created by Md Parvez Hussain from India."
+          },
+          {
+            role: "user",
+            content: message
+          }
+        ]
+      })
+    });
 
-    // Gemini API
-
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" +
-      apiKey,
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
-
-        body: JSON.stringify({
-
-          contents: [
-
-            {
-              role: "user",
-
-              parts: [
-
-                {
-                  text:
-                    `You are Smart AI, a helpful AI assistant created by Md Parvez Hussain from India.
-
-Answer the user's question clearly and helpfully.
-
-User question:
-${userMessage}`
-                }
-
-              ]
-
-            }
-
-          ]
-
-        })
-
-      }
-    );
-
-
-    const data =
-      await response.json();
-
+    const data = await response.json();
 
     if (!response.ok) {
-
-      console.error(
-        "Gemini API Error:",
-        data
-      );
-
-      return res.status(500).json({
-
-        success: false,
-
-        reply:
-          "Sorry, Smart AI could not connect to Gemini right now."
-
-      });
-
-    }
-
-
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-
-    if (!reply) {
+      console.log(data);
 
       return res.json({
-
-        success: true,
-
-        reply:
-          "Sorry, I could not generate a response."
-
+        success: false,
+        reply: "OpenRouter Error."
       });
-
     }
 
+    const reply =
+      data.choices?.[0]?.message?.content ||
+      "No response.";
 
     res.json({
-
       success: true,
-
-      reply: reply
-
+      reply
     });
 
+  } catch (err) {
+    console.log(err);
 
-  } catch (error) {
-
-    console.error(
-      "Smart AI Error:",
-      error
-    );
-
-
-    res.status(500).json({
-
+    res.json({
       success: false,
-
-      reply:
-        "Smart AI backend error. Please try again."
-
+      reply: "Server Error."
     });
-
   }
-
 });
 
-
-// ================================
-// START SERVER
-// ================================
-
-app.listen(
-  PORT,
-  () => {
-
-    console.log(
-      `Smart AI Backend running on port ${PORT}`
-    );
-
-  }
-);
+app.listen(PORT, () => {
+  console.log(`Smart AI Backend running on port ${PORT}`);
+});
