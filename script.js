@@ -1182,73 +1182,37 @@ function saveRecentChat(
 
 
 function renderRecentChats() {
-
   if (!recentChats) return;
 
-
-  recentChats.innerHTML =
-    "";
-
+  recentChats.innerHTML = "";
 
   const chats =
     JSON.parse(
-
-      localStorage.getItem(
-        "smartAI_recent_chats"
-      )
-
+      localStorage.getItem("smartAI_recent_chats")
     ) || [];
 
+  chats.forEach((chat) => {
+    const button = document.createElement("button");
 
-  chats.forEach(
-    chat => {
+    button.className = "recent-chat";
+    button.type = "button";
 
-      const button =
-        document.createElement(
-          "button"
-        );
+    // Clean single-line text
+    button.textContent = chat;
 
+    button.addEventListener("click", () => {
+      if (messageInput) {
+        messageInput.value = chat;
+        messageInput.focus();
+      }
 
-      button.className =
-        "recent-chat";
+      showScreen(chatScreen);
+      closeSidebarMenu();
+    });
 
-
-      button.textContent =
-        chat;
-
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          if (messageInput) {
-
-            messageInput.value =
-              chat;
-
-            messageInput.focus();
-
-          }
-
-
-          showScreen(
-            chatScreen
-          );
-
-
-          closeSidebarMenu();
-
-        }
-      );
-
-
-      recentChats.appendChild(
-        button
-      );
-
-    }
-  );
-
+    recentChats.appendChild(button);
+  });
+}
 }
 
 
