@@ -97,7 +97,53 @@ app.post("/api/chat", async (req, res) => {
     });
   }
 });
+// Image Generation API
+app.post("/generate-image", async (req, res) => {
+  try {
+    const { prompt } = req.body;
 
+    if (!prompt) {
+      return res.json({
+        success: false,
+        reply: "Please enter a prompt."
+      });
+    }
+
+    const response = await fetch("https://openrouter.ai/api/v1/images/generations", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "stabilityai/stable-diffusion-xl-base-1.0",
+        prompt: prompt,
+        size: "512x512"
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.data && data.data[0].url) {
+      return res.json({
+        success: true,
+        image: data.data[0].url
+      });
+    } else {
+      return res.json({
+        success: false,
+        reply: "Image generate nahi ho payi."
+      });
+    }
+
+  } catch (err) {
+    console.log(err);
+    res.json({
+      success: false,
+      reply: "Server Error."
+    });
+  }
+});
 app.listen(PORT, () => {
   console.log(`Smart AI Backend running on port ${PORT}`);
 });
