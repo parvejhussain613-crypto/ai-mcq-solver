@@ -1182,23 +1182,40 @@ function saveRecentChat(
 
 
 function renderRecentChats() {
+function renderRecentChats() {
   if (!recentChats) return;
 
   recentChats.innerHTML = "";
 
   const chats =
-    JSON.parse(
-      localStorage.getItem("smartAI_recent_chats")
-    ) || [];
+    JSON.parse(localStorage.getItem("smartAI_recent_chats")) || [];
 
   chats.forEach((chat) => {
     const button = document.createElement("button");
 
-    button.className = "recent-chat";
     button.type = "button";
+    button.className = "recent-chat";
 
-    // Clean single-line text
-    button.textContent = chat;
+    button.textContent = String(chat);
+
+    // FORCE proper spacing
+    button.style.display = "flex";
+    button.style.alignItems = "center";
+    button.style.width = "100%";
+    button.style.height = "48px";
+    button.style.minHeight = "48px";
+    button.style.maxHeight = "48px";
+    button.style.padding = "0 12px";
+    button.style.margin = "0 0 4px 0";
+    button.style.boxSizing = "border-box";
+    button.style.lineHeight = "20px";
+    button.style.fontSize = "16px";
+    button.style.textAlign = "left";
+    button.style.whiteSpace = "nowrap";
+    button.style.overflow = "hidden";
+    button.style.textOverflow = "ellipsis";
+    button.style.border = "none";
+    button.style.background = "transparent";
 
     button.addEventListener("click", () => {
       if (messageInput) {
@@ -1212,8 +1229,7 @@ function renderRecentChats() {
 
     recentChats.appendChild(button);
   });
-}
-}
+         }
 
 
 renderRecentChats();
