@@ -1534,3 +1534,28 @@ body.dark .top-header {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
 }
+/* Recent Chats Fix */
+.recent-chats {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.recent-chat-item {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  margin: 2px 0;
+  min-height: 44px;
+  height: auto;
+  line-height: 1.4;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 8px;
+}
+
+.recent-chat-item:hover {
+  background: #f3f3f3;
+}
