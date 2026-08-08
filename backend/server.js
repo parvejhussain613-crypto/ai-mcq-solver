@@ -109,36 +109,58 @@ app.post("/generate-image", async (req, res) => {
       });
     }
 
-    const response = await fetch("https://openrouter.ai/api/v1/images/generations", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "stabilityai/stable-diffusion-xl-base-1.0",
-        prompt: prompt,
-        size: "512x512"
-      })
-    });
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/images",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "openai/gpt-image-1",
+          prompt: prompt
+        })
+      }
+    );
 
     const data = await response.json();
 
-    if (data.data && data.data[0].url) {
-      return res.json({
-        success: true,
-        image: data.data[0].url
-      });
-    } else {
+    console.log(
+      "IMAGE API RESPONSE:",
+      JSON.stringify(data, null, 2)
+    );
+
+    if (!response.ok) {
+      console.log(data);
+
       return res.json({
         success: false,
-        reply: "Image generate nahi ho payi."
+        reply: "OpenRouter image error."
       });
     }
 
+    const image = data.data?.[0];
+
+    if (!image?.b64_json) {
+      return res.json({
+        success: false,
+        reply: "Image data was not returned."
+      });
+    }
+
+    const imageUrl =
+      `data:${image.media_type || "image/png"};base64,${image.b64_json}`;
+
+    return res.json({
+      success: true,
+      image: imageUrl
+    });
+
   } catch (err) {
     console.log(err);
-    res.json({
+
+    return res.json({
       success: false,
       reply: "Server Error."
     });
