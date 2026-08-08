@@ -1278,7 +1278,7 @@ if (generateImageAction) {
       try {
 
         const response =
-          await fetch("https://ai-mcq-solver-i7qs.onrender.com/api/chat", {
+          await fetch("https://ai-mcq-solver-i7qs.onrender.com/generate-image", {
 
               method: "POST",
 
