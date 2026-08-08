@@ -69,7 +69,7 @@ app.post("/api/chat", async (req, res) => {
     });
 
     const data = await response.json();
-
+console.log("IMAGE API RESPONSE:", JSON.stringify(data, null, 2));
     if (!response.ok) {
       console.log(data);
 
