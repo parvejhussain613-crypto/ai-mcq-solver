@@ -2,13 +2,16 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const { InferenceClient } = require("@huggingface/inference");
 
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 
 const PORT = process.env.PORT || 10000;
+
+const hf = new InferenceClient(process.env.HF_TOKEN);
 
 
 /* =========================================
@@ -24,7 +27,7 @@ app.get("/", (req, res) => {
 
 
 /* =========================================
-   CHAT API
+   CHAT API — OPENROUTER
 ========================================= */
 
 app.post("/api/chat", async (req, res) => {
@@ -38,7 +41,6 @@ app.post("/api/chat", async (req, res) => {
       });
     }
 
-    // Smart AI identity
     const text = message.toLowerCase();
 
     if (
@@ -55,254 +57,129 @@ app.post("/api/chat", async (req, res) => {
       });
     }
 
-
     const response = await fetch(
       "https://openrouter.ai/api/v1/chat/completions",
       {
         method: "POST",
-
         headers: {
           Authorization:
             `Bearer ${process.env.OPENROUTER_API_KEY}`,
-
           "Content-Type":
             "application/json"
         },
-
         body: JSON.stringify({
-
           model: "openrouter/free",
-
           messages: [
             {
               role: "system",
-
               content:
                 "You are Smart AI, a helpful assistant created by Md Parvez Hussain from India."
             },
-
             {
               role: "user",
-
               content: message
             }
           ]
-
         })
       }
     );
 
-
     const data = await response.json();
 
-
     if (!response.ok) {
-
-      console.log(
-        "OpenRouter Chat Error:",
-        data
-      );
+      console.log("OpenRouter Chat Error:", data);
 
       return res.json({
         success: false,
         reply: "OpenRouter Error."
       });
-
     }
-
 
     const reply =
       data.choices?.[0]?.message?.content ||
       "No response.";
 
-
-    res.json({
+    return res.json({
       success: true,
-      reply: reply
+      reply
     });
 
+  } catch (error) {
+    console.error("Chat Server Error:", error);
 
-  } catch (err) {
-
-    console.log(
-      "Chat Server Error:",
-      err
-    );
-
-    res.json({
+    return res.status(500).json({
       success: false,
       reply: "Server Error."
     });
-
   }
 });
 
 
-
 /* =========================================
-   IMAGE GENERATION API
+   IMAGE GENERATION — HUGGING FACE
 ========================================= */
 
 app.post("/generate-image", async (req, res) => {
-
   try {
-
     const { prompt } = req.body;
 
-
     if (!prompt) {
-
-      return res.json({
+      return res.status(400).json({
         success: false,
         message: "Please enter an image prompt."
       });
-
     }
 
-
-    console.log(
-      "Image Prompt:",
-      prompt
-    );
-
-
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/images",
-      {
-
-        method: "POST",
-
-        headers: {
-
-          "Authorization":
-            `Bearer ${process.env.OPENROUTER_API_KEY}`,
-
-          "Content-Type":
-            "application/json"
-
-        },
-
-        body: JSON.stringify({
-
-          model:
-            "google/gemini-2.5-flash-image",
-
-          prompt:
-            prompt
-
-        })
-
-      }
-    );
-
-
-    const data =
-      await response.json();
-
-
-    console.log(
-      "IMAGE API RESPONSE:",
-      JSON.stringify(
-        data,
-        null,
-        2
-      )
-    );
-
-
-    if (!response.ok) {
-
-      console.log(
-        "OpenRouter Image Error:",
-        data
-      );
-
-
-      return res.status(
-        response.status
-      ).json({
-
+    if (!process.env.HF_TOKEN) {
+      return res.status(500).json({
         success: false,
-
-        message:
-          data?.error?.message ||
-          "OpenRouter image generation failed."
-
+        message: "HF_TOKEN is missing on the server."
       });
-
     }
 
+    console.log("Image Prompt:", prompt);
 
-    const imageData =
-      data?.data?.[0]?.b64_json;
-
-
-    const mediaType =
-      data?.data?.[0]?.media_type ||
-      "image/png";
-
-
-    if (!imageData) {
-
-      return res.json({
-
-        success: false,
-
-        message:
-          "Image data was not returned by OpenRouter."
-
-      });
-
-    }
-
-
-    const imageUrl =
-      `data:${mediaType};base64,${imageData}`;
-
-
-    return res.json({
-
-      success: true,
-
-      image: imageUrl
-
+    const imageBlob = await hf.textToImage({
+      model: "black-forest-labs/FLUX.1-dev",
+      inputs: prompt
     });
 
+    const buffer = Buffer.from(
+      await imageBlob.arrayBuffer()
+    );
+
+    const imageUrl =
+      `data:image/png;base64,${buffer.toString("base64")}`;
+
+    console.log("Image generated successfully.");
+
+    return res.json({
+      success: true,
+      image: imageUrl
+    });
 
   } catch (error) {
-
     console.error(
       "IMAGE GENERATION ERROR:",
       error
     );
 
-
     return res.status(500).json({
-
       success: false,
-
       message:
-        "Image generation server error."
-
+        error?.message ||
+        "Hugging Face image generation failed."
     });
-
   }
-
 });
-
 
 
 /* =========================================
    START SERVER
 ========================================= */
 
-app.listen(
-  PORT,
-  () => {
-
-    console.log(
-      `Smart AI Backend running on port ${PORT}`
-    );
-
-  }
-);
+app.listen(PORT, () => {
+  console.log(
+    `Smart AI Backend running on port ${PORT}`
+  );
+});
