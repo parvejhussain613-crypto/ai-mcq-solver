@@ -10,7 +10,11 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 10000;
 
-// Home
+
+/* =========================================
+   HOME
+========================================= */
+
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -18,7 +22,11 @@ app.get("/", (req, res) => {
   });
 });
 
-// Chat API
+
+/* =========================================
+   CHAT API
+========================================= */
+
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
@@ -42,130 +50,259 @@ app.post("/api/chat", async (req, res) => {
     ) {
       return res.json({
         success: true,
-        reply: "Smart AI is created by Md Parvez Hussain from India."
+        reply:
+          "Smart AI is created by Md Parvez Hussain from India."
       });
     }
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "openrouter/free",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are Smart AI, a helpful assistant created by Md Parvez Hussain from India."
-          },
-          {
-            role: "user",
-            content: message
-          }
-        ]
-      })
-    });
+
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+
+        headers: {
+          Authorization:
+            `Bearer ${process.env.OPENROUTER_API_KEY}`,
+
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+
+          model: "openrouter/free",
+
+          messages: [
+            {
+              role: "system",
+
+              content:
+                "You are Smart AI, a helpful assistant created by Md Parvez Hussain from India."
+            },
+
+            {
+              role: "user",
+
+              content: message
+            }
+          ]
+
+        })
+      }
+    );
+
 
     const data = await response.json();
-console.log("IMAGE API RESPONSE:", JSON.stringify(data, null, 2));
+
+
     if (!response.ok) {
-      console.log(data);
+
+      console.log(
+        "OpenRouter Chat Error:",
+        data
+      );
 
       return res.json({
         success: false,
         reply: "OpenRouter Error."
       });
+
     }
+
 
     const reply =
       data.choices?.[0]?.message?.content ||
       "No response.";
 
+
     res.json({
       success: true,
-      reply
+      reply: reply
     });
 
+
   } catch (err) {
-    console.log(err);
+
+    console.log(
+      "Chat Server Error:",
+      err
+    );
 
     res.json({
       success: false,
       reply: "Server Error."
     });
+
   }
 });
-// Image Generation API
+
+
+
+/* =========================================
+   IMAGE GENERATION API
+========================================= */
+
 app.post("/generate-image", async (req, res) => {
+
   try {
+
     const { prompt } = req.body;
 
+
     if (!prompt) {
+
       return res.json({
         success: false,
-        reply: "Please enter a prompt."
+        message: "Please enter an image prompt."
       });
+
     }
+
+
+    console.log(
+      "Image Prompt:",
+      prompt
+    );
+
 
     const response = await fetch(
       "https://openrouter.ai/api/v1/images",
       {
+
         method: "POST",
+
         headers: {
-          "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
-          "Content-Type": "application/json"
+
+          "Authorization":
+            `Bearer ${process.env.OPENROUTER_API_KEY}`,
+
+          "Content-Type":
+            "application/json"
+
         },
+
         body: JSON.stringify({
-          model: "openai/gpt-image-1",
-          prompt: prompt
+
+          model:
+            "google/gemini-2.5-flash-image",
+
+          prompt:
+            prompt
+
         })
+
       }
     );
 
-    const data = await response.json();
+
+    const data =
+      await response.json();
+
 
     console.log(
       "IMAGE API RESPONSE:",
-      JSON.stringify(data, null, 2)
+      JSON.stringify(
+        data,
+        null,
+        2
+      )
     );
 
+
     if (!response.ok) {
-      console.log(data);
 
-      return res.json({
+      console.log(
+        "OpenRouter Image Error:",
+        data
+      );
+
+
+      return res.status(
+        response.status
+      ).json({
+
         success: false,
-        reply: "OpenRouter image error."
+
+        message:
+          data?.error?.message ||
+          "OpenRouter image generation failed."
+
       });
+
     }
 
-    const image = data.data?.[0];
 
-    if (!image?.b64_json) {
+    const imageData =
+      data?.data?.[0]?.b64_json;
+
+
+    const mediaType =
+      data?.data?.[0]?.media_type ||
+      "image/png";
+
+
+    if (!imageData) {
+
       return res.json({
+
         success: false,
-        reply: "Image data was not returned."
+
+        message:
+          "Image data was not returned by OpenRouter."
+
       });
+
     }
+
 
     const imageUrl =
-      `data:${image.media_type || "image/png"};base64,${image.b64_json}`;
+      `data:${mediaType};base64,${imageData}`;
+
 
     return res.json({
+
       success: true,
+
       image: imageUrl
+
     });
 
-  } catch (err) {
-    console.log(err);
 
-    return res.json({
+  } catch (error) {
+
+    console.error(
+      "IMAGE GENERATION ERROR:",
+      error
+    );
+
+
+    return res.status(500).json({
+
       success: false,
-      reply: "Server Error."
+
+      message:
+        "Image generation server error."
+
     });
+
   }
+
 });
-app.listen(PORT, () => {
-  console.log(`Smart AI Backend running on port ${PORT}`);
-});
+
+
+
+/* =========================================
+   START SERVER
+========================================= */
+
+app.listen(
+  PORT,
+  () => {
+
+    console.log(
+      `Smart AI Backend running on port ${PORT}`
+    );
+
+  }
+);
