@@ -2289,60 +2289,62 @@ if (closeLoginBtn) {
 
 }
 
-
 /* =========================================
-   LOGIN FORM
+   LOGIN FORM — FIXED
 ========================================= */
 
-const loginForm =
-  get("loginForm");
-
+const loginForm = get("loginForm");
 
 if (loginForm) {
 
-  loginForm.addEventListener(
-    "submit",
-    event => {
+  loginForm.addEventListener("submit", function(event) {
 
-      event.preventDefault();
+    event.preventDefault();
 
+    const emailInput = get("loginEmail");
 
-      const email =
-        get("loginEmail") ?
-        get("loginEmail").value.trim() :
-        "";
+    const email = emailInput
+      ? emailInput.value.trim()
+      : "";
 
-
-      if (!email) {
-
-        alert(
-          "Please enter your email."
-        );
-
-        return;
-
-      }
-
-
-      isLoggedIn =
-        true;
-
-
-      localStorage.setItem(
-        "smartAI_logged_in",
-        "true"
-      );
-
-
-      closeLoginModal();
-
-
-      alert(
-        "Login successful! Welcome to Smart AI."
-      );
-
+    if (!email) {
+      alert("Please enter your email.");
+      return;
     }
-  );
+
+    // Save login state
+    isLoggedIn = true;
+
+    localStorage.setItem(
+      "smartAI_logged_in",
+      "true"
+    );
+
+    // Close login modal
+    closeLoginModal();
+
+    // Make sure Chat screen is visible
+    showScreen(chatScreen);
+
+    if (welcomeScreen) {
+      welcomeScreen.style.display = "flex";
+    }
+
+    // Clear email field
+    if (emailInput) {
+      emailInput.value = "";
+    }
+
+    console.log(
+      "Smart AI Login successful:",
+      email
+    );
+
+    alert(
+      "Login successful! Welcome to Smart AI. 🎉"
+    );
+
+  });
 
 }
 
