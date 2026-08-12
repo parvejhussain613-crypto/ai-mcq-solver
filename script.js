@@ -1943,7 +1943,7 @@ if (enhanceAction) {
 
 
         const response =
-          await fetch("https://ai-mcq-solver-i7qs.onrender.com/api/chat", {
+          await fetch("https://ai-mcq-solver-i7qs.onrender.com/enhance-image", {
 
               method: "POST",
 
@@ -2007,7 +2007,68 @@ if (enhanceAction) {
   );
 
 }
+/* =========================================
+   IMAGE ENHANCE API — HUGGING FACE
+========================================= */
 
+app.post(
+  "/enhance-image",
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: "Please upload an image."
+        });
+      }
+
+      if (!process.env.HF_TOKEN) {
+        return res.status(500).json({
+          success: false,
+          message: "HF_TOKEN is missing."
+        });
+      }
+
+      console.log(
+        "Enhancing image:",
+        req.file.originalname
+      );
+
+      const enhancedBlob = await hf.imageToImage({
+        model: "qualcomm/Real-ESRGAN-x4plus",
+        inputs: req.file.buffer
+      });
+
+      const buffer = Buffer.from(
+        await enhancedBlob.arrayBuffer()
+      );
+
+      const imageUrl =
+        `data:image/png;base64,${buffer.toString("base64")}`;
+
+      console.log("Image enhanced successfully.");
+
+      return res.json({
+        success: true,
+        imageUrl: imageUrl
+      });
+
+    } catch (error) {
+      console.error(
+        "IMAGE ENHANCE ERROR:",
+        error
+      );
+
+      return res.status(500).json({
+        success: false,
+        message:
+          error?.message ||
+          "Image enhancement failed."
+      });
+    }
+  }
+);
 
 /* =========================================
    DISPLAY ENHANCED IMAGE
