@@ -343,9 +343,8 @@ app.post(
   }
 );
 
-
 /* =========================================
-   IMAGE ENHANCE
+   IMAGE ENHANCE — HUGGING FACE
 ========================================= */
 
 app.post(
@@ -355,68 +354,89 @@ app.post(
 
     try {
 
-      /* CHECK TOKEN */
-
       if (!process.env.HF_TOKEN) {
-
         return res.status(500).json({
-
           success: false,
-
-          message:
-            "HF_TOKEN is missing on the server."
-
+          message: "HF_TOKEN is missing on the server."
         });
-
       }
-
-
-      /* CHECK IMAGE */
 
       if (!req.file) {
-
         return res.status(400).json({
-
           success: false,
-
-          message:
-            "Please upload an image."
-
+          message: "Please upload an image."
         });
-
       }
 
-
       console.log(
-        "Enhance request:",
+        "Enhancing image:",
         req.file.originalname
+      );
+
+      /*
+       * Convert uploaded image buffer
+       * into a Blob for Hugging Face.
+       */
+
+      const inputImage = new Blob(
+        [req.file.buffer],
+        {
+          type: req.file.mimetype
+        }
       );
 
 
       /*
-        IMPORTANT:
+       * IMAGE TO IMAGE
+       *
+       * The model receives the original image
+       * and creates an improved version.
+       */
 
-        We are intentionally not using
-        qualcomm/Real-ESRGAN-x4plus here
-        because it is currently not hosted
-        by a Hugging Face Inference Provider.
-      */
+      const enhancedBlob =
+        await hf.imageToImage({
+
+          data: inputImage,
+
+          model:
+            "black-forest-labs/FLUX.2-klein-9B",
+
+          parameters: {
+
+            prompt:
+              "Enhance this photo. Improve sharpness, clarity, lighting and details. Remove mild blur and noise. Keep the original subject, face, clothing, composition and colors natural. Do not change the person's identity.",
+
+            guidance_scale: 3.5
+
+          }
+
+        });
 
 
       /*
-        Temporary safe response.
+       * Convert result to Base64
+       */
 
-        This confirms that:
-        Frontend → Render → image upload
-        is working correctly.
-      */
+      const buffer =
+        Buffer.from(
+          await enhancedBlob.arrayBuffer()
+        );
+
+
+      const imageUrl =
+        `data:image/png;base64,${buffer.toString("base64")}`;
+
+
+      console.log(
+        "Image enhanced successfully."
+      );
+
 
       return res.json({
 
-        success: false,
+        success: true,
 
-        message:
-          "Image received successfully, but the hosted AI enhancement model is not connected yet."
+        image: imageUrl
 
       });
 
@@ -435,7 +455,7 @@ app.post(
 
         message:
           error?.message ||
-          "Image enhancement server error."
+          "Image enhancement failed."
 
       });
 
