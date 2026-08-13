@@ -326,7 +326,7 @@ app.post("/generate-video", async (req, res) => {
 
     const videoBlob = await hf.textToVideo(
       {
-        model: "Lightricks/LTX-Video-0.9.8-13B-distilled",
+        model: "Wan-AI/Wan2.2-TI2V-5B",
         inputs: prompt.trim(),
         parameters: {
           num_frames: 121,
@@ -334,7 +334,7 @@ app.post("/generate-video", async (req, res) => {
         }
       },
       {
-        provider: "auto"
+        provider: "fal-ai"
       }
     );
 
