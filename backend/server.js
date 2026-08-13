@@ -229,119 +229,71 @@ app.post("/api/chat", async (req, res) => {
         "Server Error."
 
     });
+     
 
   }
 
 });
 
-
 /* =========================================
    IMAGE GENERATION — HUGGING FACE
 ========================================= */
 
-app.post(
-  "/generate-image",
-  async (req, res) => {
+app.post("/generate-image", async (req, res) => {
+  try {
+    const { prompt } = req.body;
 
-    try {
-
-      const { prompt } =
-        req.body;
-
-
-      if (!prompt) {
-
-        return res.status(400).json({
-
-          success: false,
-
-          message:
-            "Please enter an image prompt."
-
-        });
-
-      }
-
-
-      if (!process.env.HF_TOKEN) {
-
-        return res.status(500).json({
-
-          success: false,
-
-          message:
-            "HF_TOKEN is missing on the server."
-
-        });
-
-      }
-
-
-      console.log(
-        "Image Prompt:",
-        prompt
-      );
-
-
-      const imageBlob =
-        await hf.textToImage({
-
-          model:
-            "black-forest-labs/FLUX.1-dev",
-
-          inputs:
-            prompt
-
-        });
-
-
-      const buffer =
-        Buffer.from(
-          await imageBlob.arrayBuffer()
-        );
-
-
-      const imageUrl =
-        `data:image/png;base64,${buffer.toString("base64")}`;
-
-
-      console.log(
-        "Image generated successfully."
-      );
-
-
-      return res.json({
-
-        success: true,
-
-        image:
-          imageUrl
-
-      });
-
-
-    } catch (error) {
-
-      console.error(
-        "IMAGE GENERATION ERROR:",
-        error
-      );
-
-
-      return res.status(500).json({
-
+    if (!prompt || !prompt.trim()) {
+      return res.status(400).json({
         success: false,
-
-        message:
-          error?.message ||
-          "Hugging Face image generation failed."
-
+        message: "Please enter an image prompt."
       });
-
     }
 
+    if (!process.env.HF_TOKEN) {
+      return res.status(500).json({
+        success: false,
+        message: "HF_TOKEN is missing on the server."
+      });
+    }
+
+    console.log("Image Prompt:", prompt);
+
+    const imageBlob = await hf.textToImage({
+      model: "black-forest-labs/FLUX.1-schnell",
+      inputs: prompt.trim()
+    });
+
+    const buffer = Buffer.from(
+      await imageBlob.arrayBuffer()
+    );
+
+    const imageUrl =
+      `data:image/png;base64,${buffer.toString("base64")}`;
+
+    console.log("Image generated successfully.");
+
+    return res.json({
+      success: true,
+      image: imageUrl,
+      imageUrl: imageUrl
+    });
+
+  } catch (error) {
+    console.error(
+      "IMAGE GENERATION ERROR:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error?.message ||
+        "Image generation failed."
+    });
   }
-);
+});
+
 
 /* =========================================
    IMAGE ENHANCE — HUGGING FACE
