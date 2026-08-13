@@ -1,21 +1,19 @@
 /* =========================================
-   SMART AI — FINAL SCRIPT
-   Main Features:
-   - Sidebar
-   - New Chat
-   - Recent Chat History
-   - Login Required
-   - Camera / Photo / File Attachment
-   - Image Preview + X Remove
-   - Microphone Voice Input
-   - AI Chat API
-   - Image Generation
-   - Video Generation
-   - 3 Free Video Trials
-   - ₹299 Upgrade UI
-   - Image Enhance
-   - Download Generated Image/Video
-   - Creator Identity Response
+   SMART AI — CLEAN FINAL SCRIPT
+   =========================================
+   Features:
+   ✅ AI Chat
+   ✅ Login
+   ✅ Recent Chats
+   ✅ New Chat
+   ✅ Camera / Photo / File
+   ✅ Voice Input
+   ✅ Image Generation
+   ✅ Video Generation UI
+   ✅ 3 Free Video Trials
+   ✅ ₹299 Upgrade UI
+   ✅ Download Generated Image/Video
+   ❌ Image Enhance removed
 ========================================= */
 
 
@@ -32,7 +30,9 @@ let isLoggedIn =
   localStorage.getItem("smartAI_logged_in") === "true";
 
 let videoFreeTrials =
-  Number(localStorage.getItem("smartAI_video_trials")) || 0;
+  Number(
+    localStorage.getItem("smartAI_video_trials")
+  ) || 0;
 
 
 /* =========================================
@@ -88,6 +88,19 @@ const recentChats = get("recentChats");
 
 
 /* =========================================
+   REMOVE IMAGE ENHANCE
+========================================= */
+
+if (imageEnhanceBtn) {
+  imageEnhanceBtn.style.display = "none";
+}
+
+if (enhanceScreen) {
+  enhanceScreen.style.display = "none";
+}
+
+
+/* =========================================
    SCREEN SWITCHING
 ========================================= */
 
@@ -97,7 +110,6 @@ function showScreen(screen) {
     chatScreen,
     imageScreen,
     videoScreen,
-    enhanceScreen,
     settingsScreen
   ];
 
@@ -122,9 +134,9 @@ function showScreen(screen) {
 
 function openSidebar() {
 
-  if (!sidebar) return;
-
-  sidebar.classList.add("open");
+  if (sidebar) {
+    sidebar.classList.add("open");
+  }
 
   if (overlay) {
     overlay.classList.add("show");
@@ -241,26 +253,6 @@ if (generateVideoBtn) {
       closeSidebarMenu();
 
       updateVideoTrialUI();
-
-    }
-  );
-
-}
-
-
-/* =========================================
-   IMAGE ENHANCE
-========================================= */
-
-if (imageEnhanceBtn) {
-
-  imageEnhanceBtn.addEventListener(
-    "click",
-    () => {
-
-      showScreen(enhanceScreen);
-
-      closeSidebarMenu();
 
     }
   );
@@ -430,21 +422,16 @@ if (fileBtn && fileInput) {
    HANDLE ATTACHMENT
 ========================================= */
 
-function handleAttachment(
-  file,
-  type
-) {
+function handleAttachment(file, type) {
 
   if (!file) return;
 
   selectedAttachment = file;
-
   selectedAttachmentType = type;
 
   if (!attachmentPreview) return;
 
   attachmentPreview.innerHTML = "";
-
 
   const chip =
     document.createElement("div");
@@ -452,8 +439,6 @@ function handleAttachment(
   chip.className =
     "attachment-chip";
 
-
-  /* IMAGE PREVIEW */
 
   if (
     file.type &&
@@ -471,8 +456,6 @@ function handleAttachment(
   }
 
 
-  /* FILE NAME */
-
   const name =
     document.createElement("span");
 
@@ -482,19 +465,11 @@ function handleAttachment(
   chip.appendChild(name);
 
 
-  /* REMOVE BUTTON */
-
   const removeBtn =
     document.createElement("button");
 
   removeBtn.type = "button";
-
   removeBtn.textContent = "✕";
-
-  removeBtn.setAttribute(
-    "aria-label",
-    "Remove attachment"
-  );
 
   removeBtn.addEventListener(
     "click",
@@ -509,14 +484,9 @@ function handleAttachment(
 
   chip.appendChild(removeBtn);
 
+  attachmentPreview.appendChild(chip);
 
-  attachmentPreview.appendChild(
-    chip
-  );
-
-  attachmentPreview.classList.add(
-    "show"
-  );
+  attachmentPreview.classList.add("show");
 
 }
 
@@ -528,9 +498,7 @@ function handleAttachment(
 function removeAttachment() {
 
   selectedAttachment = null;
-
   selectedAttachmentType = null;
-
 
   if (attachmentPreview) {
 
@@ -541,7 +509,6 @@ function removeAttachment() {
     );
 
   }
-
 
   if (cameraInput) {
     cameraInput.value = "";
@@ -621,13 +588,11 @@ function addMessage(
 
   if (!chatMessages) return;
 
-
   const message =
     document.createElement("div");
 
   message.className =
     `message ${sender}`;
-
 
   const bubble =
     document.createElement("div");
@@ -651,15 +616,9 @@ function addMessage(
           attachment
         );
 
-      img.style.maxWidth =
-        "220px";
-
-      img.style.display =
-        "block";
-
-      img.style.borderRadius =
-        "10px";
-
+      img.style.maxWidth = "220px";
+      img.style.display = "block";
+      img.style.borderRadius = "10px";
       img.style.marginBottom =
         text ? "8px" : "0";
 
@@ -685,17 +644,44 @@ function addMessage(
   }
 
 
-  message.appendChild(
-    bubble
-  );
+  message.appendChild(bubble);
 
-  chatMessages.appendChild(
-    message
-  );
-
+  chatMessages.appendChild(message);
 
   chatMessages.scrollTop =
     chatMessages.scrollHeight;
+
+}
+
+
+/* =========================================
+   THINKING MESSAGE
+========================================= */
+
+function addThinkingMessage() {
+
+  if (!chatMessages) {
+    return null;
+  }
+
+  const loading =
+    document.createElement("div");
+
+  loading.className =
+    "message ai";
+
+  loading.innerHTML = `
+    <div class="message-bubble">
+      Thinking...
+    </div>
+  `;
+
+  chatMessages.appendChild(loading);
+
+  chatMessages.scrollTop =
+    chatMessages.scrollHeight;
+
+  return loading;
 
 }
 
@@ -712,8 +698,7 @@ function getCreatorResponse(text) {
       .replace(/[?!.]/g, "")
       .trim();
 
-
-  const creatorQuestions = [
+  const questions = [
 
     "who created you",
     "who create you",
@@ -722,13 +707,14 @@ function getCreatorResponse(text) {
     "who is your creator",
     "who developed you",
     "who created smart ai",
-    "who is smart ai owner"
+    "who is smart ai owner",
+    "tumko kisne banaya",
+    "tumhe kisne banaya"
 
   ];
 
-
   if (
-    creatorQuestions.some(
+    questions.some(
       question =>
         normalized.includes(question)
     )
@@ -739,7 +725,6 @@ function getCreatorResponse(text) {
     );
 
   }
-
 
   return null;
 
@@ -753,18 +738,15 @@ function getCreatorResponse(text) {
 async function sendMessage() {
 
   const text =
-    messageInput ?
-    messageInput.value.trim() :
-    "";
-
+    messageInput
+      ? messageInput.value.trim()
+      : "";
 
   if (
     !text &&
     !selectedAttachment
   ) {
-
     return;
-
   }
 
 
@@ -780,10 +762,7 @@ async function sendMessage() {
 
 
   if (welcomeScreen) {
-
-    welcomeScreen.style.display =
-      "none";
-
+    welcomeScreen.style.display = "none";
   }
 
 
@@ -815,11 +794,10 @@ async function sendMessage() {
     messageInput.value = "";
   }
 
-
   removeAttachment();
 
 
-  /* CREATOR QUESTION */
+  /* CREATOR */
 
   const creatorReply =
     getCreatorResponse(text);
@@ -853,7 +831,7 @@ async function sendMessage() {
   }
 
 
-  /* AI THINKING */
+  /* AI */
 
   const loadingMessage =
     addThinkingMessage();
@@ -862,15 +840,15 @@ async function sendMessage() {
   try {
 
     const response =
-      await fetch("https://ai-mcq-solver-i7qs.onrender.com/api/chat", {
+      await fetch(
+        "https://ai-mcq-solver-i7qs.onrender.com/api/chat",
+        {
 
           method: "POST",
 
           headers: {
-
             "Content-Type":
               "application/json"
-
           },
 
           body:
@@ -889,15 +867,16 @@ async function sendMessage() {
       );
 
 
-    if (!response.ok) {
-      throw new Error(
-        "API request failed"
-      );
-    }
-
-
     const data =
       await response.json();
+
+
+    if (!response.ok) {
+      throw new Error(
+        data?.reply ||
+        "Chat API failed"
+      );
+    }
 
 
     if (loadingMessage) {
@@ -906,12 +885,9 @@ async function sendMessage() {
 
 
     addMessage(
-
       data.reply ||
       "Smart AI received your message.",
-
       "ai"
-
     );
 
 
@@ -928,56 +904,16 @@ async function sendMessage() {
       error
     );
 
-
     if (loadingMessage) {
       loadingMessage.remove();
     }
 
-
     addMessage(
-
-      "Smart AI backend is not connected yet. Please connect your AI API.",
-
+      "Smart AI backend is not connected yet. Please check your backend.",
       "ai"
-
     );
 
   }
-
-}
-
-
-function addThinkingMessage() {
-
-  if (!chatMessages) {
-    return null;
-  }
-
-
-  const loading =
-    document.createElement("div");
-
-  loading.className =
-    "message ai";
-
-
-  loading.innerHTML = `
-    <div class="message-bubble">
-      Thinking...
-    </div>
-  `;
-
-
-  chatMessages.appendChild(
-    loading
-  );
-
-
-  chatMessages.scrollTop =
-    chatMessages.scrollHeight;
-
-
-  return loading;
 
 }
 
@@ -1038,14 +974,11 @@ if (
   recognition =
     new SpeechRecognition();
 
-
   recognition.lang =
     "en-IN";
 
-
   recognition.continuous =
     false;
-
 
   recognition.interimResults =
     false;
@@ -1073,10 +1006,7 @@ if (
     event => {
 
       const transcript =
-        event
-          .results[0][0]
-          .transcript;
-
+        event.results[0][0].transcript;
 
       if (messageInput) {
 
@@ -1143,38 +1073,26 @@ if (
    RECENT CHAT HISTORY
 ========================================= */
 
-function saveRecentChat(
-  text
-) {
+function saveRecentChat(text) {
 
   if (!text) return;
 
-
   let chats =
     JSON.parse(
-
       localStorage.getItem(
         "smartAI_recent_chats"
       )
-
     ) || [];
 
-
   chats.unshift(text);
-
 
   chats =
     chats.slice(0, 20);
 
-
   localStorage.setItem(
-
     "smartAI_recent_chats",
-
     JSON.stringify(chats)
-
   );
-
 
   renderRecentChats();
 
@@ -1182,37 +1100,62 @@ function saveRecentChat(
 
 
 function renderRecentChats() {
+
   if (!recentChats) return;
 
   recentChats.innerHTML = "";
 
   const chats =
     JSON.parse(
-      localStorage.getItem("smartAI_recent_chats")
+      localStorage.getItem(
+        "smartAI_recent_chats"
+      )
     ) || [];
 
-  chats.forEach((chat) => {
-    const button = document.createElement("button");
 
-    button.className = "recent-chat";
+  chats.forEach(chat => {
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "recent-chat";
+
     button.type = "button";
 
-    // Clean single-line text
-    button.textContent = chat;
+    button.textContent =
+      chat;
 
-    button.addEventListener("click", () => {
-      if (messageInput) {
-        messageInput.value = chat;
-        messageInput.focus();
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if (messageInput) {
+
+          messageInput.value =
+            chat;
+
+          messageInput.focus();
+
+        }
+
+        showScreen(chatScreen);
+
+        closeSidebarMenu();
+
       }
+    );
 
-      showScreen(chatScreen);
-      closeSidebarMenu();
-    });
 
-    recentChats.appendChild(button);
+    recentChats.appendChild(
+      button
+    );
+
   });
+
 }
+
 
 renderRecentChats();
 
@@ -1241,9 +1184,9 @@ if (generateImageAction) {
     async () => {
 
       const prompt =
-        imagePrompt ?
-        imagePrompt.value.trim() :
-        "";
+        imagePrompt
+          ? imagePrompt.value.trim()
+          : "";
 
 
       if (!prompt) {
@@ -1258,11 +1201,9 @@ if (generateImageAction) {
 
 
       if (imageLoading) {
-
         imageLoading.classList.add(
           "show"
         );
-
       }
 
 
@@ -1278,45 +1219,35 @@ if (generateImageAction) {
       try {
 
         const response =
-          await fetch("https://ai-mcq-solver-i7qs.onrender.com/generate-image", {
+          await fetch(
+            "https://ai-mcq-solver-i7qs.onrender.com/generate-image",
+            {
 
               method: "POST",
 
               headers: {
-
                 "Content-Type":
                   "application/json"
-
               },
 
               body:
                 JSON.stringify({
-
                   prompt: prompt
-
                 })
 
             }
           );
 
 
-        if (!response.ok) {
-
-          throw new Error(
-            "Image API failed"
-          );
-
-        }
-
-
         const data =
           await response.json();
 
 
-        if (imageLoading) {
+        if (!response.ok) {
 
-          imageLoading.classList.remove(
-            "show"
+          throw new Error(
+            data?.message ||
+            "Image API failed"
           );
 
         }
@@ -1334,6 +1265,12 @@ if (generateImageAction) {
           error
         );
 
+        alert(
+          error.message ||
+          "Image generation failed."
+        );
+
+      } finally {
 
         if (imageLoading) {
 
@@ -1342,11 +1279,6 @@ if (generateImageAction) {
           );
 
         }
-
-
-        alert(
-          "Image generation API is not connected yet."
-        );
 
       }
 
@@ -1360,16 +1292,14 @@ if (generateImageAction) {
    DISPLAY GENERATED IMAGE
 ========================================= */
 
-function displayGeneratedImage(
-  data
-) {
+function displayGeneratedImage(data) {
 
   if (!generatedImageResult) {
     return;
   }
 
 
-  let imageUrl =
+  const imageUrl =
     data.imageUrl ||
     data.url ||
     data.image;
@@ -1379,7 +1309,7 @@ function displayGeneratedImage(
 
     alert(
       data.message ||
-      "Image generated, but no image URL was returned."
+      "Image generated, but no image was returned."
     );
 
     return;
@@ -1391,12 +1321,14 @@ function displayGeneratedImage(
 
     <div class="result-header">
 
-      <span>Generated Image</span>
+      <span>
+        Generated Image
+      </span>
 
       <button
         class="download-btn"
         id="downloadGeneratedImage"
-        title="Download Image"
+        type="button"
       >
         ⬇️
       </button>
@@ -1439,8 +1371,9 @@ function displayGeneratedImage(
 
 }
 
+
 /* =========================================
-   IMAGE REFERENCE
+   IMAGE REFERENCE BUTTON
 ========================================= */
 
 const imageReferenceInput =
@@ -1525,9 +1458,7 @@ if (generateVideoAction) {
     "click",
     async () => {
 
-      if (
-        videoFreeTrials >= 3
-      ) {
+      if (videoFreeTrials >= 3) {
 
         showUpgradeMessage();
 
@@ -1537,9 +1468,9 @@ if (generateVideoAction) {
 
 
       const prompt =
-        videoPrompt ?
-        videoPrompt.value.trim() :
-        "";
+        videoPrompt
+          ? videoPrompt.value.trim()
+          : "";
 
 
       if (!prompt) {
@@ -1562,27 +1493,27 @@ if (generateVideoAction) {
       }
 
 
-      if (generatedVideoResult) {
-
-        generatedVideoResult.classList.remove(
-          "show"
-        );
-
-      }
-
-
       try {
 
+        /*
+          NOTE:
+          Your current backend does NOT have
+          a real /generate-video endpoint yet.
+
+          This request is kept separate from
+          the Chat API so it won't break Chat.
+        */
+
         const response =
-          await fetch("https://ai-mcq-solver-i7qs.onrender.com/api/chat", {
+          await fetch(
+            "https://ai-mcq-solver-i7qs.onrender.com/generate-video",
+            {
 
               method: "POST",
 
               headers: {
-
                 "Content-Type":
                   "application/json"
-
               },
 
               body:
@@ -1598,43 +1529,28 @@ if (generateVideoAction) {
           );
 
 
-        if (!response.ok) {
-
-          throw new Error(
-            "Video API failed"
-          );
-
-        }
-
-
         const data =
           await response.json();
 
 
-        if (videoLoading) {
+        if (!response.ok) {
 
-          videoLoading.classList.remove(
-            "show"
+          throw new Error(
+            data?.message ||
+            "Video generation API is not connected yet."
           );
 
         }
 
 
-        /* Count only successful response */
-
         videoFreeTrials++;
 
         localStorage.setItem(
-
           "smartAI_video_trials",
-
           videoFreeTrials
-
         );
 
-
         updateVideoTrialUI();
-
 
         displayGeneratedVideo(
           data
@@ -1648,6 +1564,12 @@ if (generateVideoAction) {
           error
         );
 
+        alert(
+          error.message ||
+          "Video generation API is not connected yet."
+        );
+
+      } finally {
 
         if (videoLoading) {
 
@@ -1657,11 +1579,6 @@ if (generateVideoAction) {
 
         }
 
-
-        alert(
-          "Video generation API is not connected yet."
-        );
-
       }
 
     }
@@ -1670,9 +1587,11 @@ if (generateVideoAction) {
 }
 
 
-function displayGeneratedVideo(
-  data
-) {
+/* =========================================
+   DISPLAY VIDEO
+========================================= */
+
+function displayGeneratedVideo(data) {
 
   if (!generatedVideoResult) {
     return;
@@ -1688,11 +1607,8 @@ function displayGeneratedVideo(
   if (!videoUrl) {
 
     alert(
-
       data.message ||
-
       "Video generated, but no video URL was returned."
-
     );
 
     return;
@@ -1704,12 +1620,14 @@ function displayGeneratedVideo(
 
     <div class="result-header">
 
-      <span>Generated 8s Video</span>
+      <span>
+        Generated 8s Video
+      </span>
 
       <button
         class="download-btn"
         id="downloadGeneratedVideo"
-        title="Download Video"
+        type="button"
       >
         ⬇️
       </button>
@@ -1759,24 +1677,16 @@ function displayGeneratedVideo(
 
 function showUpgradeMessage() {
 
-  const message =
-
-    "Your 3 free AI video generations are finished.\n\n" +
-
-    "Upgrade for ₹299 to continue generating AI videos.";
-
-
   const confirmed =
     confirm(
-      message +
-      "\n\nPress OK to view Upgrade options."
+      "Your 3 free AI video generations are finished.\n\n" +
+      "Upgrade for ₹299 to continue generating AI videos.\n\n" +
+      "Press OK to view upgrade options."
     );
 
 
   if (confirmed) {
-
     openUpgradeModal();
-
   }
 
 }
@@ -1811,359 +1721,6 @@ if (
 
 
 /* =========================================
-   IMAGE ENHANCE
-========================================= */
-
-const enhanceInput =
-  get("enhanceInput");
-
-const uploadEnhanceBtn =
-  get("uploadEnhanceBtn");
-
-const enhancePreviewBox =
-  get("enhancePreviewBox");
-
-const enhancePreview =
-  get("enhancePreview");
-
-const enhanceAction =
-  get("enhanceAction");
-
-const enhanceLoading =
-  get("enhanceLoading");
-
-
-if (
-  uploadEnhanceBtn &&
-  enhanceInput
-) {
-
-  uploadEnhanceBtn.addEventListener(
-    "click",
-    () => {
-
-      enhanceInput.click();
-
-    }
-  );
-
-}
-
-
-if (enhanceInput) {
-
-  enhanceInput.addEventListener(
-    "change",
-    event => {
-
-      const file =
-        event.target.files[0];
-
-
-      if (!file) return;
-
-
-      if (
-        !file.type.startsWith("image/")
-      ) {
-
-        alert(
-          "Please select an image."
-        );
-
-        return;
-
-      }
-
-
-      if (enhancePreview) {
-
-        enhancePreview.src =
-          URL.createObjectURL(file);
-
-      }
-
-
-      if (enhancePreviewBox) {
-
-        enhancePreviewBox.classList.add(
-          "show"
-        );
-
-      }
-
-    }
-  );
-
-}
-
-
-if (enhanceAction) {
-
-  enhanceAction.addEventListener(
-    "click",
-    async () => {
-
-      const file =
-        enhanceInput ?
-        enhanceInput.files[0] :
-        null;
-
-
-      if (!file) {
-
-        alert(
-          "Please upload a photo first."
-        );
-
-        return;
-
-      }
-
-
-      if (enhanceLoading) {
-
-        enhanceLoading.classList.add(
-          "show"
-        );
-
-      }
-
-
-      try {
-
-        const formData =
-          new FormData();
-
-
-        formData.append(
-          "image",
-          file
-        );
-
-
-        const response =
-          await fetch("https://ai-mcq-solver-i7qs.onrender.com/enhance-image", {
-
-              method: "POST",
-
-              body: formData
-
-            }
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "Enhance API failed"
-          );
-
-        }
-
-
-        const data =
-          await response.json();
-
-
-        if (enhanceLoading) {
-
-          enhanceLoading.classList.remove(
-            "show"
-          );
-
-        }
-
-
-        displayEnhancedImage(
-          data
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Enhance error:",
-          error
-        );
-
-
-        if (enhanceLoading) {
-
-          enhanceLoading.classList.remove(
-            "show"
-          );
-
-        }
-
-
-        alert(
-          "Image enhancement API is not connected yet."
-        );
-
-      }
-
-    }
-  );
-
-}
-/* =========================================
-   IMAGE ENHANCE API — HUGGING FACE
-========================================= */
-
-app.post(
-  "/enhance-image",
-  upload.single("image"),
-  async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({
-          success: false,
-          message: "Please upload an image."
-        });
-      }
-
-      if (!process.env.HF_TOKEN) {
-        return res.status(500).json({
-          success: false,
-          message: "HF_TOKEN is missing."
-        });
-      }
-
-      console.log(
-        "Enhancing image:",
-        req.file.originalname
-      );
-
-      const enhancedBlob = await hf.imageToImage({
-        model: "qualcomm/Real-ESRGAN-x4plus",
-        inputs: req.file.buffer
-      });
-
-      const buffer = Buffer.from(
-        await enhancedBlob.arrayBuffer()
-      );
-
-      const imageUrl =
-        `data:image/png;base64,${buffer.toString("base64")}`;
-
-      console.log("Image enhanced successfully.");
-
-      return res.json({
-        success: true,
-        imageUrl: imageUrl
-      });
-
-    } catch (error) {
-      console.error(
-        "IMAGE ENHANCE ERROR:",
-        error
-      );
-
-      return res.status(500).json({
-        success: false,
-        message:
-          error?.message ||
-          "Image enhancement failed."
-      });
-    }
-  }
-);
-
-/* =========================================
-   DISPLAY ENHANCED IMAGE
-========================================= */
-
-function displayEnhancedImage(
-  data
-) {
-
-  const result =
-    get("generatedEnhanceResult");
-
-
-  if (!result) {
-
-    alert(
-      data.message ||
-      "Enhanced image is ready."
-    );
-
-    return;
-
-  }
-
-
-  const imageUrl =
-    data.imageUrl ||
-    data.url ||
-    data.image;
-
-
-  if (!imageUrl) {
-
-    alert(
-      data.message ||
-      "No enhanced image URL returned."
-    );
-
-    return;
-
-  }
-
-
-  result.innerHTML = `
-
-    <div class="result-header">
-
-      <span>Enhanced HD Image</span>
-
-      <button
-        class="download-btn"
-        id="downloadEnhancedImage"
-      >
-        ⬇️
-      </button>
-
-    </div>
-
-    <img
-      src="${imageUrl}"
-      alt="Enhanced Image"
-    >
-
-  `;
-
-
-  result.classList.add(
-    "show"
-  );
-
-
-  const downloadBtn =
-    get("downloadEnhancedImage");
-
-
-  if (downloadBtn) {
-
-    downloadBtn.addEventListener(
-      "click",
-      () => {
-
-        downloadFile(
-          imageUrl,
-          "smart-ai-enhanced-image"
-        );
-
-      }
-    );
-
-  }
-
-}
-
-
-/* =========================================
    DOWNLOAD
 ========================================= */
 
@@ -2176,6 +1733,13 @@ async function downloadFile(
 
     const response =
       await fetch(url);
+
+
+    if (!response.ok) {
+      throw new Error(
+        "Download failed"
+      );
+    }
 
 
     const blob =
@@ -2193,18 +1757,13 @@ async function downloadFile(
     link.href =
       blobUrl;
 
-
     link.download =
       filename;
 
 
-    document.body.appendChild(
-      link
-    );
-
+    document.body.appendChild(link);
 
     link.click();
-
 
     link.remove();
 
@@ -2220,7 +1779,6 @@ async function downloadFile(
       "Download error:",
       error
     );
-
 
     window.open(
       url,
@@ -2289,62 +1847,79 @@ if (closeLoginBtn) {
 
 }
 
+
 /* =========================================
-   LOGIN FORM — FIXED
+   LOGIN FORM
 ========================================= */
 
-const loginForm = get("loginForm");
+const loginForm =
+  get("loginForm");
+
 
 if (loginForm) {
 
-  loginForm.addEventListener("submit", function(event) {
+  loginForm.addEventListener(
+    "submit",
+    event => {
 
-    event.preventDefault();
+      event.preventDefault();
 
-    const emailInput = get("loginEmail");
 
-    const email = emailInput
-      ? emailInput.value.trim()
-      : "";
+      const emailInput =
+        get("loginEmail");
 
-    if (!email) {
-      alert("Please enter your email.");
-      return;
+
+      const email =
+        emailInput
+          ? emailInput.value.trim()
+          : "";
+
+
+      if (!email) {
+
+        alert(
+          "Please enter your email."
+        );
+
+        return;
+
+      }
+
+
+      isLoggedIn = true;
+
+
+      localStorage.setItem(
+        "smartAI_logged_in",
+        "true"
+      );
+
+
+      closeLoginModal();
+
+
+      showScreen(chatScreen);
+
+
+      if (welcomeScreen) {
+
+        welcomeScreen.style.display =
+          "flex";
+
+      }
+
+
+      if (emailInput) {
+        emailInput.value = "";
+      }
+
+
+      alert(
+        "Login successful! Welcome to Smart AI. 🎉"
+      );
+
     }
-
-    // Save login state
-    isLoggedIn = true;
-
-    localStorage.setItem(
-      "smartAI_logged_in",
-      "true"
-    );
-
-    // Close login modal
-    closeLoginModal();
-
-    // Make sure Chat screen is visible
-    showScreen(chatScreen);
-
-    if (welcomeScreen) {
-      welcomeScreen.style.display = "flex";
-    }
-
-    // Clear email field
-    if (emailInput) {
-      emailInput.value = "";
-    }
-
-    console.log(
-      "Smart AI Login successful:",
-      email
-    );
-
-    alert(
-      "Login successful! Welcome to Smart AI. 🎉"
-    );
-
-  });
+  );
 
 }
 
@@ -2422,11 +1997,8 @@ if (upgradePaymentBtn) {
     () => {
 
       alert(
-
         "Payment gateway is not connected yet.\n\n" +
-
-        "Later you can connect Razorpay or another payment gateway."
-
+        "Later you can connect Razorpay or UPI."
       );
 
     }
@@ -2436,7 +2008,7 @@ if (upgradePaymentBtn) {
 
 
 /* =========================================
-   CLOSE MODALS ON OUTSIDE CLICK
+   CLOSE MODALS OUTSIDE CLICK
 ========================================= */
 
 document.addEventListener(
@@ -2474,7 +2046,7 @@ document.addEventListener(
 
 
 /* =========================================
-   INITIAL VIDEO UI
+   INITIAL UI
 ========================================= */
 
 updateVideoTrialUI();
@@ -2485,5 +2057,5 @@ updateVideoTrialUI();
 ========================================= */
 
 console.log(
-  "Smart AI frontend loaded successfully."
+  "Smart AI frontend loaded successfully 🚀"
 );
