@@ -293,7 +293,81 @@ app.post("/generate-image", async (req, res) => {
     });
   }
 });
+/* =========================================
+   VIDEO GENERATION — HUGGING FACE
+========================================= */
 
+app.post("/generate-video", async (req, res) => {
+  try {
+    const { prompt, duration } = req.body;
+
+    if (!prompt || !prompt.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a video prompt."
+      });
+    }
+
+    if (!process.env.HF_TOKEN) {
+      return res.status(500).json({
+        success: false,
+        message: "HF_TOKEN is missing on the server."
+      });
+    }
+
+    console.log("Video Prompt:", prompt);
+    console.log("Requested duration:", duration || 8);
+
+    /*
+     * Use Hugging Face Inference Providers.
+     * The provider policy automatically selects
+     * an available provider for the model.
+     */
+
+    const videoBlob = await hf.textToVideo(
+      {
+        model: "Lightricks/LTX-Video-0.9.8-13B-distilled",
+        inputs: prompt.trim(),
+        parameters: {
+          num_frames: 121,
+          guidance_scale: 7
+        }
+      },
+      {
+        provider: "auto"
+      }
+    );
+
+    const buffer = Buffer.from(
+      await videoBlob.arrayBuffer()
+    );
+
+    const videoUrl =
+      `data:video/mp4;base64,${buffer.toString("base64")}`;
+
+    console.log("Video generated successfully.");
+
+    return res.json({
+      success: true,
+      video: videoUrl,
+      videoUrl: videoUrl,
+      duration: 8
+    });
+
+  } catch (error) {
+    console.error(
+      "VIDEO GENERATION ERROR:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error?.message ||
+        "Video generation failed."
+    });
+  }
+});
 
 /* =========================================
    IMAGE ENHANCE — HUGGING FACE
