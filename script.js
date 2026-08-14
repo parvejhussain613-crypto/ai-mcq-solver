@@ -1667,6 +1667,33 @@ function displayGeneratedVideo(data) {
     );
 
   }
+/* =========================================
+   VIDEO HISTORY
+========================================= */
+
+function saveVideoHistory(videoUrl) {
+
+  if (!videoUrl) return;
+
+  const history =
+    JSON.parse(
+      localStorage.getItem("smartAI_video_history")
+    ) || [];
+
+  history.unshift({
+    videoUrl: videoUrl,
+    date: new Date().toLocaleString()
+  });
+
+  // Keep latest 10 videos
+  history.splice(10);
+
+  localStorage.setItem(
+    "smartAI_video_history",
+    JSON.stringify(history)
+  );
+
+}
 
 }
 
