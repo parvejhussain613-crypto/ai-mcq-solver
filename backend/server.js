@@ -294,11 +294,12 @@ app.post("/generate-image", async (req, res) => {
   }
 });
 /* =========================================
-   VIDEO GENERATION — HUGGING FACE
+   VIDEO GENERATION — MAGIC HOUR
 ========================================= */
 
 app.post("/generate-video", async (req, res) => {
   try {
+
     const { prompt, duration } = req.body;
 
     if (!prompt || !prompt.trim()) {
@@ -308,65 +309,358 @@ app.post("/generate-video", async (req, res) => {
       });
     }
 
-    if (!process.env.HF_TOKEN) {
+    if (!process.env.MAGIC_HOUR_API_KEY) {
       return res.status(500).json({
         success: false,
-        message: "HF_TOKEN is missing on the server."
+        message: "MAGIC_HOUR_API_KEY is missing on the server."
       });
     }
 
-    console.log("Video Prompt:", prompt);
-    console.log("Requested duration:", duration || 8);
+    const requestedDuration =
+      Number(duration) || 8;
 
-    /*
-     * Use Hugging Face Inference Providers.
-     * The provider policy automatically selects
-     * an available provider for the model.
-     */
+    const videoDuration =
+      Math.min(
+        Math.max(requestedDuration, 1),
+        60
+      );
 
-    const videoBlob = await hf.textToVideo(
+    console.log(
+      "Magic Hour Video Prompt:",
+      prompt
+    );
+
+    console.log(
+      "Video Duration:",
+      videoDuration
+    );
+
+
+    /* =========================================
+       STEP 1 — CREATE VIDEO JOB
+    ========================================= */
+
+    const createResponse = await fetch(
+      "https://api.magichour.ai/v1/text-to-video",
       {
-        model: "Wan-AI/Wan2.2-TI2V-5B",
-        inputs: prompt.trim(),
-        parameters: {
-          num_frames: 121,
-          guidance_scale: 7
-        }
-      },
-      {
-        provider: "fal-ai"
+        method: "POST",
+
+        headers: {
+          "accept": "application/json",
+
+          "authorization":
+            `Bearer ${process.env.MAGIC_HOUR_API_KEY}`,
+
+          "content-type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+
+          name:
+            "Smart AI Generated Video",
+
+          end_seconds:
+            videoDuration,
+
+          aspect_ratio:
+            "16:9",
+
+          resolution:
+            "480p",
+
+          model:
+            "ltx-2.3",
+
+          audio:
+            true,
+
+          style: {
+            prompt:
+              prompt.trim()
+          }
+
+        })
       }
     );
 
-    const buffer = Buffer.from(
-      await videoBlob.arrayBuffer()
+
+    const createData =
+      await createResponse.json();
+
+
+    if (!createResponse.ok) {
+
+      console.error(
+        "Magic Hour Create Error:",
+        createData
+      );
+
+      return res.status(
+        createResponse.status
+      ).json({
+
+        success: false,
+
+        message:
+          createData?.message ||
+          createData?.error ||
+          "Magic Hour video creation failed."
+
+      });
+
+    }
+
+
+    const projectId =
+      createData?.id;
+
+
+    if (!projectId) {
+
+      return res.status(500).json({
+
+        success: false,
+
+        message:
+          "Magic Hour did not return a video project ID."
+
+      });
+
+    }
+
+
+    console.log(
+      "Magic Hour Project ID:",
+      projectId
     );
 
-    const videoUrl =
-      `data:video/mp4;base64,${buffer.toString("base64")}`;
 
-    console.log("Video generated successfully.");
+    /* =========================================
+       STEP 2 — CHECK VIDEO STATUS
+    ========================================= */
 
-    return res.json({
-      success: true,
-      video: videoUrl,
-      videoUrl: videoUrl,
-      duration: 8
+    const maxAttempts = 60;
+
+    const waitTime = 5000;
+
+
+    for (
+      let attempt = 1;
+      attempt <= maxAttempts;
+      attempt++
+    ) {
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            waitTime
+          )
+      );
+
+
+      const statusResponse =
+        await fetch(
+
+          `https://api.magichour.ai/v1/video-projects/${projectId}`,
+
+          {
+
+            method: "GET",
+
+            headers: {
+
+              "accept":
+                "application/json",
+
+              "authorization":
+                `Bearer ${process.env.MAGIC_HOUR_API_KEY}`
+
+            }
+
+          }
+
+        );
+
+
+      const statusData =
+        await statusResponse.json();
+
+
+      if (!statusResponse.ok) {
+
+        console.error(
+          "Magic Hour Status Error:",
+          statusData
+        );
+
+        return res.status(
+          statusResponse.status
+        ).json({
+
+          success: false,
+
+          message:
+            statusData?.message ||
+            statusData?.error ||
+            "Could not check video status."
+
+        });
+
+      }
+
+
+      console.log(
+        `Magic Hour video status (${attempt}/${maxAttempts}):`,
+        statusData.status
+      );
+
+
+      /* =====================================
+         VIDEO COMPLETE
+      ===================================== */
+
+      if (
+        statusData.status ===
+        "complete"
+      ) {
+
+        const videoUrl =
+          statusData
+            ?.downloads?.[0]?.url;
+
+
+        if (!videoUrl) {
+
+          return res.status(500).json({
+
+            success: false,
+
+            message:
+              "Video completed, but no download URL was returned."
+
+          });
+
+        }
+
+
+        console.log(
+          "Magic Hour video generated successfully."
+        );
+
+
+        return res.json({
+
+          success: true,
+
+          video:
+            videoUrl,
+
+          videoUrl:
+            videoUrl,
+
+          duration:
+            videoDuration,
+
+          projectId:
+            projectId
+
+        });
+
+      }
+
+
+      /* =====================================
+         VIDEO ERROR
+      ===================================== */
+
+      if (
+        statusData.status ===
+        "error"
+      ) {
+
+        console.error(
+          "Magic Hour Render Error:",
+          statusData.error
+        );
+
+
+        return res.status(500).json({
+
+          success: false,
+
+          message:
+            statusData
+              ?.error
+              ?.message ||
+            "Magic Hour video generation failed."
+
+        });
+
+      }
+
+
+      /* =====================================
+         VIDEO CANCELED
+      ===================================== */
+
+      if (
+        statusData.status ===
+        "canceled"
+      ) {
+
+        return res.status(500).json({
+
+          success: false,
+
+          message:
+            "Magic Hour video generation was canceled."
+
+        });
+
+      }
+
+    }
+
+
+    /* =========================================
+       TIMEOUT
+    ========================================= */
+
+    return res.status(504).json({
+
+      success: false,
+
+      message:
+        "Video generation is taking longer than expected. Please try again later.",
+
+      projectId:
+        projectId
+
     });
 
+
   } catch (error) {
+
     console.error(
-      "VIDEO GENERATION ERROR:",
+      "MAGIC HOUR VIDEO ERROR:",
       error
     );
 
+
     return res.status(500).json({
+
       success: false,
+
       message:
         error?.message ||
         "Video generation failed."
+
     });
+
   }
+
 });
 
 /* =========================================
