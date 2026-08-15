@@ -1,6 +1,6 @@
 {
-  "name": "AI MCQ Solver",
-  "short_name": "MCQ Solver",
+  "name": "smart ai"
+  "short_name": "smart ai",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
