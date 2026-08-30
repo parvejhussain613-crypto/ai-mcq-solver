@@ -1728,3 +1728,1198 @@ console.log(
   "Video trials used:",
   videoFreeTrials
 );
+/* =========================================
+   SMART AI — PART 3
+   =========================================
+   ✅ AI IMAGE GENERATION
+   ✅ IMAGE HISTORY
+   ✅ IMAGE DOWNLOAD
+   ✅ AI VIDEO GENERATION UI
+   ✅ VIDEO HISTORY
+   ✅ VIDEO DOWNLOAD
+   ✅ 3 FREE VIDEO TRIALS
+   ✅ ₹299 SMART AI PRO
+   ❌ IMAGE ENHANCE REMOVED
+========================================= */
+
+
+/* =========================================
+   IMAGE STORAGE
+========================================= */
+
+function getImageHistory() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        "smartAI_image_history"
+      )
+    ) || [];
+
+  } catch (error) {
+
+    console.error(
+      "Image history error:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+function saveImageHistory(history) {
+
+  localStorage.setItem(
+    "smartAI_image_history",
+    JSON.stringify(history)
+  );
+
+}
+
+
+/* =========================================
+   VIDEO STORAGE
+========================================= */
+
+function getVideoHistory() {
+
+  try {
+
+    return JSON.parse(
+      localStorage.getItem(
+        "smartAI_video_history"
+      )
+    ) || [];
+
+  } catch (error) {
+
+    console.error(
+      "Video history error:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+function saveVideoHistory(history) {
+
+  localStorage.setItem(
+    "smartAI_video_history",
+    JSON.stringify(history)
+  );
+
+}
+
+
+/* =========================================
+   IMAGE ELEMENTS
+========================================= */
+
+const imagePrompt =
+  get("imagePrompt");
+
+const generateImage =
+  get("generateImage");
+
+const imageResult =
+  get("imageResult");
+
+const imageHistory =
+  get("imageHistory");
+
+
+/* =========================================
+   GENERATE IMAGE FUNCTION
+========================================= */
+
+async function generateAIImage() {
+
+  const prompt =
+    imagePrompt
+      ? imagePrompt.value.trim()
+      : "";
+
+
+  if (!prompt) {
+
+    alert(
+      "Please enter an image prompt."
+    );
+
+    return;
+
+  }
+
+
+  /*
+   USE YOUR EXISTING BACKEND
+  */
+
+  const API_URL =
+    "https://ai-mcq-solver-i7qs.onrender.com/generate-image";
+
+
+  if (generateImage) {
+
+    generateImage.disabled = true;
+
+    generateImage.textContent =
+      "Generating...";
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body: JSON.stringify({
+
+            prompt: prompt
+
+          })
+
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Image API request failed"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    /*
+     SUPPORT COMMON IMAGE URL NAMES
+    */
+
+    const imageUrl =
+      data.imageUrl ||
+      data.image_url ||
+      data.url ||
+      (
+        data.image &&
+        (
+          data.image.url ||
+          data.image.imageUrl
+        )
+      );
+
+
+    if (!imageUrl) {
+
+      throw new Error(
+        "Image generated but no image URL was returned."
+      );
+
+    }
+
+
+    displayGeneratedImage(
+      imageUrl,
+      prompt
+    );
+
+
+    saveGeneratedImage(
+      imageUrl,
+      prompt
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Image generation error:",
+      error
+    );
+
+
+    alert(
+      "Image generation failed. Please check your image API connection."
+    );
+
+
+  } finally {
+
+    if (generateImage) {
+
+      generateImage.disabled = false;
+
+      generateImage.textContent =
+        "Generate Image";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================
+   GENERATE IMAGE BUTTON
+========================================= */
+
+if (generateImage) {
+
+  generateImage.addEventListener(
+    "click",
+    generateAIImage
+  );
+
+}
+
+
+/* =========================================
+   DISPLAY GENERATED IMAGE
+========================================= */
+
+function displayGeneratedImage(
+  imageUrl,
+  prompt
+) {
+
+  if (!imageResult) return;
+
+
+  imageResult.innerHTML = "";
+
+
+  const card =
+    document.createElement("div");
+
+  card.className =
+    "generated-image-card";
+
+
+  const img =
+    document.createElement("img");
+
+  img.src =
+    imageUrl;
+
+  img.alt =
+    prompt;
+
+  img.loading =
+    "lazy";
+
+
+  const actions =
+    document.createElement("div");
+
+  actions.className =
+    "generation-actions";
+
+
+  const downloadBtn =
+    document.createElement("button");
+
+  downloadBtn.textContent =
+    "⬇ Download";
+
+
+  downloadBtn.addEventListener(
+    "click",
+    () => {
+
+      downloadFile(
+        imageUrl,
+        "smart-ai-image.png"
+      );
+
+    }
+  );
+
+
+  const newBtn =
+    document.createElement("button");
+
+  newBtn.textContent =
+    "✨ New Image";
+
+
+  newBtn.addEventListener(
+    "click",
+    () => {
+
+      if (imagePrompt) {
+
+        imagePrompt.value = "";
+
+        imagePrompt.focus();
+
+      }
+
+    }
+  );
+
+
+  actions.appendChild(
+    downloadBtn
+  );
+
+  actions.appendChild(
+    newBtn
+  );
+
+
+  card.appendChild(img);
+
+  card.appendChild(actions);
+
+
+  imageResult.appendChild(card);
+
+}
+
+
+/* =========================================
+   SAVE IMAGE
+========================================= */
+
+function saveGeneratedImage(
+  imageUrl,
+  prompt
+) {
+
+  const history =
+    getImageHistory();
+
+
+  history.unshift({
+
+    id:
+      "image_" +
+      Date.now(),
+
+    prompt:
+      prompt,
+
+    url:
+      imageUrl,
+
+    createdAt:
+      Date.now()
+
+  });
+
+
+  /*
+   KEEP LAST 30 IMAGES
+  */
+
+  saveImageHistory(
+    history.slice(0, 30)
+  );
+
+
+  renderImageHistory();
+
+}
+
+
+/* =========================================
+   IMAGE HISTORY UI
+========================================= */
+
+function renderImageHistory() {
+
+  if (!imageHistory) return;
+
+
+  const history =
+    getImageHistory();
+
+
+  imageHistory.innerHTML = "";
+
+
+  if (
+    history.length === 0
+  ) {
+
+    imageHistory.innerHTML =
+      `
+        <div class="empty-history">
+          No generated images yet.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  history.forEach(
+    item => {
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "image-history-card";
+
+
+      const img =
+        document.createElement("img");
+
+      img.src =
+        item.url;
+
+      img.alt =
+        item.prompt || "Generated image";
+
+
+      const title =
+        document.createElement("p");
+
+      title.textContent =
+        item.prompt || "Generated image";
+
+
+      const downloadBtn =
+        document.createElement("button");
+
+      downloadBtn.textContent =
+        "⬇ Download";
+
+
+      downloadBtn.addEventListener(
+        "click",
+        () => {
+
+          downloadFile(
+            item.url,
+            "smart-ai-image.png"
+          );
+
+        }
+      );
+
+
+      card.appendChild(img);
+
+      card.appendChild(title);
+
+      card.appendChild(downloadBtn);
+
+
+      imageHistory.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   IMAGE HISTORY START
+========================================= */
+
+renderImageHistory();
+
+
+/* =========================================
+   VIDEO ELEMENTS
+========================================= */
+
+const videoPrompt =
+  get("videoPrompt");
+
+const generateVideo =
+  get("generateVideo");
+
+const videoResult =
+  get("videoResult");
+
+const videoHistory =
+  get("videoHistory");
+
+const upgradeVideoBtn =
+  get("upgradeVideoBtn");
+
+
+/* =========================================
+   VIDEO GENERATION
+========================================= */
+
+async function generateAIVideo() {
+
+  const prompt =
+    videoPrompt
+      ? videoPrompt.value.trim()
+      : "";
+
+
+  if (!prompt) {
+
+    alert(
+      "Please enter a video prompt."
+    );
+
+    return;
+
+  }
+
+
+  /*
+   CHECK FREE TRIAL
+  */
+
+  if (!canGenerateVideo()) {
+
+    showUpgradeMessage();
+
+    return;
+
+  }
+
+
+  /*
+   CONSUME ONE TRIAL
+  */
+
+  if (!useVideoTrial()) {
+
+    return;
+
+  }
+
+
+  if (generateVideo) {
+
+    generateVideo.disabled = true;
+
+    generateVideo.textContent =
+      "Generating...";
+
+  }
+
+
+  try {
+
+    /*
+     -------------------------------------
+     IMPORTANT:
+     Replace this URL with your real
+     video-generation backend endpoint.
+     -------------------------------------
+    */
+
+    const VIDEO_API_URL =
+      "https://ai-mcq-solver-i7qs.onrender.com/generate-video";
+
+
+    const response =
+      await fetch(
+        VIDEO_API_URL,
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body: JSON.stringify({
+
+            prompt:
+              prompt
+
+          })
+
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Video API request failed"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const videoUrl =
+      data.videoUrl ||
+      data.video_url ||
+      data.url ||
+      (
+        data.video &&
+        (
+          data.video.url ||
+          data.video.videoUrl
+        )
+      );
+
+
+    if (!videoUrl) {
+
+      throw new Error(
+        "Video generated but no video URL was returned."
+      );
+
+    }
+
+
+    displayGeneratedVideo(
+      videoUrl,
+      prompt
+    );
+
+
+    saveGeneratedVideo(
+      videoUrl,
+      prompt
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Video generation error:",
+      error
+    );
+
+
+    /*
+     IF API FAILS, RETURN THE TRIAL
+     SO USER DOES NOT LOSE A TRIAL
+    */
+
+    videoFreeTrials =
+      Math.max(
+        0,
+        videoFreeTrials - 1
+      );
+
+
+    localStorage.setItem(
+      "smartAI_video_trials",
+      String(videoFreeTrials)
+    );
+
+
+    updateVideoTrialUI();
+
+
+    alert(
+      "Video generation API is not connected yet. Please connect your video backend."
+    );
+
+  } finally {
+
+    if (generateVideo) {
+
+      generateVideo.disabled =
+        false;
+
+      generateVideo.textContent =
+        "Generate Video";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================
+   VIDEO BUTTON
+========================================= */
+
+if (generateVideo) {
+
+  generateVideo.addEventListener(
+    "click",
+    generateAIVideo
+  );
+
+}
+
+
+/* =========================================
+   DISPLAY VIDEO
+========================================= */
+
+function displayGeneratedVideo(
+  videoUrl,
+  prompt
+) {
+
+  if (!videoResult) return;
+
+
+  videoResult.innerHTML = "";
+
+
+  const card =
+    document.createElement("div");
+
+  card.className =
+    "generated-video-card";
+
+
+  const video =
+    document.createElement("video");
+
+  video.src =
+    videoUrl;
+
+  video.controls =
+    true;
+
+  video.playsInline =
+    true;
+
+
+  const title =
+    document.createElement("p");
+
+  title.textContent =
+    prompt;
+
+
+  const downloadBtn =
+    document.createElement("button");
+
+  downloadBtn.textContent =
+    "⬇ Download Video";
+
+
+  downloadBtn.addEventListener(
+    "click",
+    () => {
+
+      downloadFile(
+        videoUrl,
+        "smart-ai-video.mp4"
+      );
+
+    }
+  );
+
+
+  card.appendChild(video);
+
+  card.appendChild(title);
+
+  card.appendChild(downloadBtn);
+
+
+  videoResult.appendChild(
+    card
+  );
+
+}
+
+
+/* =========================================
+   SAVE VIDEO
+========================================= */
+
+function saveGeneratedVideo(
+  videoUrl,
+  prompt
+) {
+
+  const history =
+    getVideoHistory();
+
+
+  history.unshift({
+
+    id:
+      "video_" +
+      Date.now(),
+
+    prompt:
+      prompt,
+
+    url:
+      videoUrl,
+
+    createdAt:
+      Date.now()
+
+  });
+
+
+  saveVideoHistory(
+    history.slice(0, 20)
+  );
+
+
+  renderVideoHistory();
+
+}
+
+
+/* =========================================
+   VIDEO HISTORY UI
+========================================= */
+
+function renderVideoHistory() {
+
+  if (!videoHistory) return;
+
+
+  const history =
+    getVideoHistory();
+
+
+  videoHistory.innerHTML = "";
+
+
+  if (
+    history.length === 0
+  ) {
+
+    videoHistory.innerHTML =
+      `
+        <div class="empty-history">
+          No generated videos yet.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  history.forEach(
+    item => {
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "video-history-card";
+
+
+      const video =
+        document.createElement("video");
+
+      video.src =
+        item.url;
+
+      video.controls =
+        true;
+
+      video.playsInline =
+        true;
+
+
+      const title =
+        document.createElement("p");
+
+      title.textContent =
+        item.prompt || "Generated video";
+
+
+      const downloadBtn =
+        document.createElement("button");
+
+      downloadBtn.textContent =
+        "⬇ Download";
+
+
+      downloadBtn.addEventListener(
+        "click",
+        () => {
+
+          downloadFile(
+            item.url,
+            "smart-ai-video.mp4"
+          );
+
+        }
+      );
+
+
+      card.appendChild(video);
+
+      card.appendChild(title);
+
+      card.appendChild(downloadBtn);
+
+
+      videoHistory.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   VIDEO HISTORY START
+========================================= */
+
+renderVideoHistory();
+
+
+/* =========================================
+   UPGRADE MESSAGE
+========================================= */
+
+function showUpgradeMessage() {
+
+  const message =
+    `
+      You have used all 3 free video trials.
+
+      Smart AI Pro:
+      ₹299
+
+      Upgrade to continue generating videos.
+    `;
+
+
+  alert(message);
+
+}
+
+
+/* =========================================
+UPGRADE BUTTON
+========================================= */
+
+if (upgradeVideoBtn) {
+
+  upgradeVideoBtn.addEventListener(
+    "click",
+    () => {
+
+      showUpgradeMessage();
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   DOWNLOAD FILE
+========================================= */
+
+async function downloadFile(
+  url,
+  filename
+) {
+
+  try {
+
+    const response =
+      await fetch(url);
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Download failed"
+      );
+
+    }
+
+
+    const blob =
+      await response.blob();
+
+
+    const blobUrl =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const link =
+      document.createElement("a");
+
+
+    link.href =
+      blobUrl;
+
+    link.download =
+      filename;
+
+
+    document.body.appendChild(
+      link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+
+    setTimeout(
+      () => {
+
+        URL.revokeObjectURL(
+          blobUrl
+        );
+
+      },
+      1000
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Download error:",
+      error
+    );
+
+
+    /*
+     FALLBACK
+    */
+
+    const link =
+      document.createElement("a");
+
+
+    link.href =
+      url;
+
+    link.target =
+      "_blank";
+
+    link.rel =
+      "noopener";
+
+
+    document.body.appendChild(
+      link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+  }
+
+}
+
+
+/* =========================================
+   CLEAR IMAGE HISTORY
+========================================= */
+
+function clearImageHistory() {
+
+  const confirmDelete =
+    confirm(
+      "Delete all image history?"
+    );
+
+
+  if (!confirmDelete) return;
+
+
+  localStorage.removeItem(
+    "smartAI_image_history"
+  );
+
+
+  renderImageHistory();
+
+}
+
+
+/* =========================================
+   CLEAR VIDEO HISTORY
+========================================= */
+
+function clearVideoHistory() {
+
+  const confirmDelete =
+    confirm(
+      "Delete all video history?"
+    );
+
+
+  if (!confirmDelete) return;
+
+
+  localStorage.removeItem(
+    "smartAI_video_history"
+  );
+
+
+  renderVideoHistory();
+
+}
+
+
+/* =========================================
+   GLOBAL HISTORY FUNCTIONS
+========================================= */
+
+window.clearImageHistory =
+  clearImageHistory;
+
+window.clearVideoHistory =
+  clearVideoHistory;
+
+
+/* =========================================
+   FINAL INITIALIZATION
+========================================= */
+
+updateVideoTrialUI();
+
+renderImageHistory();
+
+renderVideoHistory();
+
+
+console.log(
+  "Smart AI Part 3 loaded successfully."
+);
