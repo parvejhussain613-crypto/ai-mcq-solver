@@ -1559,3 +1559,25 @@ body.dark .top-header {
 .recent-chat-item:hover {
   background: #f3f3f3;
 }
+.recent-chat-item {
+  display: block;
+  width: 100%;
+  padding: 12px 8px;
+  margin: 0;
+  min-height: 44px;
+  height: auto;
+  line-height: 1.4;
+  overflow: visible;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.recent-chats {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.recent-chat-item + .recent-chat-item {
+  margin-top: 2px;
+}
