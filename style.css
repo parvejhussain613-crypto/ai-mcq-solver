@@ -53,7 +53,6 @@ body {
   overflow-x: hidden;
 }
 
-
 /* =========================================
    BUTTON RESET
 ========================================= */
@@ -67,7 +66,6 @@ button {
 button:disabled {
   cursor: not-allowed;
 }
-
 
 /* =========================================
    OVERLAY
@@ -93,7 +91,6 @@ button:disabled {
   visibility: visible;
   pointer-events: auto;
 }
-
 
 /* =========================================
    SIDEBAR
@@ -124,7 +121,6 @@ button:disabled {
 .sidebar.open {
   transform: translateX(0);
 }
-
 
 /* =========================================
    SIDEBAR HEADER
@@ -163,7 +159,6 @@ button:disabled {
   font-size: 20px;
 }
 
-
 /* =========================================
    ICON BUTTON
 ========================================= */
@@ -196,14 +191,12 @@ button:disabled {
   transform: scale(0.94);
 }
 
-
 /* =========================================
    SIDEBAR ITEMS
 ========================================= */
 
 .sidebar-item {
   width: 100%;
-
   min-height: 48px;
 
   display: flex;
@@ -212,7 +205,6 @@ button:disabled {
   gap: 13px;
 
   padding: 10px 13px;
-
   margin-bottom: 5px;
 
   border-radius: 12px;
@@ -257,27 +249,41 @@ button:disabled {
   letter-spacing: 0.6px;
 }
 
-
 /* =========================================
    RECENT CHATS
 ========================================= */
 
 .recent-chats {
+  width: 100%;
+
   display: flex;
   flex-direction: column;
 
-  gap: 3px;
+  gap: 4px;
 
   max-height: 42vh;
 
   overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-right: 2px;
 }
 
 .recent-chat {
+  display: block;
+
   width: 100%;
 
-  padding: 10px 12px;
+  min-height: 44px;
+  height: auto;
 
+  padding: 12px 14px;
+
+  margin: 0;
+
+  box-sizing: border-box;
+
+  border: none;
   border-radius: 10px;
 
   background: transparent;
@@ -285,16 +291,33 @@ button:disabled {
 
   text-align: left;
 
+  font: inherit;
+  font-size: 14px;
+
+  line-height: 1.4;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  transition: background 0.2s ease;
+  flex-shrink: 0;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
 }
 
 .recent-chat:hover {
   background: var(--surface);
 }
+
+.recent-chat:active {
+  transform: scale(0.99);
+}
+
+/* =========================================
+   SIDEBAR BOTTOM
+========================================= */
 
 .sidebar-bottom {
   margin-top: auto;
@@ -303,7 +326,6 @@ button:disabled {
 
   border-top: 1px solid var(--border);
 }
-
 
 /* =========================================
    TOP HEADER
@@ -366,7 +388,6 @@ body.dark .top-header {
   border: 1px solid var(--border);
 }
 
-
 /* =========================================
    MAIN APP
 ========================================= */
@@ -377,7 +398,6 @@ body.dark .top-header {
 
   padding-top: 64px;
 }
-
 
 /* =========================================
    SCREEN
@@ -394,7 +414,6 @@ body.dark .top-header {
   display: flex;
 }
 
-
 /* =========================================
    CHAT SCREEN
 ========================================= */
@@ -406,7 +425,6 @@ body.dark .top-header {
 
   padding-bottom: 120px;
 }
-
 
 /* =========================================
    WELCOME
@@ -462,7 +480,6 @@ body.dark .top-header {
   font-size: 15px;
 }
 
-
 /* =========================================
    CHAT MESSAGES
 ========================================= */
@@ -505,6 +522,7 @@ body.dark .top-header {
   line-height: 1.55;
 
   word-wrap: break-word;
+  overflow-wrap: anywhere;
 
   white-space: pre-wrap;
 }
@@ -523,7 +541,6 @@ body.dark .top-header {
 
   border-bottom-left-radius: 5px;
 }
-
 
 /* =========================================
    ATTACHMENT PREVIEW
@@ -606,7 +623,6 @@ body.dark .top-header {
   justify-content: center;
 }
 
-
 /* =========================================
    CHAT INPUT WRAPPER
 ========================================= */
@@ -675,7 +691,6 @@ body.dark .top-header {
   color: var(--muted);
 }
 
-
 /* =========================================
    INPUT BUTTONS
 ========================================= */
@@ -720,7 +735,6 @@ body.dark .top-header {
 .send-btn:active {
   transform: scale(0.92);
 }
-
 
 /* =========================================
    ATTACHMENT MENU
@@ -800,7 +814,6 @@ body.dark .top-header {
 
   font-size: 17px;
 }
-
 
 /* =========================================
    TOOL SCREENS
@@ -888,7 +901,6 @@ body.dark .top-header {
   margin-bottom: 25px;
 }
 
-
 /* =========================================
    PROMPT
 ========================================= */
@@ -920,7 +932,6 @@ body.dark .top-header {
 .tool-prompt:focus {
   border-color: var(--text);
 }
-
 
 /* =========================================
    BUTTONS
@@ -968,7 +979,6 @@ body.dark .top-header {
   transform: scale(0.98);
 }
 
-
 /* =========================================
    UPLOAD BOX
 ========================================= */
@@ -1008,7 +1018,6 @@ body.dark .top-header {
 .upload-box small {
   color: var(--muted);
 }
-
 
 /* =========================================
    LOADING
@@ -1061,7 +1070,6 @@ body.dark .top-header {
 .loading-box small {
   color: var(--muted);
 }
-
 
 /* =========================================
    RESULTS
@@ -1126,7 +1134,6 @@ body.dark .top-header {
   background: #000;
 }
 
-
 /* =========================================
    ENHANCE PREVIEW
 ========================================= */
@@ -1158,7 +1165,6 @@ body.dark .top-header {
   border-radius: 10px;
 }
 
-
 /* =========================================
    TRIAL INFO
 ========================================= */
@@ -1178,7 +1184,6 @@ body.dark .top-header {
 
   font-size: 14px;
 }
-
 
 /* =========================================
    SETTINGS
@@ -1236,7 +1241,6 @@ body.dark .top-header {
 .version-text {
   font-size: 12px;
 }
-
 
 /* =========================================
    MODAL
@@ -1353,7 +1357,6 @@ body.dark .top-header {
   border-color: var(--text);
 }
 
-
 /* =========================================
    UPGRADE
 ========================================= */
@@ -1385,7 +1388,6 @@ body.dark .top-header {
 .payment-note {
   font-size: 12px;
 }
-
 
 /* =========================================
    INSTALL BANNER
@@ -1436,7 +1438,6 @@ body.dark .top-header {
   min-width: 90px;
 }
 
-
 /* =========================================
    MOBILE
 ========================================= */
@@ -1483,8 +1484,13 @@ body.dark .top-header {
     width: 100%;
   }
 
+  .recent-chat {
+    min-height: 44px;
+    padding: 11px 12px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
 }
-
 
 /* =========================================
    SMALL MOBILE
@@ -1494,7 +1500,7 @@ body.dark .top-header {
 
   .header-brand {
     font-size: 17px;
- }
+  }
 
   .message-input {
     font-size: 14px;
@@ -1510,8 +1516,12 @@ body.dark .top-header {
     padding: 6px;
   }
 
+  .recent-chat {
+    min-height: 42px;
+    padding: 10px;
+    font-size: 13px;
+  }
 }
-
 
 /* =========================================
    SCROLLBAR
@@ -1533,51 +1543,4 @@ body.dark .top-header {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
-}
-/* Recent Chats Fix */
-.recent-chats {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.recent-chat-item {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 16px;
-  margin: 2px 0;
-  min-height: 44px;
-  height: auto;
-  line-height: 1.4;
-  font-size: 16px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-radius: 8px;
-}
-
-.recent-chat-item:hover {
-  background: #f3f3f3;
-}
-.recent-chat-item {
-  display: block;
-  width: 100%;
-  padding: 12px 8px;
-  margin: 0;
-  min-height: 44px;
-  height: auto;
-  line-height: 1.4;
-  overflow: visible;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-}
-
-.recent-chats {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.recent-chat-item + .recent-chat-item {
-  margin-top: 2px;
 }
