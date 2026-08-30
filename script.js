@@ -3657,3 +3657,668 @@ console.log(
   "Smart AI Pro:",
   isSmartAIPro()
 );
+/* =========================================
+   SMART AI — PART 5
+   FINAL INTEGRATION & SAFETY FIXES
+   =========================================
+   ✅ API SETTINGS
+   ✅ LOGIN UI
+   ✅ PRO UI
+   ✅ SCREEN INITIALIZATION
+   ✅ CHAT HISTORY
+   ✅ IMAGE HISTORY
+   ✅ VIDEO HISTORY
+   ✅ DOWNLOAD HELPERS
+   ✅ MOBILE INPUT FIXES
+   ❌ IMAGE ENHANCE
+========================================= */
+
+
+/* =========================================
+   FINAL APP INITIALIZATION
+========================================= */
+
+function initializeSmartAI() {
+
+  console.log(
+    "🚀 Smart AI initializing..."
+  );
+
+
+  /*
+   CHAT
+  */
+
+  if (
+    typeof renderRecentChats ===
+    "function"
+  ) {
+
+    renderRecentChats();
+
+  }
+
+
+  /*
+   IMAGE
+  */
+
+  if (
+    typeof renderImageHistory ===
+    "function"
+  ) {
+
+    renderImageHistory();
+
+  }
+
+
+  /*
+   VIDEO
+  */
+
+  if (
+    typeof renderVideoHistory ===
+    "function"
+  ) {
+
+    renderVideoHistory();
+
+  }
+
+
+  /*
+   PRO
+  */
+
+  if (
+    typeof updateProUI ===
+    "function"
+  ) {
+
+    updateProUI();
+
+  }
+
+
+  /*
+   VIDEO TRIAL
+  */
+
+  if (
+    typeof updateVideoTrialUI ===
+    "function"
+  ) {
+
+    updateVideoTrialUI();
+
+  }
+
+
+  /*
+   DEFAULT SCREEN
+  */
+
+  showScreen(
+    chatScreen
+  );
+
+
+  console.log(
+    "✅ Smart AI ready."
+  );
+
+}
+
+
+/* =========================================
+   DOM READY
+========================================= */
+
+if (
+  document.readyState ===
+  "loading"
+) {
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeSmartAI
+  );
+
+} else {
+
+  initializeSmartAI();
+
+}
+
+
+/* =========================================
+   MOBILE KEYBOARD FIX
+========================================= */
+
+if (messageInput) {
+
+  messageInput.addEventListener(
+    "focus",
+    () => {
+
+      setTimeout(
+        () => {
+
+          try {
+
+            messageInput.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+
+          } catch (error) {
+
+            console.log(
+              "Keyboard scroll unavailable"
+            );
+
+          }
+
+        },
+        300
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   IMAGE PROMPT ENTER
+========================================= */
+
+if (imagePrompt) {
+
+  imagePrompt.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
+        event.preventDefault();
+
+        if (
+          typeof generateAIImage ===
+          "function"
+        ) {
+
+          generateAIImage();
+
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   VIDEO PROMPT ENTER
+========================================= */
+
+if (videoPrompt) {
+
+  videoPrompt.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
+        event.preventDefault();
+
+        if (
+          typeof generateProVideo ===
+          "function"
+        ) {
+
+          generateProVideo();
+
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================
+   SETTINGS — PASSWORD INPUT
+========================================= */
+
+if (openrouterKeyInput) {
+
+  openrouterKeyInput.type =
+    "password";
+
+
+  /*
+   SHOW / HIDE API KEY
+  */
+
+  const toggleKeyBtn =
+    get("toggleApiKeyBtn");
+
+
+  if (toggleKeyBtn) {
+
+    toggleKeyBtn.addEventListener(
+      "click",
+      () => {
+
+        if (
+          openrouterKeyInput.type ===
+          "password"
+        ) {
+
+          openrouterKeyInput.type =
+            "text";
+
+          toggleKeyBtn.textContent =
+            "🙈";
+
+        } else {
+
+          openrouterKeyInput.type =
+            "password";
+
+          toggleKeyBtn.textContent =
+            "👁";
+
+        }
+
+      }
+    );
+
+  }
+
+}
+
+
+/* =========================================
+   CLEAR ALL CHAT HISTORY
+========================================= */
+
+function clearAllChatHistory() {
+
+  const confirmed =
+    confirm(
+      "Delete all Smart AI chat history?"
+    );
+
+
+  if (!confirmed) return;
+
+
+  localStorage.removeItem(
+    "smartAI_chat_history"
+  );
+
+
+  currentChat = [];
+
+  currentChatId = null;
+
+
+  if (chatMessages) {
+
+    chatMessages.innerHTML = "";
+
+  }
+
+
+  if (welcomeScreen) {
+
+    welcomeScreen.style.display =
+      "flex";
+
+  }
+
+
+  renderRecentChats();
+
+
+  alert(
+    "Chat history deleted."
+  );
+
+}
+
+
+window.clearAllChatHistory =
+  clearAllChatHistory;
+
+
+/* =========================================
+   RESET VIDEO TRIALS
+   ADMIN / TEST ONLY
+========================================= */
+
+function resetVideoTrialsForTesting() {
+
+  localStorage.setItem(
+    "smartAI_video_trials",
+    "0"
+  );
+
+
+  videoFreeTrials = 0;
+
+
+  updateVideoTrialUI();
+
+
+  console.log(
+    "Video trials reset."
+  );
+
+}
+
+
+/*
+ IMPORTANT:
+ This is only for testing.
+ Do not show this button to normal users.
+*/
+
+window.resetVideoTrialsForTesting =
+  resetVideoTrialsForTesting;
+
+
+/* =========================================
+   PRO TEST MODE
+   ADMIN / TEST ONLY
+========================================= */
+
+function activateProForTesting() {
+
+  localStorage.setItem(
+    "smartAI_pro",
+    "true"
+  );
+
+
+  updateProUI();
+
+
+  alert(
+    "Smart AI Pro test mode activated."
+  );
+
+}
+
+
+function deactivateProForTesting() {
+
+  localStorage.removeItem(
+    "smartAI_pro"
+  );
+
+
+  updateProUI();
+
+
+  alert(
+    "Smart AI Pro test mode disabled."
+  );
+
+}
+
+
+window.activateProForTesting =
+  activateProForTesting;
+
+window.deactivateProForTesting =
+  deactivateProForTesting;
+
+
+/* =========================================
+   APP RESET
+========================================= */
+
+function resetSmartAIApp() {
+
+  const confirmed =
+    confirm(
+      "Reset Smart AI completely?\n\nThis will delete chats, image history, video history and settings."
+    );
+
+
+  if (!confirmed) return;
+
+
+  localStorage.removeItem(
+    "smartAI_chat_history"
+  );
+
+  localStorage.removeItem(
+    "smartAI_image_history"
+  );
+
+  localStorage.removeItem(
+    "smartAI_video_history"
+  );
+
+  localStorage.removeItem(
+    "smartAI_openrouter_key"
+  );
+
+  localStorage.removeItem(
+    "smartAI_image_api_url"
+  );
+
+  localStorage.removeItem(
+    "smartAI_video_api_url"
+  );
+
+  localStorage.removeItem(
+    "smartAI_video_trials"
+  );
+
+  localStorage.removeItem(
+    "smartAI_pro"
+  );
+
+  localStorage.removeItem(
+    "smartAI_logged_in"
+  );
+
+
+  currentChat = [];
+
+  currentChatId = null;
+
+  isLoggedIn = false;
+
+  videoFreeTrials = 0;
+
+
+  location.reload();
+
+}
+
+
+window.resetSmartAIApp =
+  resetSmartAIApp;
+
+
+/* =========================================
+   PREVENT EMPTY SUBMISSIONS
+========================================= */
+
+document.addEventListener(
+  "submit",
+  event => {
+
+    const form =
+      event.target;
+
+
+    if (
+      form &&
+      form.classList &&
+      form.classList.contains(
+        "smart-ai-form"
+      )
+    ) {
+
+      event.preventDefault();
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   IMAGE ENHANCE CLEANUP
+========================================= */
+
+function removeEnhanceCompletely() {
+
+  const enhanceElements =
+    document.querySelectorAll(
+      "#imageEnhanceBtn, #enhanceScreen, .image-enhance, [data-enhance]"
+    );
+
+
+  enhanceElements.forEach(
+    element => {
+
+      element.remove();
+
+    }
+  );
+
+}
+
+
+removeEnhanceCompletely();
+
+
+/* =========================================
+   DISABLE BROKEN GENERATION BUTTONS
+========================================= */
+
+function checkGenerationUI() {
+
+  if (
+    generateImage &&
+    !imagePrompt
+  ) {
+
+    console.warn(
+      "Image prompt element not found."
+    );
+
+  }
+
+
+  if (
+    generateVideo &&
+    !videoPrompt
+  ) {
+
+    console.warn(
+      "Video prompt element not found."
+    );
+
+  }
+
+}
+
+
+checkGenerationUI();
+
+
+/* =========================================
+   CONNECTION STATUS
+========================================= */
+
+function getSmartAIConnectionStatus() {
+
+  const openrouterKey =
+    localStorage.getItem(
+      "smartAI_openrouter_key"
+    );
+
+
+  const imageAPI =
+    getImageAPIURL();
+
+
+  const videoAPI =
+    getVideoAPIURL();
+
+
+  return {
+
+    chat:
+      Boolean(openrouterKey),
+
+    image:
+      Boolean(imageAPI),
+
+    video:
+      Boolean(videoAPI),
+
+    pro:
+      isSmartAIPro()
+
+  };
+
+}
+
+
+window.getSmartAIConnectionStatus =
+  getSmartAIConnectionStatus;
+
+
+/* =========================================
+   CONSOLE STATUS
+========================================= */
+
+console.log(
+  "================================="
+);
+
+console.log(
+  "       SMART AI STATUS"
+);
+
+console.log(
+  "================================="
+);
+
+console.log(
+  getSmartAIConnectionStatus()
+);
+
+console.log(
+  "================================="
+);
+
+
+/* =========================================
+   FINAL MESSAGE
+========================================= */
+
+console.log(
+  "🎉 Smart AI Part 5 loaded successfully!"
+);
