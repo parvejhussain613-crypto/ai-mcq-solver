@@ -2923,3 +2923,737 @@ renderVideoHistory();
 console.log(
   "Smart AI Part 3 loaded successfully."
 );
+/* =========================================
+   SMART AI — PART 4
+   =========================================
+   ✅ SMART AI PRO — ₹299
+   ✅ PRO STATUS
+   ✅ OPENROUTER API KEY SETTINGS
+   ✅ IMAGE API URL SETTINGS
+   ✅ VIDEO API URL SETTINGS
+   ✅ SAVE SETTINGS
+   ✅ LOGOUT
+   ✅ RAZORPAY-READY FRONTEND FLOW
+   ❌ SECRET PAYMENT KEY IN FRONTEND
+========================================= */
+
+
+/* =========================================
+   PRO STORAGE
+========================================= */
+
+function isSmartAIPro() {
+
+  return (
+    localStorage.getItem(
+      "smartAI_pro"
+    ) === "true"
+  );
+
+}
+
+
+function setSmartAIPro(status) {
+
+  localStorage.setItem(
+    "smartAI_pro",
+    status ? "true" : "false"
+  );
+
+}
+
+
+/* =========================================
+   SETTINGS ELEMENTS
+========================================= */
+
+const openrouterKeyInput =
+  get("openrouterKeyInput");
+
+const imageApiInput =
+  get("imageApiInput");
+
+const videoApiInput =
+  get("videoApiInput");
+
+const saveSettingsBtn =
+  get("saveSettingsBtn");
+
+const logoutBtn =
+  get("logoutBtn");
+
+const upgradeProBtn =
+  get("upgradeProBtn");
+
+const proStatus =
+  get("proStatus");
+
+
+/* =========================================
+   LOAD SETTINGS
+========================================= */
+
+function loadSmartAISettings() {
+
+  if (openrouterKeyInput) {
+
+    openrouterKeyInput.value =
+      localStorage.getItem(
+        "smartAI_openrouter_key"
+      ) || "";
+
+  }
+
+
+  if (imageApiInput) {
+
+    imageApiInput.value =
+      localStorage.getItem(
+        "smartAI_image_api_url"
+      ) ||
+      "https://ai-mcq-solver-i7qs.onrender.com/generate-image";
+
+  }
+
+
+  if (videoApiInput) {
+
+    videoApiInput.value =
+      localStorage.getItem(
+        "smartAI_video_api_url"
+      ) ||
+      "https://ai-mcq-solver-i7qs.onrender.com/generate-video";
+
+  }
+
+
+  updateProUI();
+
+}
+
+
+/* =========================================
+   SAVE SETTINGS
+========================================= */
+
+function saveSmartAISettings() {
+
+  if (openrouterKeyInput) {
+
+    localStorage.setItem(
+      "smartAI_openrouter_key",
+      openrouterKeyInput.value.trim()
+    );
+
+  }
+
+
+  if (imageApiInput) {
+
+    localStorage.setItem(
+      "smartAI_image_api_url",
+      imageApiInput.value.trim()
+    );
+
+  }
+
+
+  if (videoApiInput) {
+
+    localStorage.setItem(
+      "smartAI_video_api_url",
+      videoApiInput.value.trim()
+    );
+
+  }
+
+
+  alert(
+    "Smart AI settings saved successfully."
+  );
+
+}
+
+
+if (saveSettingsBtn) {
+
+  saveSettingsBtn.addEventListener(
+    "click",
+    saveSmartAISettings
+  );
+
+}
+
+
+/* =========================================
+   API URL HELPERS
+========================================= */
+
+function getImageAPIURL() {
+
+  return (
+    localStorage.getItem(
+      "smartAI_image_api_url"
+    ) ||
+    "https://ai-mcq-solver-i7qs.onrender.com/generate-image"
+  );
+
+}
+
+
+function getVideoAPIURL() {
+
+  return (
+    localStorage.getItem(
+      "smartAI_video_api_url"
+    ) ||
+    "https://ai-mcq-solver-i7qs.onrender.com/generate-video"
+  );
+
+}
+
+
+/* =========================================
+   PRO UI
+========================================= */
+
+function updateProUI() {
+
+  const pro =
+    isSmartAIPro();
+
+
+  if (proStatus) {
+
+    proStatus.textContent =
+      pro
+        ? "Smart AI Pro Active ✓"
+        : "Free Plan";
+
+  }
+
+
+  if (upgradeProBtn) {
+
+    upgradeProBtn.style.display =
+      pro
+        ? "none"
+        : "block";
+
+  }
+
+
+  /*
+   PRO USERS DON'T NEED VIDEO LIMIT
+  */
+
+  if (pro) {
+
+    const trialText =
+      get("videoTrialText");
+
+    if (trialText) {
+
+      trialText.textContent =
+        "Smart AI Pro — Unlimited Video";
+
+    }
+
+  } else {
+
+    updateVideoTrialUI();
+
+  }
+
+}
+
+
+/* =========================================
+   PRO VIDEO CHECK
+========================================= */
+
+function canGenerateVideoForUser() {
+
+  if (isSmartAIPro()) {
+
+    return true;
+
+  }
+
+
+  return canGenerateVideo();
+
+}
+
+
+/* =========================================
+   OVERRIDE VIDEO TRIAL
+========================================= */
+
+function checkVideoAccess() {
+
+  if (isSmartAIPro()) {
+
+    return true;
+
+  }
+
+
+  if (
+    videoFreeTrials >= 3
+  ) {
+
+    showUpgradeMessage();
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* =========================================
+   UPGRADE PRO
+========================================= */
+
+function startSmartAIProUpgrade() {
+
+  /*
+   -----------------------------------------
+   DEMO / FRONTEND FLOW
+   -----------------------------------------
+
+   Real Razorpay payment should be created
+   and verified by your backend.
+
+   Never put Razorpay SECRET KEY here.
+  */
+
+
+  const confirmed =
+    confirm(
+      "Smart AI Pro\n\n₹299\n\nContinue to upgrade?"
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  /*
+   If Razorpay Checkout is installed,
+   use your backend-created order here.
+
+   Example flow:
+
+   1. Frontend asks backend for order
+   2. Backend creates Razorpay order
+   3. Razorpay Checkout opens
+   4. Backend verifies payment
+   5. Backend activates Pro
+  */
+
+
+  if (
+    typeof window.Razorpay ===
+    "undefined"
+  ) {
+
+    alert(
+      "Razorpay is not connected yet. Please connect your payment backend."
+    );
+
+    return;
+
+  }
+
+
+  /*
+   PLACEHOLDER ORDER ID
+
+   DO NOT PUT A REAL SECRET KEY
+   IN THIS FILE.
+  */
+
+  alert(
+    "Razorpay is detected, but a backend order is required before accepting payment."
+  );
+
+}
+
+
+/* =========================================
+   UPGRADE BUTTON
+========================================= */
+
+if (upgradeProBtn) {
+
+  upgradeProBtn.addEventListener(
+    "click",
+    startSmartAIProUpgrade
+  );
+
+}
+
+
+/* =========================================
+   PRO VIDEO GENERATION
+========================================= */
+
+async function generateProVideo() {
+
+  const prompt =
+    videoPrompt
+      ? videoPrompt.value.trim()
+      : "";
+
+
+  if (!prompt) {
+
+    alert(
+      "Please enter a video prompt."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !checkVideoAccess()
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+   FREE USER:
+   USE ONE TRIAL
+
+   PRO USER:
+   NO TRIAL REQUIRED
+  */
+
+  const isPro =
+    isSmartAIPro();
+
+
+  if (!isPro) {
+
+    if (!useVideoTrial()) {
+
+      return;
+
+    }
+
+  }
+
+
+  if (generateVideo) {
+
+    generateVideo.disabled =
+      true;
+
+    generateVideo.textContent =
+      "Generating...";
+
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        getVideoAPIURL(),
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body: JSON.stringify({
+
+            prompt:
+              prompt,
+
+            pro:
+              isPro
+
+          })
+
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Video API request failed"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const videoUrl =
+      data.videoUrl ||
+      data.video_url ||
+      data.url ||
+      (
+        data.video &&
+        (
+          data.video.url ||
+          data.video.videoUrl
+        )
+      );
+
+
+    if (!videoUrl) {
+
+      throw new Error(
+        "No video URL returned"
+      );
+
+    }
+
+
+    displayGeneratedVideo(
+      videoUrl,
+      prompt
+    );
+
+
+    saveGeneratedVideo(
+      videoUrl,
+      prompt
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Pro video error:",
+      error
+    );
+
+
+    /*
+     REFUND FREE TRIAL
+     IF GENERATION FAILED
+    */
+
+    if (!isPro) {
+
+      videoFreeTrials =
+        Math.max(
+          0,
+          videoFreeTrials - 1
+        );
+
+
+      localStorage.setItem(
+        "smartAI_video_trials",
+        String(videoFreeTrials)
+      );
+
+    }
+
+
+    updateVideoTrialUI();
+
+
+    alert(
+      "Video generation failed. Please check your video API."
+    );
+
+
+  } finally {
+
+    if (generateVideo) {
+
+      generateVideo.disabled =
+        false;
+
+      generateVideo.textContent =
+        "Generate Video";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================
+   REPLACE OLD VIDEO CLICK HANDLER
+========================================= */
+
+if (generateVideo) {
+
+  /*
+   Remove previously attached handler
+   by cloning the button.
+  */
+
+  const newVideoButton =
+    generateVideo.cloneNode(true);
+
+
+  generateVideo.parentNode.replaceChild(
+    newVideoButton,
+    generateVideo
+  );
+
+
+  /*
+   Update global reference
+  */
+
+  window.smartAIGenerateVideoButton =
+    newVideoButton;
+
+
+  newVideoButton.addEventListener(
+    "click",
+    generateProVideo
+  );
+
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+function smartAILogout() {
+
+  const confirmed =
+    confirm(
+      "Are you sure you want to logout?"
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    "smartAI_logged_in"
+  );
+
+
+  isLoggedIn =
+    false;
+
+
+  alert(
+    "You have been logged out."
+  );
+
+
+  showScreen(
+    chatScreen
+  );
+
+}
+
+
+if (logoutBtn) {
+
+  logoutBtn.addEventListener(
+    "click",
+    smartAILogout
+  );
+
+}
+
+
+/* =========================================
+   PRO USER MESSAGE
+========================================= */
+
+function getPlanText() {
+
+  if (
+    isSmartAIPro()
+  ) {
+
+    return (
+      "Smart AI Pro — ₹299\n" +
+      "✓ Unlimited video generation\n" +
+      "✓ AI chat\n" +
+      "✓ Image generation\n" +
+      "✓ Image history\n" +
+      "✓ Video history"
+    );
+
+  }
+
+
+  return (
+    "Smart AI Free\n" +
+    "✓ AI chat\n" +
+    "✓ Image generation\n" +
+    "✓ 3 free video trials"
+  );
+
+}
+
+
+/* =========================================
+   SETTINGS INIT
+========================================= */
+
+loadSmartAISettings();
+
+updateProUI();
+
+
+/* =========================================
+   GLOBAL FUNCTIONS
+========================================= */
+
+window.startSmartAIProUpgrade =
+  startSmartAIProUpgrade;
+
+window.smartAILogout =
+  smartAILogout;
+
+window.isSmartAIPro =
+  isSmartAIPro;
+
+window.getPlanText =
+  getPlanText;
+
+
+/* =========================================
+   FINAL LOG
+========================================= */
+
+console.log(
+  "Smart AI Part 4 loaded successfully."
+);
+
+console.log(
+  "Smart AI Pro:",
+  isSmartAIPro()
+);
