@@ -664,253 +664,80 @@ if (fileInput) {
 
 }
 /* =========================================
-   SMART AI — PART 2
-   =========================================
-   ✅ Send Message
-   ✅ Login Check
-   ✅ Chat History
-   ✅ Recent Chats
-   ✅ Open Previous Chat
-   ✅ Voice Input
-   ✅ OpenRouter AI
-   ========================================= */
-
-
-/* =========================================
-   LOGIN MODAL
+   ADD MESSAGE
 ========================================= */
 
-function showLoginModal() {
-
-  let modal = get("loginModal");
-
-  if (modal) {
-
-    modal.style.display = "flex";
-
-    return;
-
-  }
-
-  modal =
-    document.createElement("div");
-
-  modal.id = "loginModal";
-
-  modal.className = "smart-login-modal";
-
-  modal.innerHTML = `
-    <div class="login-box">
-
-      <button
-        class="login-close"
-        id="loginCloseBtn">
-        ✕
-      </button>
-
-      <div class="login-icon">🤖</div>
-
-      <h2>Login to Smart AI</h2>
-
-      <p>
-        Please login to continue using Smart AI.
-      </p>
-
-      <button
-        id="loginContinueBtn"
-        class="login-main-btn">
-        Login / Sign Up
-      </button>
-
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-
-  const closeBtn =
-    get("loginCloseBtn");
-
-  if (closeBtn) {
-
-    closeBtn.onclick = () => {
-
-      modal.style.display = "none";
-
-    };
-
-  }
-
-
-  const continueBtn =
-    get("loginContinueBtn");
-
-  if (continueBtn) {
-
-    continueBtn.onclick = () => {
-
-      isLoggedIn = true;
-
-      localStorage.setItem(
-        "smartAI_logged_in",
-        "true"
-      );
-
-      modal.style.display = "none";
-
-      alert("Login successful!");
-
-    };
-
-  }
-
-}
-
-
-/* =========================================
-   CHAT ID
-========================================= */
-
-function ensureChatId() {
-
-  if (!currentChatId) {
-
-    currentChatId =
-      "chat_" +
-      Date.now();
-
-  }
-
-  return currentChatId;
-
-}
-
-
-/* =========================================
-   SAVE CURRENT CHAT
-========================================= */
-
-function saveCurrentChat() {
-
-  if (
-    !currentChat ||
-    currentChat.length === 0
-  ) {
-
-    return;
-
-  }
-
-
-  const history =
-    getChatHistory();
-
-
-  const id =
-    ensureChatId();
-
-
-  const existingIndex =
-    history.findIndex(
-      chat => chat.id === id
-    );
-
-
-  const firstUserMessage =
-    currentChat.find(
-      message =>
-        message.role === "user"
-    );
-
-
-  let title =
-    firstUserMessage
-      ? firstUserMessage.content
-      : "New Chat";
-
-
-  title =
-    title.substring(0, 40);
-
-
-  const chatData = {
-
-    id: id,
-
-    title: title,
-
-    updatedAt: Date.now(),
-
-    messages: currentChat
-
-  };
-
-
-  if (existingIndex !== -1) {
-
-    history[existingIndex] =
-      chatData;
-
-  } else {
-
-    history.unshift(chatData);
-
-  }
-
-
-  saveChatHistory(history);
-
-  renderRecentChats();
-
-}
-
-
-/* =========================================
-   ADD MESSAGE TO UI
-========================================= */
-
-function addMessageToUI(
-  role,
-  text
+function addMessage(
+  text,
+  sender,
+  attachment = null
 ) {
 
   if (!chatMessages) return;
 
-
-  if (welcomeScreen) {
-
-    welcomeScreen.style.display =
-      "none";
-
-  }
-
-
   const message =
     document.createElement("div");
 
-
   message.className =
-    "chat-message " +
-    role;
-
+    `message ${sender}`;
 
   const bubble =
     document.createElement("div");
-
 
   bubble.className =
     "message-bubble";
 
 
-  bubble.textContent =
-    text;
+  if (attachment) {
+
+    if (
+      attachment.type &&
+      attachment.type.startsWith("image/")
+    ) {
+
+      const img =
+        document.createElement("img");
+
+      img.src =
+        URL.createObjectURL(
+          attachment
+        );
+
+      img.style.maxWidth = "220px";
+      img.style.display = "block";
+      img.style.borderRadius = "10px";
+      img.style.marginBottom =
+        text ? "8px" : "0";
+
+      bubble.appendChild(img);
+
+    }
+
+  }
 
 
-  message.appendChild(bubble);
+  if (text) {
+
+    const textElement =
+      document.createElement("div");
+
+    textElement.textContent =
+      text;
+
+    bubble.appendChild(
+      textElement
+    );
+
+  }
 
 
-  chatMessages.appendChild(message);
+  message.appendChild(
+    bubble
+  );
 
+  chatMessages.appendChild(
+    message
+  );
 
   chatMessages.scrollTop =
     chatMessages.scrollHeight;
@@ -919,46 +746,80 @@ function addMessageToUI(
 
 
 /* =========================================
-   TYPING MESSAGE
+   THINKING MESSAGE
 ========================================= */
 
-function addTypingMessage() {
+function addThinkingMessage() {
 
-  if (!chatMessages) return null;
+  if (!chatMessages) {
+    return null;
+  }
 
-
-  const message =
+  const loading =
     document.createElement("div");
 
-  message.className =
-    "chat-message assistant";
+  loading.className =
+    "message ai";
 
+  loading.innerHTML = `
+    <div class="message-bubble">
+      Thinking...
+    </div>
+  `;
 
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "message-bubble typing";
-
-
-  bubble.innerHTML =
-    `
-      <span></span>
-      <span></span>
-      <span></span>
-    `;
-
-
-  message.appendChild(bubble);
-
-  chatMessages.appendChild(message);
-
+  chatMessages.appendChild(
+    loading
+  );
 
   chatMessages.scrollTop =
     chatMessages.scrollHeight;
 
+  return loading;
 
-  return message;
+}
+
+
+/* =========================================
+   CREATOR RESPONSE
+========================================= */
+
+function getCreatorResponse(text) {
+
+  const normalized =
+    text
+      .toLowerCase()
+      .replace(/[?!.]/g, "")
+      .trim();
+
+  const questions = [
+
+    "who created you",
+    "who create you",
+    "who is your owner",
+    "who made you",
+    "who is your creator",
+    "who developed you",
+    "who created smart ai",
+    "who is smart ai owner",
+    "tumko kisne banaya",
+    "tumhe kisne banaya"
+
+  ];
+
+  if (
+    questions.some(
+      question =>
+        normalized.includes(question)
+    )
+  ) {
+
+    return (
+      "Smart AI is created by Md Parvez Hussain from India."
+    );
+
+  }
+
+  return null;
 
 }
 
@@ -974,71 +835,56 @@ async function sendMessage() {
       ? messageInput.value.trim()
       : "";
 
-
   if (
     !text &&
     !selectedAttachment
   ) {
-
     return;
-
   }
 
 
-  /*
-   LOGIN CHECK
-  */
+  /* LOGIN CHECK */
 
   if (!isLoggedIn) {
 
-    showLoginModal();
+    openLoginModal();
 
     return;
 
   }
 
 
-  ensureChatId();
+  if (welcomeScreen) {
 
-
-  let userText =
-    text || "Please analyze this attachment.";
-
-
-  if (selectedAttachment) {
-
-    userText +=
-      "\n[Attachment: " +
-      selectedAttachment.name +
-      "]";
+    welcomeScreen.style.display =
+      "none";
 
   }
 
 
-  /*
-   ADD USER MESSAGE
-  */
+  addMessage(
+    text,
+    "user",
+    selectedAttachment
+  );
+
 
   currentChat.push({
 
-    role: "user",
+    text: text,
 
-    content: userText,
+    hasAttachment:
+      !!selectedAttachment,
 
-    time: Date.now()
+    time:
+      new Date().toISOString()
 
   });
 
 
-  addMessageToUI(
-    "user",
-    userText
-  );
+  const sentAttachment =
+    selectedAttachment;
 
-
-  /*
-   CLEAR INPUT
-  */
 
   if (messageInput) {
 
@@ -1050,93 +896,137 @@ async function sendMessage() {
   removeAttachment();
 
 
-  saveCurrentChat();
+  /* CREATOR RESPONSE */
+
+  const creatorReply =
+    getCreatorResponse(text);
 
 
-  /*
-   TYPING
-  */
+  if (creatorReply) {
 
-  const typingMessage =
-    addTypingMessage();
+    const loading =
+      addThinkingMessage();
+
+    setTimeout(
+      () => {
+
+        if (loading) {
+
+          loading.remove();
+
+        }
+
+        addMessage(
+          creatorReply,
+          "ai"
+        );
+
+        saveRecentChat(text);
+
+      },
+      700
+    );
+
+    return;
+
+  }
 
 
-  /*
-   AI RESPONSE
-  */
+  /* AI REQUEST */
+
+  const loadingMessage =
+    addThinkingMessage();
+
 
   try {
 
-    const reply =
-      await getSmartAIResponse(
-        userText
+    const response =
+      await fetch(
+        "https://ai-mcq-solver-i7qs.onrender.com/api/chat",
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              message:
+                text ||
+                "Please analyze this attachment.",
+
+              hasAttachment:
+                !!sentAttachment
+
+            })
+
+        }
       );
 
 
-    if (typingMessage) {
+    const data =
+      await response.json();
 
-      typingMessage.remove();
+
+    if (!response.ok) {
+
+      throw new Error(
+        data?.reply ||
+        "Chat API failed"
+      );
 
     }
 
 
-    currentChat.push({
+    if (loadingMessage) {
 
-      role: "assistant",
+      loadingMessage.remove();
 
-      content: reply,
-
-      time: Date.now()
-
-    });
+    }
 
 
-    addMessageToUI(
-      "assistant",
-      reply
+    const reply =
+      data.reply ||
+      "Smart AI received your message.";
+
+
+    addMessage(
+      reply,
+      "ai"
     );
 
 
-    saveCurrentChat();
+    saveRecentChat(
+      text ||
+      "Attachment message"
+    );
 
 
   } catch (error) {
 
     console.error(
-      "Smart AI Error:",
+      "Chat error:",
       error
     );
 
 
-    if (typingMessage) {
+    if (loadingMessage) {
 
-      typingMessage.remove();
+      loadingMessage.remove();
 
     }
 
 
-    const errorMessage =
-      "Sorry, Smart AI could not connect right now. Please check your AI API connection.";
-
-
-    currentChat.push({
-
-      role: "assistant",
-
-      content: errorMessage,
-
-      time: Date.now()
-
-    });
-
-
-    addMessageToUI(
-      "assistant",
-      errorMessage
+    addMessage(
+      "Smart AI backend is not connected yet. Please check your backend.",
+      "ai"
     );
-
-
-    saveCurrentChat();
 
   }
 
@@ -1185,297 +1075,10 @@ if (messageInput) {
 
 
 /* =========================================
-   OPENROUTER AI
-========================================= */
-
-async function getSmartAIResponse(
-  userMessage
-) {
-
-  /*
-   IMPORTANT:
-   Put your OpenRouter API key here.
-  */
-
-  const OPENROUTER_API_KEY =
-    localStorage.getItem(
-      "smartAI_openrouter_key"
-    );
-
-
-  if (!OPENROUTER_API_KEY) {
-
-    throw new Error(
-      "OpenRouter API key missing"
-    );
-
-  }
-
-
-  /*
-   SEND PREVIOUS CHAT CONTEXT
-  */
-
-  const messages =
-    currentChat.map(
-      message => ({
-
-        role: message.role,
-
-        content: message.content
-
-      })
-    );
-
-
-  const response =
-    await fetch(
-      "https://ai-mcq-solver-i7qs.onrender.com/api/chat"
-      {
-
-        method: "POST",
-
-        headers: {
-
-          "Content-Type":
-            "application/json",
-
-          "Authorization":
-            "Bearer " +
-            OPENROUTER_API_KEY,
-
-          "HTTP-Referer":
-            window.location.origin,
-
-          "X-Title":
-            "Smart AI"
-
-        },
-
-        body: JSON.stringify({
-
-          model:
-            "openai/gpt-4o-mini",
-
-          messages: [
-
-            {
-              role: "system",
-
-              content:
-                "You are Smart AI, a helpful, friendly and intelligent AI assistant. Give clear and useful answers."
-            },
-
-            ...messages
-
-          ],
-
-          temperature: 0.7
-
-        })
-
-      }
-    );
-
-
-  if (!response.ok) {
-
-    const errorText =
-      await response.text();
-
-    console.error(
-      "OpenRouter Error:",
-      errorText
-    );
-
-    throw new Error(
-      "OpenRouter request failed"
-    );
-
-  }
-
-
-  const data =
-    await response.json();
-
-
-  const answer =
-    data &&
-    data.choices &&
-    data.choices[0] &&
-    data.choices[0].message
-      ? data.choices[0].message.content
-      : "";
-
-
-  if (!answer) {
-
-    throw new Error(
-      "Empty AI response"
-    );
-
-  }
-
-
-  return answer;
-
-}
-
-
-/* =========================================
-   RECENT CHAT RENDER
-========================================= */
-
-function renderRecentChats() {
-
-  if (!recentChats) return;
-
-
-  const history =
-    getChatHistory();
-
-
-  recentChats.innerHTML = "";
-
-
-  if (
-    history.length === 0
-  ) {
-
-    recentChats.innerHTML =
-      `
-        <div class="no-recent-chat">
-          No recent chats
-        </div>
-      `;
-
-    return;
-
-  }
-
-
-  history
-    .slice(0, 20)
-    .forEach(chat => {
-
-      const item =
-        document.createElement("button");
-
-
-      item.className =
-        "recent-chat-item";
-
-
-      item.textContent =
-        chat.title || "New Chat";
-
-
-      item.title =
-        chat.title || "New Chat";
-
-
-      item.addEventListener(
-        "click",
-        () => {
-
-          openPreviousChat(
-            chat.id
-          );
-
-        }
-      );
-
-
-      recentChats.appendChild(item);
-
-    });
-
-}
-
-
-/* =========================================
-   OPEN PREVIOUS CHAT
-========================================= */
-
-function openPreviousChat(
-  chatId
-) {
-
-  const history =
-    getChatHistory();
-
-
-  const chat =
-    history.find(
-      item =>
-        item.id === chatId
-    );
-
-
-  if (!chat) return;
-
-
-  currentChatId =
-    chat.id;
-
-
-  currentChat =
-    Array.isArray(chat.messages)
-      ? [...chat.messages]
-      : [];
-
-
-  if (chatMessages) {
-
-    chatMessages.innerHTML = "";
-
-  }
-
-
-  if (welcomeScreen) {
-
-    welcomeScreen.style.display =
-      currentChat.length
-        ? "none"
-        : "flex";
-
-  }
-
-
-  currentChat.forEach(
-    message => {
-
-      addMessageToUI(
-        message.role,
-        message.content
-      );
-
-    }
-  );
-
-
-  showScreen(chatScreen);
-
-  closeSidebarMenu();
-
-}
-
-
-/* =========================================
-   LOAD RECENT CHATS
-========================================= */
-
-renderRecentChats();
-
-
-/* =========================================
    VOICE INPUT
 ========================================= */
 
-let speechRecognition = null;
-
-let isListening = false;
-
+let recognition = null;
 
 const SpeechRecognition =
   window.SpeechRecognition ||
@@ -1487,79 +1090,52 @@ if (
   micBtn
 ) {
 
-  speechRecognition =
+  recognition =
     new SpeechRecognition();
 
 
-  speechRecognition.lang =
+  recognition.lang =
     "en-IN";
 
 
-  speechRecognition.continuous =
+  recognition.continuous =
     false;
 
 
-  speechRecognition.interimResults =
+  recognition.interimResults =
     false;
 
 
-  micBtn.addEventListener(
-    "click",
+  recognition.onstart =
     () => {
 
-      if (isListening) {
-
-        speechRecognition.stop();
-
-        return;
-
-      }
-
-
-      try {
-
-        speechRecognition.start();
-
-      } catch (error) {
-
-        console.log(
-          "Voice already running"
-        );
-
-      }
-
-    }
-  );
-
-
-  speechRecognition.onstart =
-    () => {
-
-      isListening = true;
-
-      micBtn.classList.add(
-        "listening"
-      );
+      micBtn.textContent =
+        "🔴";
 
     };
 
 
-  speechRecognition.onresult =
+  recognition.onend =
+    () => {
+
+      micBtn.textContent =
+        "🎤";
+
+    };
+
+
+  recognition.onresult =
     event => {
 
       const transcript =
-        event.results[0][0].transcript;
+        event.results[0][0]
+          .transcript;
 
 
       if (messageInput) {
 
         messageInput.value +=
-          (
-            messageInput.value
-              ? " "
-              : ""
-          ) +
-          transcript;
+          transcript + " ";
 
         messageInput.focus();
 
@@ -1568,27 +1144,39 @@ if (
     };
 
 
-  speechRecognition.onerror =
+  recognition.onerror =
     error => {
 
       console.error(
-        "Voice Error:",
+        "Voice error:",
         error
       );
 
+      micBtn.textContent =
+        "🎤";
+
     };
 
 
-  speechRecognition.onend =
+  micBtn.addEventListener(
+    "click",
     () => {
 
-      isListening = false;
+      try {
 
-      micBtn.classList.remove(
-        "listening"
-      );
+        recognition.start();
 
-    };
+      } catch (error) {
+
+        console.log(
+          "Voice recognition already active."
+        );
+
+      }
+
+    }
+  );
+
 
 } else if (micBtn) {
 
@@ -1607,127 +1195,116 @@ if (
 
 
 /* =========================================
-   VIDEO TRIAL UI
+   RECENT CHAT HISTORY
 ========================================= */
 
-function updateVideoTrialUI() {
+function saveRecentChat(text) {
 
-  const trialText =
-    get("videoTrialText");
-
-  const upgradeBtn =
-    get("upgradeVideoBtn");
+  if (!text) return;
 
 
-  const remaining =
-    Math.max(
-      0,
-      3 - videoFreeTrials
-    );
+  let chats =
+    JSON.parse(
+      localStorage.getItem(
+        "smartAI_recent_chats"
+      )
+    ) || [];
 
 
-  if (trialText) {
-
-    trialText.textContent =
-      remaining +
-      " free video trial" +
-      (
-        remaining === 1
-          ? ""
-          : "s"
-      ) +
-      " remaining";
-
-  }
+  chats.unshift(text);
 
 
-  if (upgradeBtn) {
-
-    upgradeBtn.style.display =
-      remaining <= 0
-        ? "block"
-        : "none";
-
-  }
-
-}
-
-
-/* =========================================
-   VIDEO TRIAL CHECK
-========================================= */
-
-function canGenerateVideo() {
-
-  if (
-    videoFreeTrials >= 3
-  ) {
-
-    return false;
-
-  }
-
-  return true;
-
-}
-
-
-/* =========================================
-   USE VIDEO TRIAL
-========================================= */
-
-function useVideoTrial() {
-
-  if (!canGenerateVideo()) {
-
-    updateVideoTrialUI();
-
-    return false;
-
-  }
-
-
-  videoFreeTrials++;
+  chats =
+    chats.slice(0, 20);
 
 
   localStorage.setItem(
-    "smartAI_video_trials",
-    String(videoFreeTrials)
+    "smartAI_recent_chats",
+    JSON.stringify(chats)
   );
 
 
-  updateVideoTrialUI();
-
-
-  return true;
+  renderRecentChats();
 
 }
 
 
 /* =========================================
-   INITIAL VIDEO UI
+   RENDER RECENT CHATS
 ========================================= */
 
-updateVideoTrialUI();
+function renderRecentChats() {
+
+  if (!recentChats) return;
 
 
-/* =========================================
-   SMART AI STARTUP
-========================================= */
+  recentChats.innerHTML =
+    "";
 
-console.log(
-  "Smart AI loaded successfully."
-);
 
-console.log(
-  "Logged in:",
-  isLoggedIn
-);
+  const chats =
+    JSON.parse(
+      localStorage.getItem(
+        "smartAI_recent_chats"
+      )
+    ) || [];
 
-console.log(
-  "Video trials used:",
-  videoFreeTrials
-);
+
+  chats.forEach(chat => {
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+
+    button.className =
+      "recent-chat";
+
+
+    button.type =
+      "button";
+
+
+    button.textContent =
+      chat;
+
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if (messageInput) {
+
+          messageInput.value =
+            chat;
+
+          messageInput.focus();
+
+        }
+
+
+        showScreen(
+          chatScreen
+        );
+
+
+        closeSidebarMenu();
+
+      }
+    );
+
+
+    recentChats.appendChild(
+      button
+    );
+
+  });
+
+}
+
+
+renderRecentChats();
 /* =========================================
    SMART AI — PART 3
    =========================================
