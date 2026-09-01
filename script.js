@@ -1230,7 +1230,7 @@ async function getSmartAIResponse(
 
   const response =
     await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
+      "https://ai-mcq-solver-i7qs.onrender.com/api/chat"
       {
 
         method: "POST",
